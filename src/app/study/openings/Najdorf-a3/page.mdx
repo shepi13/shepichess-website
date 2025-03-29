@@ -1,0 +1,89 @@
+import PGNViewer from "@/components/PGNViewer";
+
+# Openings
+
+## Najdorf
+
+### Nf5 Variations:
+
+There are several moves that white can play intending to meet black's classical e5 break with Nf5. While this idea usually isn't effective, if we effectively prepare it we can sometimes generate a huge and surprising attack.
+
+#### a3
+
+<PGNViewer pgn="1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. a3!?"/>
+
+This move looks too quiet to be threatening, but it actually has a subtle and strong point:
+
+<PGNViewer 
+    start="rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/P1N5/1PP2PPP/R1BQKB1R b KQkq - 0 6" 
+    pgn="6... e5 {After 6... e6, we can continue in an English attack style with 7. Be3. An alternative is also 7. Rg1!? intending a quick g4. } 7. Nf5 d5 8. Bg5 d4 9. Bxf6 gxf6!" 
+/>
+
+#### This is the main starting position of the 6. a3 line.
+
+Here we see that a3 is useful, to prevent Bb4+, and sometimes to be able to play b4 against Qa5+. Interestingly, it has another surprising point!
+
+<PGNViewer 
+    start="rnbqkb1r/1p3p1p/p4p2/4pN2/3pP3/P1N5/1PP2PPP/R2QKB1R w KQkq - 0 10"
+    pgn="10. Na2!? Bxf5 11. exf5 Qd5 {11... Nd7 is well met by 12. b4!, showing another use for a3! Other moves allow Bd3 followed by 0-0, controlling e4 with a good position for white.} 12. Be2!? e4 13. 0-0"
+/>
+
+We've reached the most interesting position, where black has a massive center and white's pieces look misplaced. Yet black has nowhere to put his king and must be extremely careful as white's position can suddenly explode through the center, and tactics involving Nc3 -> Nxe4 are looming large.
+
+---
+
+### At this point, we should look at 2 options:
+
+Bishop moves don't make too much sense here, for example 13... Bc5 can be well met by either 14. Nb4, or more simply with 14. c4 followed by 15. b4 gaining a large amount of space and time on the queenside and discouraging 0-0-0.
+
+Against most bishop moves 14. Re1 is also a good option, as black cannot quickly 0-0-0 to get his king out of the center.
+
+----
+For that reason, we see that the 2 most logical moves are developing the queens knight to prepare 0-0-0, the only question is which square.
+
+#### 13...Nc6
+This is the more solid option, as the knight defends d4 and blocks the c file. Here there is a simple forcing line that I would recommend both sides to follow to get a good position.
+
+
+{/*
+
+
+<pgn> 14. Nc3! Qe5 {Qxf5 blunders 15. Bg4 followed by Nxe4 using the pin on the e file} 15. f4! exf3 {Qe7 nd5 Qd6 Bc4 leads to a double edged position where white has clear compensation for the center} 16. Bxf3 0-0-0 17. Ne4 Bd6!? {Not the only move but the simplest} 18. Nxd6 Qxd6 19. Bxc6 Qxc6
+
+After all of the fireworks, the position remains equal.
+
+#### 13...Nd7!?
+
+The most aggressive option for black, intending to stop white's Nc3 tactic by meeting it with a strong queen sacrifice:
+
+<pgn> 14. Nc3? Qe5 15. f4 exf3 16. Bxf3 dxc3! 17. Re1 0-0-0 </pgn>
+
+Black will be better as white never gets a chance to play Bxc6, so Rxe5 Nxe5 will give immediately play, with Bc5+, cxb2, and Nxf3 ideas as well as play down the d file.
+
+However,  white can handle this position differently than against 13...Nc6, and here we can aim to turn the position into an exciting battle where we go after black's king:
+
+<pgn> 14. c4! Qe5 { 14...Qd6 15. Bh5!? 0-0-0 16. Bxf7 is also unclear } 15. Re1 0-0-0 16. Bf3 exf3! 17. Rxe5 Nxe5 18. gxf3 </png>
+
+#### Black has sacrificed a queen, but clearly has some compensation, so the battle continues:
+
+However, black must play very precisely to hold the balance:
+
+<pgn> 18...d3! 19. Nc3 Rd4! 20. Nd5 Kb8 21. Qb3!  </pgn>
+
+Suddenly white has to be precise as well. 21...Nxf3+ must be met with Kg2, while 21...Rg8+ must be met with Kh1.
+
+White still easily has enough play, as there are ideas of Qb6 with threats against black's king, as well as either Rd1 or f4 (if not Nxf3) as possible improving moves. White seems to have at least enough for perpetual, although the position is still very double edged and both sides need to play well.
+
+That said, while this line isn't an enormous success for white from a theoretical perspective, it forces black to find many only moves in a line that is almost never played, and relatively unknown even among many master level players.
+
+As a Najdorf player, I always enjoy looking at lines like this, as they have unique positions with many imbalances, and working to understand such positions is very beneficial for your chess. It's also nice to be prepared when you're opponents come up with such a surprise.
+
+## Summary
+
+While a3 doesn't lead to a theoretical advantage, it's a good surprise weapon to quickly put your opponent under pressure.
+
+It can lead to dynamic and unbalanced positions that aren't similar to a normal Najdorf and can throw black off balance, and it is very rare so most black players will not be properly prepared.
+
+In this post we looked only at 10. Na2, but 10. Nb1 is a serious alternative that is worth analyzing as well, and is actually more commonly played.
+
+*/}
