@@ -10,7 +10,7 @@ interface Dictionary<T> {
     [Key: number]: T;
 }
 
-export default function PGNViewer({pgn, start=StartFen}: {pgn: string, start?: string}) {
+export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: string, start?: string, small?: boolean}) {
     // Current state of display board
     const [game, setGame] = useState(new Chess(start));
     const [halfMovNum, setHalfMovNum] = useState(0);
@@ -77,34 +77,34 @@ export default function PGNViewer({pgn, start=StartFen}: {pgn: string, start?: s
     }
 
     return (
-        <div className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3" onKeyDown={handleKeyDown} tabIndex={1}>
+        <div className={`border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5 ${small && "md:w-4/5 xl:w-2/5"}`} onKeyDown={handleKeyDown} tabIndex={1}>
             <div className="flex h-full w-full">
-                <div className="w-1/2 h-full">
+                <div className="w-2/3 sm:w-1/2 h-full">
                     <Chessboard position={game.fen()} arePiecesDraggable={false} boardOrientation={flipped ? "black" : "white"}/>
-                    <div className="flex justify-between p-5 pr-0">
+                    <div className="flex justify-between p-1 lg:p-5 pr-0">
                         <div className="flex justify-between w-2/3">
-                            <button className="cursor-pointer text-xl hover:text-secondary-dark dark:hover:text-primary-light ring-1 px-2 md:rounded-2xl" onClick={firstMove} disabled={halfMovNum <= 0}>&lt;&lt;</button>
-                            <button className="cursor-pointer text-xl hover:text-secondary-dark dark:hover:text-primary-light ring-1 px-2 md:rounded-2xl" onClick={prevMove} disabled={halfMovNum <= 0}>&nbsp;&lt;&nbsp;</button>
-                            <button className="cursor-pointer text-xl hover:text-secondary-dark dark:hover:text-primary-light ring-1 px-2 md:rounded-2xl" onClick={nextMove} disabled={halfMovNum >= pgnChess.history().length}>&nbsp;&gt;&nbsp;</button>
-                            <button className="cursor-pointer text-xl hover:text-secondary-dark dark:hover:text-primary-light ring-1 px-2 md:rounded-2xl" onClick={lastMove} disabled={halfMovNum >= pgnChess.history().length}>&gt;&gt;</button>
+                            <button className="cursor-pointer text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl" onClick={firstMove} disabled={halfMovNum <= 0}>&lt;&lt;</button>
+                            <button className="cursor-pointer text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl" onClick={prevMove} disabled={halfMovNum <= 0}>&nbsp;&lt;&nbsp;</button>
+                            <button className="cursor-pointer text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl" onClick={nextMove} disabled={halfMovNum >= pgnChess.history().length}>&nbsp;&gt;&nbsp;</button>
+                            <button className="cursor-pointer text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl" onClick={lastMove} disabled={halfMovNum >= pgnChess.history().length}>&gt;&gt;</button>
                         </div>
-                        <button className="cursor-pointer text-large hover:text-secondary-dark dark:hover:text-primary-light" onClick={flipBoard}>Flip Board</button>
+                        <button className="cursor-pointer text-large hover:text-secondary-dark" onClick={flipBoard}>Flip Board</button>
                     </div>
                 </div>
                 <div className="w-1/2 h-full p-2 lg:p-5 text-xs lg:text-lg">{
                     pgnChess.history().map((move: string, i: number) => {
                         const move_comment = pgnComments[i+1];
                         // Add number before move if it is a white move.
-                        const move_text = i % 2 == initialTurn ? "" + Math.ceil(i/2 + initialMoveNum) + "." + move + " " : move + " ";
+                        const move_text = i % 2 == initialTurn ? "" + Math.ceil(i/2 + initialMoveNum) + "." + move : move;
                         return (
                             <div key={`movetext_${i}`} className="inline">
                                 <span
                                     onClick={() => goToMove(i+1)}
-                                    className={`p-1 cursor-pointer text-nowrap ${i+1==halfMovNum && "font-bold dark:text-primarywhite text-secondarywhite ring-secondary dark:ring-primary ring-1 rounded-lg"}`}
+                                    className={`p-1 cursor-pointer text-nowrap ${i+1==halfMovNum && "font-bold dark:text-primarywhite text-secondarywhite ring-secondary ring-1 rounded-lg"}`}
                                 >
                                     {i == 0 && initialTurn == 1 ? "" + initialMoveNum + "... " : ""}{move_text} 
                                 </span>
-                                {move_comment ? <span className="lg:text-xl dark:text-secondary text-primary p-1">{move_comment}</span> : ""}
+                                {move_comment ? <span className="lg:text-xl text-primary p-1"> {move_comment}</span> : <span> </span>}
                             </div>
                         );
                     })

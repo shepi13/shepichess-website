@@ -22,18 +22,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <SVGGrainyFilter />
-          <div className="content">
+      <SVGGrainyFilter />
+      <div className="content">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <header>
               <NavBar />
             </header>
-            <main>{children}</main>
+            <main className="px-5">{children}</main>
             <footer>
               <Footer />
             </footer>
-          </div>
-      </ThemeProvider>
+        </ThemeProvider>
+      </div>
       </body>
     </html>
   );
