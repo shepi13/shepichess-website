@@ -35,14 +35,14 @@ export default function NavBar() {
                         key={link.title}
                         href={link.href}
                         onClick={toggleOpen}
-                        className="block hover:text-secondary-dark dark:hover:text-primary-light m-3 font-semibold text-gray-950 dark:text-gray-50"
+                        className="block hover:text-secondary-dark m-3 font-semibold text-gray-950 dark:text-gray-50"
                     >
                         {link.title}
                     </Link>
                 ))}
             </div>
             <div className={`${isOpen || "hidden"} sm:hidden lg:flex grow basis-0 justify-end`}>
-                <ThemeToggle className="dark:hover:text-primary hover:text-secondary cursor-pointer capitalize font-semibold mx-3 mt-2 mb-10 lg:mb-3" />
+                <ThemeToggle className="hover:text-secondary cursor-pointer capitalize font-semibold mx-3 mt-2 mb-10 lg:mb-3" />
             </div>
         </nav>
     );
