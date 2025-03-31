@@ -11,6 +11,12 @@ interface GameState {
 }
 type StateCallback = (state: GameState) => GameState;
 
+const variationStylesByLevel = new Map([
+    [0, "text-xs lg:text-xl"],
+    [1, "text-2xs lg:text-lg"],
+    [-1, "text-3xs lg:text-base"],
+]);
+
 export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: string, start?: string, small?: boolean}) {
     const mainVariation = loadPgn(pgn, start);
     const subVariation = mainVariation.moves[0].variation || mainVariation;
@@ -69,7 +75,6 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
 
     //----------------------------------------------------------
     // Rendering Logic
-
     function displayVariation(variation: Variation, level: number = 0) {
         const variation_jsx = variation.moves.map((move: Move, i: number) => {
             const isCurrentMove = (variation.id === gameState.variation.id && i+1 === gameState.halfMoveNum);
@@ -87,7 +92,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
             move_text += move.move;
             move_text += move.annotation || "";
             return (
-                <div key={`${variation.start}_${i}`} className={`inline ${level > 0 ? "text-2xs lg:text-lg" : "text-xs lg:text-xl"}`}>
+                <div key={`${variation.start}_${i}`} className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}>
                     <div 
                         className={
                             `p-1 cursor-pointer text-nowrap inline
@@ -97,8 +102,9 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
                         onClick={() => setGameStateSafe(prev => ({...prev, variation: variation, halfMoveNum: i+1}))}
                     >
                         {move_number}
-                        <span className={`${move.annotation && move.annotation.startsWith("!") && "text-lime-700 dark:text-lime-400"}`}>
-                            {move_text}
+                        <span 
+                            className={`${move.annotation && move.annotation.startsWith("!") && "text-lime-700 dark:text-lime-400"}`} 
+                            dangerouslySetInnerHTML={{__html: move_text}}>
                         </span>
                     </div>
                     <div className="inline">
