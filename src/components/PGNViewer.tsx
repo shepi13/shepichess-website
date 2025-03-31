@@ -50,12 +50,21 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
 
     function enterVariation() {
         setGameStateSafe(prevState => {
-            const moveNum = prevState.halfMoveNum ? prevState.halfMoveNum - 1 : prevState.halfMoveNum;
-            const newVariation = prevState.variation.moves[moveNum].variation
+            const variationMoves = prevState.variation.moves;
+            const initialMoveNum = prevState.halfMoveNum
+            let newVariation = null;
+            /* Find next variation if exists */
+            for(let moveNum = Math.max(initialMoveNum - 1, 0); moveNum < variationMoves.length; moveNum++) {
+                const variation = variationMoves[moveNum].variation;
+                if(variation) {
+                    newVariation = variation;
+                    break;
+                }
+            }
             if(newVariation) {
                 return {...prevState, variation: newVariation, halfMoveNum: 1}
             }
-            if(moveNum == 0) {
+            if(initialMoveNum == 0) {
                 return {...prevState, halfMoveNum: 1}
             }
             return prevState
@@ -135,7 +144,13 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
         <div className={`border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5 ${small && "md:w-4/5 xl:w-2/5"}`} onKeyDown={handleKeyDown} tabIndex={1}>
             <div className="flex h-full w-full">
                 <div className="w-2/3 sm:w-1/2 h-full">
-                    <Chessboard position={currentFen} arePiecesDraggable={false} boardOrientation={flipped ? "black" : "white"} customArrows={currentMove ? currentMove.arrows : []}/>
+                    <Chessboard 
+                        position={currentFen} 
+                        arePiecesDraggable={false} 
+                        boardOrientation={flipped ? "black" : "white"} 
+                        customArrows={currentMove ? currentMove.arrows : []}
+                        customBoardStyle={{"boxShadow": "3px 3px 3px black"}}
+                    />
                     <div className="flex justify-between p-1 lg:p-5 pr-0">
                         <div className="flex justify-between w-2/3">
                             <button 

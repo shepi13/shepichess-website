@@ -28,6 +28,27 @@ const annotationLookup = new Map([
     ["$133", "&lrarr;",],
 ]);
 
+/*
+/
+    (?:[0-9]*\.+)?          #Optional move number (Number followed by . or ...)
+     *
+    ((?:[A-Za-z]+[0-9])     # Move (Letters followed by number, eg. Ng5)
+    |0-0-0|0-0|O-O-O|O-O)   # or castling
+     *
+    ([/!?=+-]+|\$[0-9]+)*   # Annotation (!?=+- for direct annotation, e.g. $13 for pgn style notation) TODO: Should accept annotation for move and position
+     *
+    (?:\[(.*?)\])?          # Optional Arrows (Capture values inside [], will not be nested)
+     *
+    (?:\{(.*?)\})?          # Optional Comment (Capture values inside {}), comments cannot be nested
+     *
+    (?:\$\((.*?)\$\))?      # Optional Variations (Capture values inside $( to $), this will not be nested after preprocessing)
+/g
+
+Note that order must always be annotations -> arrows -> comments -> variations. This makes the most sense logistically, as variations
+are directly tied to the move, arrows to the position, then comments to the current text, and variations to the next move.
+*/
+const pgnParseRegex = /(?:[0-9]*\.+)? *((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O) *([/!?=+-]+|\$[0-9]+)* *(?:\[(.*?)\])? *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))?/g
+
 export function getFen(variation: Variation, moveNumber: number) {
     if(moveNumber === 0) {
         return variation.start;
@@ -36,13 +57,14 @@ export function getFen(variation: Variation, moveNumber: number) {
 }
 
 export function loadPgn(pgn: string, start: string, id: number = 0): Variation {
-    // Use chessjs game just to verify pgn moves are legal, since it doesn't support variations or custom pgn starting positions
     pgn = preParsePgn(pgn);
+
+    // Use chessjs game just to verify pgn moves are legal, since it doesn't support variations or custom pgn starting positions
     const game = new Chess(start);
 
-    const tokens = [...pgn.matchAll(/(?:[0-9]*\.+)* *((?:[A-Za-z]+[0-9]+)|0-0-0|0-0|O-O-O|O-O) *([/!?=+-]+|\$[0-9]+)* *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))? *(?:\[(.*?)\])?/g)];
+    const tokens = [...pgn.matchAll(pgnParseRegex)];
     const moves = [];
-    let new_id = id*100;
+    let new_id = id+1000;
     for(const token of tokens) {
         const moveNumber = game.moveNumber();
         const sideToMove = game.turn();
@@ -54,9 +76,9 @@ export function loadPgn(pgn: string, start: string, id: number = 0): Variation {
             moveNumber: moveNumber,
             move: token[1],
             annotation: getAnnotation(token[2]),
-            comment: token[3],
-            variation: token[4] ? loadPgn(token[4], beforeFen, ++new_id) : null,
-            arrows: parseArrows(token[5]),
+            comment: token[4],
+            variation: token[5] ? loadPgn(token[5], beforeFen, ++new_id) : null,
+            arrows: parseArrows(token[3]),
             fullMatch: token[0],
             fenAfter: game.fen(),
         })
