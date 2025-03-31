@@ -103,7 +103,10 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
                     >
                         {move_number}
                         <span 
-                            className={`${move.annotation && move.annotation.startsWith("!") && "text-lime-700 dark:text-lime-400"}`} 
+                            className={`
+                                ${move.annotation && move.annotation.startsWith("!") && "text-green-700 dark:text-lime-400"}
+                                ${move.annotation && move.annotation.startsWith("?") && "text-sky-900 dark:text-sky-200"}
+                            `} 
                             dangerouslySetInnerHTML={{__html: move_text}}>
                         </span>
                     </div>
@@ -142,7 +145,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
                             <button 
                                 className="cursor-pointer text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl" 
                                 onClick={prevMove} 
-                                disabled={gameState.halfMoveNum <= 0 && gameState.variation === mainVariation}
+                                disabled={gameState.halfMoveNum <= 0 && gameState.variation.id === mainVariation.id}
                             >
                                 &nbsp;&lt;&nbsp;
                             </button>
@@ -156,7 +159,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
                             <button 
                                 className="cursor-pointer text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl" 
                                 onClick={lastMove} 
-                                disabled={gameState.halfMoveNum >= mainVariation.moves.length && gameState.variation === mainVariation}
+                                disabled={gameState.halfMoveNum >= mainVariation.moves.length && gameState.variation.id === mainVariation.id}
                             >
                                 &gt;&gt;
                             </button>
