@@ -22,8 +22,8 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
     const currentFen = getFen(gameState.variation, gameState.halfMoveNum);
 
     // PGN Button Handlers
-    const firstMove = () => setGameState({variation: mainVariation, halfMoveNum: 0});
-    const lastMove = () => setGameState({variation: mainVariation, halfMoveNum: mainVariation.moves.length});
+    const firstMove = () => setGameStateSafe(prev => ({...prev, variation: mainVariation, halfMoveNum: 0}));
+    const lastMove = () => setGameStateSafe(prev => ({...prev, variation: mainVariation, halfMoveNum: mainVariation.moves.length}));
     const nextMove = () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum + 1}));
     const prevMove = () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum - 1}));
     const flipBoard = () => setFlipped(prev => !prev);
@@ -38,16 +38,32 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
             return newState;
         });
     }
+
+    function enterVariation() {
+        setGameStateSafe(prevState => {
+            const moveNum = prevState.halfMoveNum ? prevState.halfMoveNum - 1 : prevState.halfMoveNum;
+            const newVariation = prevState.variation.moves[moveNum].variation
+            if(newVariation) {
+                return {...prevState, variation: newVariation, halfMoveNum: 1}
+            }
+            if(moveNum == 0) {
+                return {...prevState, halfMoveNum: 1}
+            }
+            return prevState
+        });
+    }
     
     // Handle arrow key functions to scroll through pgn
-    function handleKeyDown({key}: {key: string}) {
-        switch(key) {
+    function handleKeyDown(event: React.KeyboardEvent) {
+        event.preventDefault();
+        switch(event.key) {
             case "ArrowUp": firstMove(); break;
             case "ArrowDown": lastMove(); break;
             case "ArrowLeft": prevMove(); break;
             case "ArrowRight": nextMove(); break;
             case "f":
             case "F": flipBoard(); break;
+            case " ": enterVariation(); break;
         }
     }
 
@@ -69,24 +85,26 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
             // Actual move and annotation
             let move_text = "";
             move_text += move.move;
-            move_text += move.annotation || "" + " ";
+            move_text += move.annotation || "";
             return (
-                <div key={`${variation.start}_${i}`} className="inline">
+                <div key={`${variation.start}_${i}`} className={`inline ${level > 0 ? "text-2xs lg:text-lg" : "text-xs lg:text-xl"}`}>
                     <div 
                         className={
                             `p-1 cursor-pointer text-nowrap inline
                             ${level > 0 && "italic"}
-                            ${isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite ring-secondary ring-2 dark: ring-1 rounded-lg"}
+                            ${isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg"}
                         `}
-                        onClick={() => setGameState({variation: variation, halfMoveNum: i+1})}
+                        onClick={() => setGameStateSafe(prev => ({...prev, variation: variation, halfMoveNum: i+1}))}
                     >
                         {move_number}
-                        <span className={`${move.annotation && move.annotation.startsWith("!") && "text-slate-700 dark:text-slate-400"}`}>
+                        <span className={`${move.annotation && move.annotation.startsWith("!") && "text-lime-700 dark:text-lime-400"}`}>
                             {move_text}
                         </span>
                     </div>
-                    {move.comment ? <span className="lg:text-xl text-primary p-1"> {move.comment}</span> : ""}
-                    {move.variation ? displayVariation(move.variation, level + 1) : ""}
+                    <div className="inline">
+                        {move.comment ? <span className="text-primary p-1"> {move.comment}</span> : <span> </span>}
+                        {move.variation ? displayVariation(move.variation, level + 1) : ""}
+                    </div>
                 </div>
             );
         });
@@ -140,24 +158,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
                         <button className="cursor-pointer text-large hover:text-secondary-dark" onClick={flipBoard}>Flip Board</button>
                     </div>
                 </div>
-                <div className="w-1/2 h-full p-2 lg:p-5 text-xs lg:text-lg">{displayVariation(mainVariation)/*
-                    pgnChess.history().map((move: string, i: number) => {
-                        const move_comment = pgnComments[i+1];
-                        // Add number before move if it is a white move.
-                        const move_text = i % 2 == initialTurn ? "" + Math.ceil(i/2 + initialMoveNum) + "." + move : move;
-                        return (
-                            <div key={`movetext_${i}`} className="inline">
-                                <span
-                                    onClick={() => goToMove(i+1)}
-                                    className={`p-1 cursor-pointer text-nowrap ${i+1==halfMovNum && "font-bold dark:text-primarywhite text-secondarywhite ring-secondary ring-1 rounded-lg"}`}
-                                >
-                                    {i == 0 && initialTurn == 1 ? "" + initialMoveNum + "... " : ""}{move_text} 
-                                </span>
-                                {move_comment ? <span className="lg:text-xl text-primary p-1"> {move_comment}</span> : <span> </span>}
-                            </div>
-                        );
-                    })
-                */}</div>
+                <div className="w-1/2 h-full p-2 lg:p-5">{displayVariation(mainVariation)}</div>
             </div>
         </div>
     )
