@@ -2,7 +2,9 @@ export type Arrows = Array<[Square, Square, string,]>;
 export interface Variation {
     id: number;
     start: string,
-    moves: Array<Move>
+    moves: Array<Move>,
+    parentVariation: Variation | null,
+    parentMove: number,
 }
 export interface Move {
     moveNumber: number,

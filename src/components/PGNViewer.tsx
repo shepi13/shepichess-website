@@ -41,8 +41,11 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
     function setGameStateSafe(callback: StateCallback) {
         setGameState(prevState => {
             const newState = callback(prevState);
+            if(!newState.variation || newState.halfMoveNum === null) {
+                return prevState;
+            }
             if (newState.halfMoveNum < 0 || newState.halfMoveNum > newState.variation.moves.length) {
-                return prevState
+                return prevState;
             }
             return newState;
         });
@@ -70,6 +73,16 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
             return prevState
         });
     }
+
+    const exitVariation = () => setGameStateSafe(
+        prev => {
+            if(!prev.variation.parentVariation) return prev;
+            return {
+                variation: prev.variation.parentVariation, 
+                halfMoveNum: prev.variation.parentMove
+            };
+        }
+    ); 
     
     // Handle arrow key functions to scroll through pgn
     function handleKeyDown(event: React.KeyboardEvent) {
@@ -82,6 +95,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
             case "f":
             case "F": flipBoard(); break;
             case " ": enterVariation(); break;
+            case "Escape": exitVariation(); break;
         }
     }
 

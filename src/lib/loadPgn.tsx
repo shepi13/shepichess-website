@@ -1,15 +1,10 @@
 import { Chess } from "chess.js";
 
-import { Arrows, isSquare, Variation } from "@/lib/pgnTypes";
+import { Arrows, isSquare, Variation, Move } from "@/lib/pgnTypes";
 
-const annotationLookup = new Map([
-    ["$1", "!"],
-    ["$2", "?"],
-    ["$3", "!!"],
-    ["$4","??"],
-    ["$5", "!?"],
-    ["$6", "?!"],
-    ["$7", "&square;"],
+const annotationLookup = [
+    ["$132", "&lrarr;",],
+    ["$133", "&lrarr;",],
     ["$10", "="],
     ["$13", "&infin;"],
     ["$14", "&pluse;"],
@@ -24,30 +19,35 @@ const annotationLookup = new Map([
     ["$37", "&uarr;",],
     ["$40", "&rarr;",],
     ["$41", "&rarr;",],
-    ["$132", "&lrarr;",],
-    ["$133", "&lrarr;",],
-]);
+    ["$1", "!"],
+    ["$2", "?"],
+    ["$3", "!!"],
+    ["$4","??"],
+    ["$5", "!?"],
+    ["$6", "?!"],
+    ["$7", "&square;"],
+] as const;
 
 /*
 /
-    (?:[0-9]*\.+)?          #Optional move number (Number followed by . or ...)
+    (?:[0-9]*\.+)?                  #Optional move number (Number followed by . or ...)
      *
-    ((?:[A-Za-z]+[0-9])     # Move (Letters followed by number, eg. Ng5)
-    |0-0-0|0-0|O-O-O|O-O)   # or castling
+    ((?:[A-Za-z]+[0-9])             # Move (Letters followed by number, eg. Ng5)
+    |0-0-0|0-0|O-O-O|O-O)           # or castling
      *
-    ([/!?=+-]+|\$[0-9]+)*   # Annotation (!?=+- for direct annotation, e.g. $13 for pgn style notation) TODO: Should accept annotation for move and position
+    ((?:[/!?=+-]+|\$[0-9]+ *)*)?    # Optional Annotation (!?=+- for direct annotation, e.g. $13 for pgn style notation)
      *
-    (?:\[(.*?)\])?          # Optional Arrows (Capture values inside [], will not be nested)
+    (?:\[(.*?)\])?                  # Optional Arrows (Capture values inside [], will not be nested)
      *
-    (?:\{(.*?)\})?          # Optional Comment (Capture values inside {}), comments cannot be nested
+    (?:\{(.*?)\})?                  # Optional Comment (Capture values inside {}), comments cannot be nested
      *
-    (?:\$\((.*?)\$\))?      # Optional Variations (Capture values inside $( to $), this will not be nested after preprocessing)
+    (?:\$\((.*?)\$\))?              # Optional Variations (Capture values inside $( to $), this will not be nested after preprocessing)
 /g
 
 Note that order must always be annotations -> arrows -> comments -> variations. This makes the most sense logistically, as variations
 are directly tied to the move, arrows to the position, then comments to the current text, and variations to the next move.
 */
-const pgnParseRegex = /(?:[0-9]*\.+)? *((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O) *([/!?=+-]+|\$[0-9]+)* *(?:\[(.*?)\])? *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))?/g
+const pgnParseRegex = /(?:[0-9]*\.+)? *((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O) *((?:[/!?=+-]+|\$[0-9]+ *)*)? *(?:\[(.*?)\])? *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))?/g
 
 export function getFen(variation: Variation, moveNumber: number) {
     if(moveNumber === 0) {
@@ -56,16 +56,23 @@ export function getFen(variation: Variation, moveNumber: number) {
     return variation.moves[moveNumber-1].fenAfter;
 }
 
-export function loadPgn(pgn: string, start: string, id: number = 0): Variation {
+export function loadPgn(
+    pgn: string, 
+    start: string, 
+    id: number = 0, 
+    parentVar: Variation | null = null, 
+    parentMove: number = 0
+): Variation {
     pgn = preParsePgn(pgn);
 
     // Use chessjs game just to verify pgn moves are legal, since it doesn't support variations or custom pgn starting positions
     const game = new Chess(start);
 
     const tokens = [...pgn.matchAll(pgnParseRegex)];
-    const moves = [];
+    const moves: Array<Move> = [];
+    const currentVariation = {id: id, start: start, moves: moves, parentVariation: parentVar, parentMove: parentMove}
     let new_id = id+1000;
-    for(const token of tokens) {
+    tokens.forEach((token, index) => {
         const moveNumber = game.moveNumber();
         const sideToMove = game.turn();
         const beforeFen = game.fen();
@@ -77,18 +84,22 @@ export function loadPgn(pgn: string, start: string, id: number = 0): Variation {
             move: token[1],
             annotation: getAnnotation(token[2]),
             comment: token[4],
-            variation: token[5] ? loadPgn(token[5], beforeFen, ++new_id) : null,
+            variation: token[5] ? loadPgn(token[5], beforeFen, ++new_id, currentVariation, index+1) : null,
             arrows: parseArrows(token[3]),
             fullMatch: token[0],
             fenAfter: game.fen(),
         })
-    }
+    });
   
-    return {id: id, start: start, moves: moves};
+    return currentVariation;
 }
 
 function getAnnotation(annotationPgn: string) {
-    return annotationLookup.get(annotationPgn) || annotationPgn;
+    if(!annotationPgn) return annotationPgn;
+    for(const [key, val] of annotationLookup) {
+        annotationPgn = annotationPgn.replaceAll(key, val);
+    }
+    return annotationPgn;
 }
 
 function parseArrows(arrowPgn: string) {
