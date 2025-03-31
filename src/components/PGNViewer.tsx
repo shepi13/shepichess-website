@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Chessboard } from "react-chessboard";
-import { loadPgn, getFen, Variation, Move } from "@/lib/loadPgn";
+import { loadPgn, getFen} from "@/lib/loadPgn";
+
+import { Variation, Move } from "@/lib/pgnTypes";
 
 const StartFen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -26,6 +28,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
     const [flipped, setFlipped] = useState(false);
 
     const currentFen = getFen(gameState.variation, gameState.halfMoveNum);
+    const currentMove = gameState.halfMoveNum != 0 ? gameState.variation.moves[gameState.halfMoveNum-1] : null;
 
     // PGN Button Handlers
     const firstMove = () => setGameStateSafe(prev => ({...prev, variation: mainVariation, halfMoveNum: 0}));
@@ -132,7 +135,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
         <div className={`border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5 ${small && "md:w-4/5 xl:w-2/5"}`} onKeyDown={handleKeyDown} tabIndex={1}>
             <div className="flex h-full w-full">
                 <div className="w-2/3 sm:w-1/2 h-full">
-                    <Chessboard position={currentFen} arePiecesDraggable={false} boardOrientation={flipped ? "black" : "white"}/>
+                    <Chessboard position={currentFen} arePiecesDraggable={false} boardOrientation={flipped ? "black" : "white"} customArrows={currentMove ? currentMove.arrows : []}/>
                     <div className="flex justify-between p-1 lg:p-5 pr-0">
                         <div className="flex justify-between w-2/3">
                             <button 

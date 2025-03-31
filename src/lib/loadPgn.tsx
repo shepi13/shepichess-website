@@ -1,20 +1,6 @@
 import { Chess } from "chess.js";
 
-export interface Variation {
-    id: number;
-    start: string,
-    moves: Array<Move>
-}
-export interface Move {
-    moveNumber: number,
-    color: string,
-    move: string,
-    annotation: string,
-    comment: string,
-    variation: Variation | null,
-    fullMatch: string,
-    fenAfter: string,
-}
+import { Arrows, isSquare, Variation } from "@/lib/pgnTypes";
 
 const annotationLookup = new Map([
     ["$1", "!"],
@@ -54,7 +40,7 @@ export function loadPgn(pgn: string, start: string, id: number = 0): Variation {
     pgn = preParsePgn(pgn);
     const game = new Chess(start);
 
-    const tokens = [...pgn.matchAll(/(?:[0-9]*\.+)* *((?:[A-Za-z]+[0-9]+)|0-0-0|0-0|O-O-O|O-O) *([/!?=+-]+|\$[0-9]+)* *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))?/g)];
+    const tokens = [...pgn.matchAll(/(?:[0-9]*\.+)* *((?:[A-Za-z]+[0-9]+)|0-0-0|0-0|O-O-O|O-O) *([/!?=+-]+|\$[0-9]+)* *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))? *(?:\[(.*?)\])?/g)];
     const moves = [];
     let new_id = id*100;
     for(const token of tokens) {
@@ -70,17 +56,32 @@ export function loadPgn(pgn: string, start: string, id: number = 0): Variation {
             annotation: getAnnotation(token[2]),
             comment: token[3],
             variation: token[4] ? loadPgn(token[4], beforeFen, ++new_id) : null,
+            arrows: parseArrows(token[5]),
             fullMatch: token[0],
-            fenAfter: game.fen()
+            fenAfter: game.fen(),
         })
     }
   
     return {id: id, start: start, moves: moves};
 }
 
-
 function getAnnotation(annotationPgn: string) {
     return annotationLookup.get(annotationPgn) || annotationPgn;
+}
+
+function parseArrows(arrowPgn: string) {
+    const arrows: Arrows = [];
+    if(!arrowPgn) return arrows;
+
+    for (const arrow of arrowPgn.split(" ")) {
+        const start = arrow.substring(0,2);
+        const end = arrow.substring(2,4)
+        
+        if(isSquare(start) && isSquare(end)) {
+            arrows.push([start, end, arrow.substring(4)]);
+        }
+    }
+    return arrows;
 }
 
 function preParsePgn(pgn: string): string {
