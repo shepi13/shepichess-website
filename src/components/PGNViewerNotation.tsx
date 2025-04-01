@@ -3,8 +3,8 @@ import { GameState, PGNStateCallback } from "./PGNViewer";
 
 interface PGNViewerNotationProps {
     variation: Variation,
-    gameState: GameState,
-    setGameState: (arg0: PGNStateCallback) => void,
+    gameState?: GameState,
+    setGameState?: (arg0: PGNStateCallback) => void,
     level?: number,
 }
 
@@ -19,7 +19,7 @@ export default function PGNViewerNotation({variation, gameState, setGameState, l
         <div className="inline">
             {level > 0? <span>( </span> : ""}
             {variation.moves.map((move: Move, i: number) => {
-                const isCurrentMove = (variation.id === gameState.variation.id && i+1 === gameState.halfMoveNum);
+                const isCurrentMove = (gameState && variation.id === gameState.variation.id && i+1 === gameState.halfMoveNum);
                 // Move Number only shows for either white player or on first move of variation
                 const move_number = move.color == "w" ? move.moveNumber + ". " : (i == 0 ? move.moveNumber + "... " : "");
                 const move_text = move.move + move.annotation || "";
@@ -31,7 +31,7 @@ export default function PGNViewerNotation({variation, gameState, setGameState, l
                                 ${level > 0 && "italic"}
                                 ${isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg"}
                             `}
-                            onClick={() => setGameState(prev => ({...prev, variation: variation, halfMoveNum: i+1}))}
+                            onClick={setGameState && (() => setGameState(prev => ({...prev, variation: variation, halfMoveNum: i+1})))}
                         >
                             {move_number}
                             <span 
