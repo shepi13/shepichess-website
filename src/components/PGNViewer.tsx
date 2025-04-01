@@ -16,12 +16,16 @@ export interface PGNViewerProps {
     small?: boolean, 
     showNotation?: boolean, 
     draggable?: boolean,
+    flip?: boolean,
+    onDrop?: () => void,
 }
 export type PGNStateCallback = (state: GameState) => GameState;
 
-export default function PGNViewer(
-    {pgn="", start=startFen, small=false, showNotation=true, draggable=false}: PGNViewerProps
-) {
+export default function PGNViewer({
+    pgn="", 
+    start=startFen, 
+    small=false
+}: PGNViewerProps) {
     /**
      * React Component that renders a chessboard, adding functionality for pgn parsing,
      * move tree traversal with buttons/key handlers, flipping the board, and displaying
@@ -32,8 +36,6 @@ export default function PGNViewer(
      * @param pgn - the pgn describing the move tree (see lib/loadPgn for format)
      * @param start - the fen of the starting position (defaults to the standard chess setup)
      * @param small - if the display board should be small (TODO: rework into proper styling params before release)
-     * @param showNotation - if the notation/buttons should be displayed (if false, is just a react-chessboard component with added key handlers and styles)
-     * @param draggable - should the end-user be able to drag/move pieces
      * 
      */
 
@@ -98,17 +100,23 @@ export default function PGNViewer(
     }
 
     return (
-        <div className={`border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5 ${small && "md:w-4/5 xl:w-2/5"}`} onKeyDown={handleKeyDown} tabIndex={1}>
+        <div className=
+            {
+                `border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5
+                ${small && "md:w-4/5 xl:w-2/5"}`
+            }
+            onKeyDown={handleKeyDown} 
+            tabIndex={1}
+        >
             <div className="flex h-full w-full">
-                <div className={`${showNotation ? "w-2/3 sm:w-1/2" : "w-full"} h-full`}>
+                <div className="w-2/3 sm:w-1/2 h-full">
                     <Chessboard 
                         position={currentFen} 
-                        arePiecesDraggable={draggable} 
-                        boardOrientation={flipped ? "black" : "white"} 
+                        arePiecesDraggable={false} 
+                        boardOrientation={flipped  ? "black" : "white"} 
                         customArrows={currentMove ? currentMove.arrows : []}
                         customBoardStyle={{"boxShadow": "3px 3px 5px rgba(0,0,0,.8)"}}
                     />
-                    {showNotation && 
                     <PGNViewerButtons 
                         moveButtons={[
                             {
@@ -126,13 +134,10 @@ export default function PGNViewer(
                         ]}
                         onFlipBoard={flipBoard}
                     />
-                    }
                 </div>
-                {showNotation && 
                 <div className="w-1/2 h-full p-2 lg:p-5">{
                     <PGNViewerNotation variation={mainVariation} gameState={gameState} setGameState={setGameStateSafe} />}
                 </div>
-                }
             </div>
         </div>
     )
