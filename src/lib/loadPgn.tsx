@@ -2,6 +2,7 @@ import { Chess } from "chess.js";
 
 import { Arrows, isSquare, Variation, Move } from "@/lib/pgnTypes";
 
+// Lookup table for PGN numerical annotations (see https://en.wikipedia.org/wiki/Portable_Game_Notation#Standard_NAGs)
 const annotationLookup = [
     ["$132", "&lrarr;",],
     ["$133", "&lrarr;",],
@@ -35,7 +36,7 @@ const annotationLookup = [
     ((?:[A-Za-z]+[0-9])             # Move (Letters followed by number, eg. Ng5)
     |0-0-0|0-0|O-O-O|O-O)           # or castling
      *
-    ((?:[/!?=+-]+|\$[0-9]+ *)*)?    # Optional Annotation (!?=+- for direct annotation, e.g. $13 for pgn style notation)
+    ((?:[/!?=+-]+|\$[0-9]+ *)*)?    # Optional Annotations (!?=+- for direct annotation, e.g. $13 for pgn style notation)
      *
     (?:\[(.*?)\])?                  # Optional Arrows (Capture values inside [], will not be nested)
      *
@@ -47,8 +48,10 @@ const annotationLookup = [
 Note that order must always be annotations -> arrows -> comments -> variations. This makes the most sense logistically, as variations
 are directly tied to the move, arrows to the position, then comments to the current text, and variations to the next move.
 */
-const pgnParseRegex = /(?:[0-9]*\.+)? *((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O) *((?:[/!?=+-]+|\$[0-9]+ *)*)? *(?:\[(.*?)\])? *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))?/g
+const pgnParseRegex = /(?:[0-9]*\.+)? *((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O) *((?:[/!?=+-]+ *|\$[0-9]+ *)*)? *(?:\[(.*?)\])? *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))?/g
 
+
+// Lookup position string for current variation/move
 export function getFen(variation: Variation, moveNumber: number) {
     if(moveNumber === 0) {
         return variation.start;
@@ -63,6 +66,17 @@ export function loadPgn(
     parentVar: Variation | null = null, 
     parentMove: number = 0
 ): Variation {
+        /*
+         *  Parses a PGN into variation objects (see pgnTypes.tsx)
+         *  Each move should be in the form of 2. Nf3! [arrows] {comments} (variations)
+         *  See pgnParseRegex above for a more detailed parsing explanation
+         * 
+         *  @param pgn - pgn to parse
+         *  @param start - fen for starting position
+         *  @returns - Parsed Variation object
+         */
+
+    // Replaces every outermost group of matching parenthesis with $( $), so we can easily match in regex
     pgn = preParsePgn(pgn);
 
     // Use chessjs game just to verify pgn moves are legal, since it doesn't support variations or custom pgn starting positions
@@ -70,8 +84,16 @@ export function loadPgn(
 
     const tokens = [...pgn.matchAll(pgnParseRegex)];
     const moves: Array<Move> = [];
-    const currentVariation = {id: id, start: start, moves: moves, parentVariation: parentVar, parentMove: parentMove}
-    let new_id = id+1000;
+    const currentVariation = {
+        id: id, 
+        start: start, 
+        moves: moves, 
+        parentVariation: parentVar, 
+        parentMove: parentMove
+    }
+    // Save 10000 id numbers for variations on current level
+    let newId = id+10000;
+
     tokens.forEach((token, index) => {
         const moveNumber = game.moveNumber();
         const sideToMove = game.turn();
@@ -83,8 +105,8 @@ export function loadPgn(
             moveNumber: moveNumber,
             move: token[1],
             annotation: getAnnotation(token[2]),
-            comment: token[4],
-            variation: token[5] ? loadPgn(token[5], beforeFen, ++new_id, currentVariation, index+1) : null,
+            comment: token[4] || "",
+            variation: token[5] ? loadPgn(token[5], beforeFen, ++newId, currentVariation, index+1) : null,
             arrows: parseArrows(token[3]),
             fullMatch: token[0],
             fenAfter: game.fen(),
@@ -94,15 +116,29 @@ export function loadPgn(
     return currentVariation;
 }
 
-function getAnnotation(annotationPgn: string) {
-    if(!annotationPgn) return annotationPgn;
+function getAnnotation(annotationPgn?: string) {
+        /*
+         * Replaces PGN Numeric codes with display html, removing extra whitespace
+         * @param annotationPgn? - The matched annotation from our pgn regex
+         */
+    if(!annotationPgn) return "";
+    annotationPgn = annotationPgn.replaceAll(/\s*\$/g, " $");
     for(const [key, val] of annotationLookup) {
         annotationPgn = annotationPgn.replaceAll(key, val);
     }
-    return annotationPgn;
+    return annotationPgn.trim();
 }
 
 function parseArrows(arrowPgn: string) {
+        /*
+         * Parses arrows of form "a2a4orange, b2b4red" into squares and colors
+         * that can be used with react-chessboard.
+         * 
+         * These should be stored inside square brackets in the pgn (e.g. [f8c5blue, f8e7red])
+         * 
+         * @param arrowPgn - The parsed arrows from the pgn regex
+         * @ returns arrows - An Array<Square, Square, string> representing the arrow and corresponding colors
+         */
     const arrows: Arrows = [];
     if(!arrowPgn) return arrows;
 
@@ -118,6 +154,12 @@ function parseArrows(arrowPgn: string) {
 }
 
 function preParsePgn(pgn: string): string {
+        /*
+         * Replaces outermost matching parenthesis with $(... $), for easier regex parsing
+         * Ignores any parenthesis inside pgn comments, represented by {...}
+         * 
+         * @param pgn - the pgn to preprocess
+         */
     let level = 0;
     let inComment = false;
     let start = 0;

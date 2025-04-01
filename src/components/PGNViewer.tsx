@@ -76,9 +76,8 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
 
     const exitVariation = () => setGameStateSafe(
         prev => {
-            if(!prev.variation.parentVariation) return prev;
             return {
-                variation: prev.variation.parentVariation, 
+                variation: prev.variation.parentVariation || mainVariation, 
                 halfMoveNum: prev.variation.parentMove
             };
         }
@@ -133,7 +132,7 @@ export default function PGNViewer({pgn, start=StartFen, small=false}: {pgn: stri
                                 ${move.annotation && move.annotation.startsWith("!") && "text-green-700 dark:text-lime-400"}
                                 ${move.annotation && move.annotation.startsWith("?") && "text-sky-900 dark:text-sky-200"}
                             `} 
-                            dangerouslySetInnerHTML={{__html: move_text}}>
+                            dangerouslySetInnerHTML={{__html: move_text + "&nbsp;"}}>
                         </span>
                     </div>
                     <div className="inline">
