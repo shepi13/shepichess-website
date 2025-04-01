@@ -1,7 +1,7 @@
 export default function Tournaments() {
   return (
     <>
-      <h1 className="text-primary dark:text-secondary p-10 text-5xl">HELLO WORLD!</h1>
+      <h1 className="p-10">HELLO WORLD!</h1>
     </>
   );
 }

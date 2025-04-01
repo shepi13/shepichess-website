@@ -106,7 +106,7 @@
     @apply text-secondary-dark drop-shadow-[0_0.8px_0.8px_var(--primary-dark)]
   }
 
-  :is(h4, h5) {
+  h4, h5 {
     @apply drop-shadow-[0_1px_1px_var(--primary-dark)]
   }
 

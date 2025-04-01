@@ -26,17 +26,12 @@ const darkmodeOptions = [
 ]
 
 export default function ThemeToggle({className}: {className?: string}) {
-    const {theme, setTheme} = useTheme();
+    const {setTheme, resolvedTheme} = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
     }, []);
-
-    //Default to dark theme
-    if(theme === "system") {
-        setTheme("dark");
-    }
 
     if(!mounted) {
         return null;
@@ -44,7 +39,7 @@ export default function ThemeToggle({className}: {className?: string}) {
 
     return (
         <Menu>
-            <MenuButton className={className}>{theme} Mode</MenuButton>
+            <MenuButton className={className}>{resolvedTheme} Mode</MenuButton>
             <MenuItems anchor="bottom" transition className="bg-primarywhite-light dark:bg-primaryblack-light absolute right-0 w-32 ring-opacity-5 ring-1 ring-black rounded-lg shadow-md
                 transition data-[enter]:duration-250 data-[leave]:duration-20 ease-out data-[closed]:scale-95 data-[closed]:opacity-0">
             <div className="p-1">

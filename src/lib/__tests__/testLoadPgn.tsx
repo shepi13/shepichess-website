@@ -1,8 +1,6 @@
 import { describe, test, expect } from "@jest/globals"
 import  { loadPgn, getFen } from "../loadPgn";
-import { Square } from "../pgnTypes"
-
-const startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+import { Square, startFen } from "../pgnTypes"
 
 describe("getFen test", () => {
     const fenAfter = "Find this string!";

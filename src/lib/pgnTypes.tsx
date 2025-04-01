@@ -91,3 +91,5 @@ export type Square = typeof squareVals[number];
 export function isSquare(str: string): str is Square {
     return !!squareVals.find(item => item === str)
 }
+
+export const startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
