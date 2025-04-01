@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { Chessboard } from "react-chessboard";
 import { loadPgn, getFen} from "@/lib/loadPgn";
-import { Variation, Move, startFen } from "@/lib/pgnTypes";
+import { Variation, startFen } from "@/lib/pgnTypes";
 import PGNViewerButtons from "./PGNViewerButtons";
+import PGNViewerNotation from "./PGNViewerNotation";
 
 export interface GameState {
     variation: Variation,
@@ -17,12 +18,6 @@ export interface PGNViewerProps {
     draggable?: boolean,
 }
 export type PGNStateCallback = (state: GameState) => GameState;
-
-const variationStylesByLevel = new Map([
-    [0, "text-xs lg:text-xl"],
-    [1, "text-2xs lg:text-lg"],
-    [-1, "text-3xs lg:text-base"],
-]);
 
 export default function PGNViewer(
     {pgn="", start=startFen, small=false, showNotation=true, draggable=false}: PGNViewerProps
@@ -87,62 +82,6 @@ export default function PGNViewer(
         }
     }
 
-    //----------------------------------------------------------
-    // Rendering Logic
-
-    function displayVariation(variation: Variation, level: number = 0) {
-        const variation_jsx = variation.moves.map((move: Move, i: number) => {
-            const isCurrentMove = (variation.id === gameState.variation.id && i+1 === gameState.halfMoveNum);
-            
-            // Show move number
-            let move_number = "";
-            if (move.color == 'w') {
-                move_number += move.moveNumber + ". ";
-            }
-            else if (i == 0) {
-                move_number += move.moveNumber + "... ";
-            }
-            // Actual move and annotation
-            let move_text = "";
-            move_text += move.move;
-            move_text += move.annotation || "";
-            return (
-                <div key={`${variation.start}_${i}`} className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}>
-                    <div 
-                        className={
-                            `p-1 cursor-pointer text-nowrap inline
-                            ${level > 0 && "italic"}
-                            ${isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg"}
-                        `}
-                        onClick={() => setGameStateSafe(prev => ({...prev, variation: variation, halfMoveNum: i+1}))}
-                    >
-                        {move_number}
-                        <span 
-                            className={`
-                                ${move.annotation && move.annotation.startsWith("!") && "text-lime-600 dark:text-lime-400"}
-                                ${move.annotation && move.annotation.startsWith("?") && "text-sky-900 dark:text-sky-200"}
-                            `} 
-                            dangerouslySetInnerHTML={{__html: move_text + "&nbsp;"}}>
-                        </span>
-                    </div>
-                    <div className="inline">
-                        {move.comment ? <span className="text-primary p-1"> {move.comment}</span> : <span> </span>}
-                        {move.variation ? displayVariation(move.variation, level + 1) : ""}
-                    </div>
-                </div>
-            );
-        });
-
-        // Wrap subvariations in parenthesis
-        return (
-            <div className="inline">
-                {level > 0? <span>( </span> : ""}
-                {variation_jsx}
-                {level > 0? <span>)</span> : ""}
-            </div>
-        );
-    }
-
     return (
         <div className={`border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5 ${small && "md:w-4/5 xl:w-2/5"}`} onKeyDown={handleKeyDown} tabIndex={1}>
             <div className="flex h-full w-full">
@@ -161,7 +100,9 @@ export default function PGNViewer(
                         start={start}
                     /> 
                 </div>
-                {showNotation && <div className="w-1/2 h-full p-2 lg:p-5">{displayVariation(mainVariation)}</div>}
+                {showNotation && <div className="w-1/2 h-full p-2 lg:p-5">{
+                    <PGNViewerNotation variation={mainVariation} gameState={gameState} setGameState={setGameStateSafe} />}</div>
+                }
             </div>
         </div>
     )

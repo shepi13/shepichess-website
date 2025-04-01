@@ -1,4 +1,4 @@
-import { GameState } from "@/components/PGNViewer/PGNViewer";
+import { GameState } from "@/components/PGNViewer";
 import { loadPgn } from "@/lib/loadPgn";
 
 
