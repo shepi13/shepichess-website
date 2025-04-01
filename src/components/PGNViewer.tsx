@@ -22,6 +22,21 @@ export type PGNStateCallback = (state: GameState) => GameState;
 export default function PGNViewer(
     {pgn="", start=startFen, small=false, showNotation=true, draggable=false}: PGNViewerProps
 ) {
+    /**
+     * React Component that renders a chessboard, adding functionality for pgn parsing,
+     * move tree traversal with buttons/key handlers, flipping the board, and displaying
+     * notation in a prettified way that also links to specific board positions when clicked.
+     * 
+     * It also supports displaying comments, arrows, and annotations stored in a simplified variation of pgn format
+     * 
+     * @param pgn - the pgn describing the move tree (see lib/loadPgn for format)
+     * @param start - the fen of the starting position (defaults to the standard chess setup)
+     * @param small - if the display board should be small (TODO: rework into proper styling params before release)
+     * @param showNotation - if the notation/buttons should be displayed (if false, is just a react-chessboard component with added key handlers and styles)
+     * @param draggable - should the end-user be able to drag/move pieces
+     * 
+     */
+
     const mainVariation = loadPgn(pgn, start);
 
     // Current state of display board
@@ -93,15 +108,30 @@ export default function PGNViewer(
                         customArrows={currentMove ? currentMove.arrows : []}
                         customBoardStyle={{"boxShadow": "3px 3px 5px rgba(0,0,0,.8)"}}
                     />
+                    {showNotation && 
                     <PGNViewerButtons 
-                        handlers={{start: firstMove, end: lastMove, next: nextMove, prev: prevMove, flip: flipBoard}} 
-                        gameState={gameState}
-                        pgn={pgn}
-                        start={start}
-                    /> 
+                        moveButtons={[
+                            {
+                                onClick: firstMove, 
+                                disabled: gameState.halfMoveNum <= 0 && gameState.variation.id === mainVariation.id,
+                                children: "<<",
+                            },
+                            {onClick: prevMove, disabled: gameState.halfMoveNum <= 0, children: "<"},
+                            {onClick: nextMove, disabled: gameState.halfMoveNum >= gameState.variation.moves.length, children: ">"},
+                            {
+                                onClick: lastMove, 
+                                disabled: gameState.halfMoveNum >= mainVariation.moves.length && gameState.variation.id === mainVariation.id,
+                                children: ">>",
+                            }
+                        ]}
+                        onFlipBoard={flipBoard}
+                    />
+                    }
                 </div>
-                {showNotation && <div className="w-1/2 h-full p-2 lg:p-5">{
-                    <PGNViewerNotation variation={mainVariation} gameState={gameState} setGameState={setGameStateSafe} />}</div>
+                {showNotation && 
+                <div className="w-1/2 h-full p-2 lg:p-5">{
+                    <PGNViewerNotation variation={mainVariation} gameState={gameState} setGameState={setGameStateSafe} />}
+                </div>
                 }
             </div>
         </div>

@@ -36,7 +36,7 @@ const annotationLookup = [
     ((?:[A-Za-z]+[0-9])             # Move (Letters followed by number, eg. Ng5)
     |0-0-0|0-0|O-O-O|O-O)           # or castling
      *
-    ((?:[/!?=+-]+|\$[0-9]+ *)*)?    # Optional Annotations (!?=+- for direct annotation, e.g. $13 for pgn style notation)
+    ((?:[/!?=+-]+ *|\$[0-9]+ *)*)?  # Optional Annotations (!?=+- for direct annotation, e.g. $13 for pgn style notation)
      *
     (?:\[(.*?)\])?                  # Optional Arrows (Capture values inside [], will not be nested)
      *
@@ -53,6 +53,12 @@ const pgnParseRegex = /(?:[0-9]*\.+)? *((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O) 
 
 // Lookup position string for current variation/move
 export function getFen(variation: Variation, moveNumber: number) {
+        /**
+         * Returns the fen for a variation after a specific move number (1 indexed)
+         * 
+         * @param variation - variation to search
+         * @param moveNumber - half move count (relative to variation start)
+         */
     if(moveNumber === 0) {
         return variation.start;
     }
@@ -66,7 +72,7 @@ export function loadPgn(
     parentVar: Variation | null = null, 
     parentMove: number = 0
 ): Variation {
-        /*
+        /**
          *  Parses a PGN into variation objects (see pgnTypes.tsx)
          *  Each move should be in the form of 2. Nf3! [arrows] {comments} (variations)
          *  See pgnParseRegex above for a more detailed parsing explanation
@@ -117,9 +123,9 @@ export function loadPgn(
 }
 
 function getAnnotation(annotationPgn?: string) {
-        /*
+        /**
          * Replaces PGN Numeric codes with display html, removing extra whitespace
-         * @param annotationPgn? - The matched annotation from our pgn regex
+         * @param annotationPgn - The matched annotation from our pgn regex
          */
     if(!annotationPgn) return "";
     annotationPgn = annotationPgn.replaceAll(/\s*\$/g, " $");
@@ -130,7 +136,7 @@ function getAnnotation(annotationPgn?: string) {
 }
 
 function parseArrows(arrowPgn: string) {
-        /*
+        /**
          * Parses arrows of form "a2a4orange, b2b4red" into squares and colors
          * that can be used with react-chessboard.
          * 
@@ -154,7 +160,7 @@ function parseArrows(arrowPgn: string) {
 }
 
 function preParsePgn(pgn: string): string {
-        /*
+        /**
          * Replaces outermost matching parenthesis with $(... $), for easier regex parsing
          * Ignores any parenthesis inside pgn comments, represented by {...}
          * 
