@@ -6,7 +6,7 @@ export default function useEngine(callback: (arg0: string) => void) {
     const workerRef = useRef<Worker>(null);
 
     useEffect(() => {
-        workerRef.current = new Worker("/stockfish/stockfish.js")
+        workerRef.current = new window.Worker("/stockfish/stockfish.js")
         workerRef.current.onmessage = (event) => {
             callback(event.data);
         }

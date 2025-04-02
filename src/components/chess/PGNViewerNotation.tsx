@@ -16,7 +16,7 @@ const variationStylesByLevel = new Map([
 
 export default function PGNViewerNotation({variation, gameState, setGameState, level = 0}: PGNViewerNotationProps) {
     return (
-        <div className="inline">
+        <>
             {level > 0? <span>( </span> : ""}
             {variation.moves.map((move: Move, i: number) => {
                 const isCurrentMove = (gameState && variation.id === gameState.variation.id && i+1 === gameState.halfMoveNum);
@@ -42,14 +42,12 @@ export default function PGNViewerNotation({variation, gameState, setGameState, l
                                 dangerouslySetInnerHTML={{__html: move_text + "&nbsp;"}}>
                             </span>
                         </div>
-                        <div className="inline">
-                            {move.comment ? <span className="text-primary p-1"> {move.comment}</span> : <span> </span>}
-                            {move.variation && <PGNViewerNotation variation={move.variation} gameState={gameState} setGameState={setGameState} level={level+1}/>}
-                        </div>
+                        {move.comment ? <span className="text-primary p-1"> {move.comment}</span> : <span> </span>}
+                        {move.variation && <PGNViewerNotation variation={move.variation} gameState={gameState} setGameState={setGameState} level={level+1}/>}
                     </div>
                 );
             })}
             {level > 0? <span>)</span> : ""}
-        </div>
+        </>
     );
 }

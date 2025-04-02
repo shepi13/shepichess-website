@@ -5,14 +5,14 @@ import { Chessboard } from "react-chessboard";
 import { Position } from "@/lib/pgnTypes";
 import usePosition from "@/lib/hooks/usePosition";
 
-const buttonStyles = "font-bold text-large ring-primary ring-2 p-1 rounded-md hover:text-primary-dark \
+const buttonStyles = "font-bold text-large ring-1 p-1 rounded-md hover:text-primary-dark \
                  hover:shadow-[3px_3px_5px_rgba(0,0,0,.8)] hover:drop-shadow-[2px_2px_3px_rgba(0,0,0,.2)] \
                  dark:hover:shadow-[3px_3px_5px_rgba(255,255,255,.8)] dark:hover:drop-shadow-[2px_2px_3px_rgba(255,255,255,.2)]"
 
 // For use by components that manage state using usePosition
 export default function PlayableChessBoardStateless({position}: {position: Position}) {
     return (
-        <div>
+        <>
             <div className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3">
                 <Chessboard 
                     position={position.position} 
@@ -33,7 +33,7 @@ export default function PlayableChessBoardStateless({position}: {position: Posit
                 ]} 
                 onFlipBoard={position.toggleFlipped}
             />
-        </div>
+        </>
     )
 }
 

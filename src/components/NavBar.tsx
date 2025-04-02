@@ -4,14 +4,11 @@ import Link from "next/link";
 import navLinks from "@/data/navLinks";
 import ThemeToggle from "./theme/ThemeToggle";
 import Image from "next/image";
-import {useState} from 'react';
+import useToggle from "@/lib/hooks/useToggle";
 
 
 export default function NavBar() {
-    const [isOpen, setIsOpen] = useState(false);
-    function toggleOpen() {
-        setIsOpen(prevState => !prevState);
-    }
+    const [isOpen, toggleOpen] = useToggle(false);
 
     return (
         <nav className="sm:flex sm:justify-between p-5 lg:px-15">

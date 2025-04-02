@@ -5,7 +5,7 @@ import { Chess, Square } from "chess.js";
 import PlayableChessBoardStateless from "./PlayableChessBoard";
 
 
-export default function PlayAgainstComputer({start = startFen, playerColor = ""}) {
+export default function PlayAgainstComputer({start = startFen, playerColor = "", depth = 15}) {
     playerColor = playerColor || new Chess(start).turn();
 
     const position = usePosition(start, false);
@@ -26,7 +26,7 @@ export default function PlayAgainstComputer({start = startFen, playerColor = ""}
     const makeMoveAndRespond = (from: Square, to: Square, promotion: string) => {
         const success = position.makeMove(from, to, promotion);
         if(success) {
-            engine.evaluatePosition(position.game.fen(), 15);
+            engine.evaluatePosition(position.game.fen(), depth);
         }
         return success
     }
