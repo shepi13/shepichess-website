@@ -5,24 +5,26 @@ interface PGNButtonSettings {
 }
 
 interface PGNViewerButtonProps {
-    moveButtons: Array<PGNButtonSettings>, 
-    onFlipBoard: () => void,
-    moveButtonStyles? : string,
-    flipButtonStyles? : string,
-    moveButtonContainerStyles?: string,
+    leftButtons?: Array<PGNButtonSettings>, 
+    rightButtons?: Array<PGNButtonSettings>, 
+    leftButtonStyle? : string,
+    rightButtonStyle?: string,
+    leftContainerStyle?: string,
+    rightContainerStyle?: string,
 }
 
 
-const defaultMoveButtonStyle = "cursor-pointer text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl";
-const defaultFlipButtonStyle = "cursor-pointer text-large hover:text-secondary-dark "
-const defaultMoveButtonContainerStyle = "justify-between "
+const defaultButtonStyle = "text-lg md:text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl";
+const defaultFlipButtonStyle = "text-base md:text-lg hover:text-secondary-dark "
+const defaultFlexStyle = "justify-between "
 
 export default function PGNViewerButtons({
-    moveButtons, 
-    onFlipBoard, 
-    moveButtonStyles = defaultMoveButtonStyle, 
-    flipButtonStyles = defaultFlipButtonStyle, 
-    moveButtonContainerStyles = defaultMoveButtonContainerStyle,
+    leftButtons = [], 
+    rightButtons = [], 
+    leftButtonStyle = defaultButtonStyle,
+    rightButtonStyle = defaultFlipButtonStyle,
+    leftContainerStyle = defaultFlexStyle, 
+    rightContainerStyle = defaultFlexStyle,
 }: PGNViewerButtonProps) {
     /**
      * React component that renders buttons in the format used by PGNViewer.
@@ -33,21 +35,31 @@ export default function PGNViewerButtons({
      * @param onFlipBoard - The function to flip the board
      */
 
+    function getButtons(left: boolean) {
+        // eslint-disable-next-line react/display-name
+        return (button: PGNButtonSettings, i: number) => {
+            const buttonStyle = left ? leftButtonStyle : rightButtonStyle;
+            return (
+                <button 
+                    key={`moveButton_${i}`}
+                    className={"cursor-pointer " + buttonStyle}
+                    onClick={button.onClick} 
+                    disabled={!!button.disabled}
+                >
+                    {button.children}
+                </button>
+            );
+        };
+    }
+
     return (
         <div className="flex justify-between p-1 lg:p-5 pr-0">
-            <div className={"flex w-2/3 " + moveButtonContainerStyles}>{
-                moveButtons.map((button, i) => (
-                    <button 
-                        key={`moveButton_${i}`}
-                        className={"cursor-pointer " + moveButtonStyles}
-                        onClick={button.onClick} 
-                        disabled={button.disabled}
-                    >
-                        {button.children}
-                    </button>
-                ))
+            <div className={"flex " + leftContainerStyle}>{
+                leftButtons.map(getButtons(true))
             }</div>
-            <button className={"cursor-pointer " + flipButtonStyles} onClick={onFlipBoard}>Flip Board</button>
+            <div className={"flex " + rightContainerStyle}>{
+                rightButtons.map(getButtons(false))
+            }</div>
         </div>
     );
 }

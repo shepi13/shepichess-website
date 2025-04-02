@@ -109,7 +109,7 @@ export default function PGNViewer({
             tabIndex={1}
         >
             <div className="flex h-full w-full">
-                <div className="w-2/3 sm:w-1/2 h-full">
+                <div className="w-3/5 h-full">
                     <Chessboard 
                         position={currentFen} 
                         arePiecesDraggable={false} 
@@ -118,7 +118,7 @@ export default function PGNViewer({
                         customBoardStyle={{"boxShadow": "3px 3px 5px rgba(0,0,0,.8)"}}
                     />
                     <PGNViewerButtons 
-                        moveButtons={[
+                        leftButtons={[
                             {
                                 onClick: firstMove, 
                                 disabled: gameState.halfMoveNum <= 0 && gameState.variation.id === mainVariation.id,
@@ -132,7 +132,8 @@ export default function PGNViewer({
                                 children: ">>",
                             }
                         ]}
-                        onFlipBoard={flipBoard}
+                        rightButtons={[{onClick: flipBoard, children: "Flip Board"}]}
+                        leftContainerStyle="justify-left gap-2 xl:gap-4 pt-1 xl:pt-0"
                     />
                 </div>
                 <div className="w-1/2 h-full p-2 lg:p-5">{

@@ -24,14 +24,14 @@ export default function PlayableChessBoardStateless({position}: {position: Posit
                 />
             </div>
             <PGNViewerButtons 
-                flipButtonStyles={buttonStyles}
-                moveButtonStyles={buttonStyles}
-                moveButtonContainerStyles="justify-left gap-5"
-                moveButtons={[
+                leftButtonStyle={buttonStyles}
+                rightButtonStyle={buttonStyles.replace("text-large", "text-xl")}
+                leftContainerStyle="justify-left gap-5"
+                leftButtons={[
                     {onClick: position.resetPosition, disabled: false, children: "Reset"},
                     {onClick: position.undoMove, disabled: false, children: "Undo"},
                 ]} 
-                onFlipBoard={position.toggleFlipped}
+                rightButtons={[{onClick: position.toggleFlipped, children: "Flip Board"}]}
             />
         </>
     )
