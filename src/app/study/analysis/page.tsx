@@ -1,4 +1,4 @@
-import { EngineAnalysis } from "@/components/EngineAnalysis";
+import { EngineAnalysis } from "@/components/chess/EngineAnalysis";
 
 export default function Analysis() {
   return (

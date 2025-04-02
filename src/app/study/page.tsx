@@ -1,4 +1,4 @@
-import PGNViewer from "@/components/PGNViewer";
+import PGNViewer from "@/components/chess/PGNViewer";
 
 export default function Blog() {
   return (

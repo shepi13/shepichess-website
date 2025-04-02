@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/css/globals.css";
 import NavBar from "@/components/NavBar";
-import ThemeProvider from "@/components/ThemeProvider";
+import ThemeProvider from "@/components/theme/ThemeProvider";
 import SVGGrainyFilter from "@/components/BackgroundFilter";
 import Footer from "@/components/Footer";
 

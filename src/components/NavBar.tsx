@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import navLinks from "@/data/navLinks";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "./theme/ThemeToggle";
 import Image from "next/image";
 import {useState} from 'react';
 

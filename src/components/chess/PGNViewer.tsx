@@ -5,6 +5,7 @@ import { loadPgn, getFen} from "@/lib/loadPgn";
 import { Variation, startFen } from "@/lib/pgnTypes";
 import PGNViewerButtons from "./PGNViewerButtons";
 import PGNViewerNotation from "./PGNViewerNotation";
+import useToggle from "@/components/chess/hooks";
 
 export interface GameState {
     variation: Variation,
@@ -43,7 +44,7 @@ export default function PGNViewer({
 
     // Current state of display board
     const [gameState, setGameState] = useState({variation: mainVariation, halfMoveNum: 0});
-    const [flipped, setFlipped] = useState(false);
+    const [flipped, flipBoard] = useToggle(false);
 
     const currentFen = getFen(gameState.variation, gameState.halfMoveNum);
     const currentMove = gameState.halfMoveNum != 0 ? gameState.variation.moves[gameState.halfMoveNum-1] : null;
@@ -53,7 +54,6 @@ export default function PGNViewer({
     const lastMove = () => setGameStateSafe(prev => ({...prev, variation: mainVariation, halfMoveNum: mainVariation.moves.length}));
     const nextMove = () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum + 1}));
     const prevMove = () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum - 1}));
-    const flipBoard = () => setFlipped(prev => !prev);
 
     // Update gamestate using react callback, forces invariants to make sure current position is within move tree
     const setGameStateSafe = (callback: PGNStateCallback) => setGameState(prevState => {
