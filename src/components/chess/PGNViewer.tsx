@@ -5,7 +5,7 @@ import { loadPgn, getFen} from "@/lib/loadPgn";
 import { Variation, startFen } from "@/lib/pgnTypes";
 import PGNViewerButtons from "./PGNViewerButtons";
 import PGNViewerNotation from "./PGNViewerNotation";
-import useToggle from "@/components/chess/hooks";
+import useToggle from "@/lib/hooks/useToggle";
 
 export interface GameState {
     variation: Variation,

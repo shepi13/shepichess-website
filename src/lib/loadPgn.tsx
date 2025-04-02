@@ -1,6 +1,6 @@
-import { Chess } from "chess.js";
+import { Chess, Square } from "chess.js";
 
-import { Arrows, isSquare, Variation, Move } from "@/lib/pgnTypes";
+import { Arrows, Variation, Move } from "@/lib/pgnTypes";
 
 // Lookup table for PGN numerical annotations (see https://en.wikipedia.org/wiki/Portable_Game_Notation#Standard_NAGs)
 const annotationLookup = [
@@ -150,11 +150,8 @@ function parseArrows(arrowPgn: string) {
 
     for (const arrow of arrowPgn.split(" ")) {
         const start = arrow.substring(0,2);
-        const end = arrow.substring(2,4)
-        
-        if(isSquare(start) && isSquare(end)) {
-            arrows.push([start, end, arrow.substring(4)]);
-        }
+        const end = arrow.substring(2,4);
+        arrows.push([start as Square, end as Square, arrow.substring(4)]);
     }
     return arrows;
 }

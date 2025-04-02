@@ -1,17 +1,9 @@
 import { Chess, Square } from "chess.js";
 import { useMemo, useState } from "react";
+import useToggle from "./useToggle";
+import { Position } from "../pgnTypes";
 
-export interface Position {
-    position: string,
-    flipped: boolean
-    resetPosition: () => void,
-    undoMove: () => void,
-    makeMove: (arg0: Square, arg1: Square, arg2: string) => boolean,
-    setPosition: (arg0: string) => void,
-    toggleFlipped: () => void,
-}
-
-export function usePosition(initialPosition: string, initialOrientation: boolean) : Position {
+export default function usePosition(initialPosition: string, initialOrientation: boolean) : Position {
     const game = useMemo(() => new Chess(initialPosition), [initialPosition]);
     const [position, setPosition] = useState(initialPosition);
     const [flipped, toggleFlipped] = useToggle(initialOrientation);
@@ -26,7 +18,7 @@ export function usePosition(initialPosition: string, initialOrientation: boolean
     };
     const makeMove = (start: Square, end: Square, piece: string) => {
         try {        
-            game.move({from: start, to: end, promotion: piece[1].toLowerCase() ?? "q"});
+            game.move({from: start, to: end, promotion: piece ? piece[1].toLowerCase() : "q"});
         } catch(error) {
             console.log(error);
             return false;
@@ -40,6 +32,7 @@ export function usePosition(initialPosition: string, initialOrientation: boolean
     }
 
     return {
+        game: game,
         position: position,
         flipped: flipped,
         resetPosition: resetPosition, 
@@ -48,10 +41,4 @@ export function usePosition(initialPosition: string, initialOrientation: boolean
         setPosition: publicSetPosition,
         toggleFlipped: toggleFlipped,
     }
-}
-
-export default function useToggle(initialVal: boolean) : [boolean, () => void] {
-    const [flipped, setFlipped] = useState(initialVal)
-
-    return [flipped, () => {setFlipped(prev => !prev)}];
 }

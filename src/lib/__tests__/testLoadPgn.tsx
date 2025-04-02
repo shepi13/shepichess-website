@@ -1,6 +1,7 @@
 import { describe, test, expect } from "@jest/globals"
 import  { loadPgn, getFen } from "../loadPgn";
-import { Square, startFen } from "../pgnTypes"
+import { startFen } from "../pgnTypes"
+import { Square } from "chess.js"
 
 describe("getFen test", () => {
     const fenAfter = "Find this string!";

@@ -1,25 +1,16 @@
 "use client";
 
-import { startFen } from "@/lib/pgnTypes";
 import PGNViewerButtons from "./PGNViewerButtons";
 import { Chessboard } from "react-chessboard";
-import { usePosition, Position } from "@/components/chess/hooks";
+import { Position } from "@/lib/pgnTypes";
+import usePosition from "@/lib/hooks/usePosition";
 
-const buttonStyles = "font-bold text-2xl ring-primary ring-3 p-1 mt-1 lg:mt-0 lg:p-3 rounded-md hover:text-primary-dark \
+const buttonStyles = "font-bold text-large ring-primary ring-2 p-1 rounded-md hover:text-primary-dark \
                  hover:shadow-[3px_3px_5px_rgba(0,0,0,.8)] hover:drop-shadow-[2px_2px_3px_rgba(0,0,0,.2)] \
                  dark:hover:shadow-[3px_3px_5px_rgba(255,255,255,.8)] dark:hover:drop-shadow-[2px_2px_3px_rgba(255,255,255,.2)]"
 
-
-
-export function EngineAnalysis({start = startFen}) {
-    /**
-     * React component where the user can make legal moves
-     */
-    const position = usePosition(start, false);
-    return <PlayableChessBoard position={position} />
-}
-
-function PlayableChessBoard({position}: {position: Position}) {
+// For use by components that manage state using usePosition
+export default function PlayableChessBoardStateless({position}: {position: Position}) {
     return (
         <div>
             <div className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3">
@@ -34,8 +25,8 @@ function PlayableChessBoard({position}: {position: Position}) {
             </div>
             <PGNViewerButtons 
                 flipButtonStyles={buttonStyles}
-                moveButtonStyles={buttonStyles + " mr-5"}
-                moveButtonContainerStyles="justify-left"
+                moveButtonStyles={buttonStyles}
+                moveButtonContainerStyles="justify-left gap-5"
                 moveButtons={[
                     {onClick: position.resetPosition, disabled: false, children: "Reset"},
                     {onClick: position.undoMove, disabled: false, children: "Undo"},
@@ -44,4 +35,10 @@ function PlayableChessBoard({position}: {position: Position}) {
             />
         </div>
     )
+}
+
+// Simple display board
+export function PlayableChessBoard({start, flipped = false}: {start: string, flipped?: boolean}) {
+    const position = usePosition(start, flipped);
+    return <PlayableChessBoardStateless position={position} />
 }
