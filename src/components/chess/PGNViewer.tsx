@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+
 import { Chessboard } from "react-chessboard";
-import { loadPgn, getFen} from "@/lib/loadPgn";
-import { Variation, startFen } from "@/lib/pgnTypes";
+import { loadPgn } from "@/lib/utils/loadPgn";
+import { Variation, startFen } from "@/lib/types/pgnTypes";
 import PGNViewerButtons from "./PGNViewerButtons";
 import PGNViewerNotation from "./PGNViewerNotation";
 import useToggle from "@/lib/hooks/useToggle";
+import useVariation from "@/lib/hooks/useVariation";
 
 export interface GameState {
     variation: Variation,
@@ -43,46 +44,22 @@ export default function PGNViewer({
     const mainVariation = loadPgn(pgn, start);
 
     // Current state of display board
-    const [gameState, setGameState] = useState({variation: mainVariation, halfMoveNum: 0});
     const [flipped, flipBoard] = useToggle(false);
+    const {
+        variation, 
+        halfMoveNum, 
+        fen, 
+        firstMove, 
+        lastMove, 
+        nextMove, 
+        prevMove, 
+        enterVariation,
+        exitVariation,
+        setGameState,
+    } = useVariation(mainVariation);
 
-    const currentFen = getFen(gameState.variation, gameState.halfMoveNum);
-    const currentMove = gameState.halfMoveNum != 0 ? gameState.variation.moves[gameState.halfMoveNum-1] : null;
+    const currentMove = halfMoveNum != 0 ? variation.moves[halfMoveNum-1] : null;
 
-    // PGN Button Handlers
-    const firstMove = () => setGameStateSafe(prev => ({...prev, variation: mainVariation, halfMoveNum: 0}));
-    const lastMove = () => setGameStateSafe(prev => ({...prev, variation: mainVariation, halfMoveNum: mainVariation.moves.length}));
-    const nextMove = () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum + 1}));
-    const prevMove = () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum - 1}));
-
-    // Update gamestate using react callback, forces invariants to make sure current position is within move tree
-    const setGameStateSafe = (callback: PGNStateCallback) => setGameState(prevState => {
-        const newState = callback(prevState);
-        if(!newState.variation || newState.halfMoveNum < 0 || newState.halfMoveNum > newState.variation.moves.length) {
-            return prevState;
-        }
-        return newState;
-    });
-
-    const enterVariation = () => setGameStateSafe(prevState => {
-        const variationMoves = prevState.variation.moves;
-        const initialMoveNum = prevState.halfMoveNum;
-        /* Find next variation if exists */
-        for(let moveNum = Math.max(initialMoveNum - 1, 0); moveNum < variationMoves.length; moveNum++) {
-            const variation = variationMoves[moveNum].variation;
-            if(variation) {
-                return {...prevState, variation: variation, halfMoveNum: 1};
-            }
-        }
-        return initialMoveNum == 0 ? {...prevState, halfMoveNum: 1} : prevState;
-    });
-
-    const exitVariation = () => setGameStateSafe(prev => {
-        return {
-            variation: prev.variation.parentVariation || mainVariation, 
-            halfMoveNum: prev.variation.parentMove
-        };
-    }); 
     
     // Handle arrow key functions to scroll through pgn
     function handleKeyDown(event: React.KeyboardEvent) {
@@ -111,7 +88,7 @@ export default function PGNViewer({
             <div className="flex h-full w-full">
                 <div className="w-3/5 h-full">
                     <Chessboard 
-                        position={currentFen} 
+                        position={fen()} 
                         arePiecesDraggable={false} 
                         boardOrientation={flipped  ? "black" : "white"} 
                         customArrows={currentMove ? currentMove.arrows : []}
@@ -121,14 +98,14 @@ export default function PGNViewer({
                         leftButtons={[
                             {
                                 onClick: firstMove, 
-                                disabled: gameState.halfMoveNum <= 0 && gameState.variation.id === mainVariation.id,
+                                disabled: halfMoveNum <= 0 && variation.id === mainVariation.id,
                                 children: "<<",
                             },
-                            {onClick: prevMove, disabled: gameState.halfMoveNum <= 0, children: "<"},
-                            {onClick: nextMove, disabled: gameState.halfMoveNum >= gameState.variation.moves.length, children: ">"},
+                            {onClick: prevMove, disabled: halfMoveNum <= 0, children: "<"},
+                            {onClick: nextMove, disabled: halfMoveNum >= variation.moves.length, children: ">"},
                             {
                                 onClick: lastMove, 
-                                disabled: gameState.halfMoveNum >= mainVariation.moves.length && gameState.variation.id === mainVariation.id,
+                                disabled: halfMoveNum >= mainVariation.moves.length && variation.id === mainVariation.id,
                                 children: ">>",
                             }
                         ]}
@@ -136,8 +113,13 @@ export default function PGNViewer({
                         leftContainerStyle="justify-left gap-2 xl:gap-4 pt-1 xl:pt-0"
                     />
                 </div>
-                <div className="w-1/2 h-full p-2 lg:p-5">{
-                    <PGNViewerNotation variation={mainVariation} gameState={gameState} setGameState={setGameStateSafe} />}
+                <div className="w-1/2 p-2 lg:p-5 flex flex-col justify-between">
+                    <div>{
+                        <PGNViewerNotation variation={mainVariation} gameState={{variation: variation, halfMoveNum: halfMoveNum}} setGameState={setGameState} />}
+                    </div>
+                    <div className="text-right">
+                        Engine Analysis!
+                    </div>
                 </div>
             </div>
         </div>

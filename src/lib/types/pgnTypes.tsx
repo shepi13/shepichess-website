@@ -1,3 +1,9 @@
+/**
+ * Chess Types
+ * 
+ * Used in loadPgn, usePosition, useEngine, etc.
+ */
+
 import { Square, Chess } from "chess.js";
 
 export type Arrows = Array<[Square, Square, string,]>;
@@ -23,7 +29,8 @@ export interface Move {
 export interface Position {
     game: Chess
     position: string,
-    flipped: boolean
+    flipped: boolean,
+    player: string,
     resetPosition: () => void,
     undoMove: () => void,
     makeMove: (arg0: Square, arg1: Square, arg2: string) => boolean,

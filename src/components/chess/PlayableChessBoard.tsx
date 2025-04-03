@@ -2,7 +2,7 @@
 
 import PGNViewerButtons from "./PGNViewerButtons";
 import { Chessboard } from "react-chessboard";
-import { Position } from "@/lib/pgnTypes";
+import { Position } from "@/lib/types/pgnTypes";
 import usePosition from "@/lib/hooks/usePosition";
 
 const buttonStyles = "font-bold text-large ring-1 p-1 rounded-md hover:text-primary-dark \
@@ -10,7 +10,7 @@ const buttonStyles = "font-bold text-large ring-1 p-1 rounded-md hover:text-prim
                  dark:hover:shadow-[3px_3px_5px_rgba(255,255,255,.8)] dark:hover:drop-shadow-[2px_2px_3px_rgba(255,255,255,.2)]"
 
 // For use by components that manage state using usePosition
-export default function PlayableChessBoardStateless({position}: {position: Position}) {
+export default function PlayableChessBoardStateless({position, flipText = "Flip Board!"}: {position: Position, flipText?: string}) {
     return (
         <>
             <div className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3">
@@ -31,7 +31,7 @@ export default function PlayableChessBoardStateless({position}: {position: Posit
                     {onClick: position.resetPosition, disabled: false, children: "Reset"},
                     {onClick: position.undoMove, disabled: false, children: "Undo"},
                 ]} 
-                rightButtons={[{onClick: position.toggleFlipped, children: "Flip Board"}]}
+                rightButtons={[{onClick: position.toggleFlipped, children: flipText}]}
             />
         </>
     )

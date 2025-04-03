@@ -1,6 +1,6 @@
 import { describe, test, expect } from "@jest/globals"
-import  { loadPgn, getFen } from "../loadPgn";
-import { startFen } from "../pgnTypes"
+import  { loadPgn, getFen } from "@/lib/utils/loadPgn";
+import { startFen } from "@/lib/types/pgnTypes"
 import { Square } from "chess.js"
 
 describe("getFen test", () => {
