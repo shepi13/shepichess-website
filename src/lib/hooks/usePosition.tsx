@@ -1,9 +1,9 @@
 import { Chess, Square } from "chess.js";
 import { useMemo, useState } from "react";
-import { Position } from "../types/pgnTypes";
+import { Position, startFen } from "../types/pgnTypes";
 
 
-export default function usePosition(initialPosition: string, initialOrientation: boolean = false) : Position {
+export default function usePosition(initialPosition: string = startFen, initialOrientation: boolean = false) : Position {
     const game = useMemo(() => new Chess(initialPosition), [initialPosition]);
 
     const [position, setPosition] = useState(initialPosition);

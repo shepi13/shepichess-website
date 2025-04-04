@@ -38,4 +38,23 @@ export interface Position {
     toggleFlipped: () => void,
 }
 
+export interface VariationState {
+     fen: () => string,
+     firstMove: () => void,
+     lastMove: () => void,
+     nextMove: () => void,
+     prevMove: () => void,
+     enterVariation: () => void,
+     exitVariation: () => void,
+     setGameState: (arg0: PGNStateCallback) => void,
+     variation: Variation,
+     halfMoveNum: number,
+}
+export interface GameState {
+    variation: Variation,
+    halfMoveNum: number,
+}
+export type PGNStateCallback = (state: GameState) => GameState;
+
+
 export const startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

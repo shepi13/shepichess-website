@@ -4,7 +4,7 @@ import useEngine from "@/lib/hooks/useEngine";
 import usePosition from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
 import { Chess, Square } from "chess.js";
-import React, { useCallback, useEffect } from "react";
+import { Suspense, useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import PlayableChessBoardStateless from "./PlayableChessBoard";
 
@@ -43,7 +43,9 @@ export function PlayAgainstComputer({start = startFen, playerColor = "", depth =
         if(position.game.isDraw()) {
             result = <h3>Draw!</h3>
         }
-        result = <h3>{position.game.turn() == "w" ? "Black Wins!" : "White Wins!"}</h3>
+        else {
+            result = <h3>{position.game.turn() == "w" ? "Black Wins!" : "White Wins!"}</h3>
+        }
     }
 
     return (
@@ -55,10 +57,17 @@ export function PlayAgainstComputer({start = startFen, playerColor = "", depth =
 }
  
 export function PlayAgainstComputerParams({depth=15}) {
-    const searchParams = useSearchParams();
+    const InnerComponent = () => {
+        const searchParams = useSearchParams();
 
-    const initialPosition = searchParams.get("start") ?? startFen;
-    const initialSide = searchParams.get("color") ?? "";
+        const initialPosition = searchParams.get("start") ?? startFen;
+        const initialSide = searchParams.get("color") ?? "";
+        return <PlayAgainstComputer start={initialPosition} playerColor={initialSide} depth={depth}/>
+    }
 
-    return <PlayAgainstComputer start={initialPosition} playerColor={initialSide} depth={depth}/>
+    return (
+        <Suspense>
+            <InnerComponent/>
+        </Suspense>
+    );
 }

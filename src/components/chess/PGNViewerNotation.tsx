@@ -1,5 +1,4 @@
-import { Move, Variation } from "@/lib/types/pgnTypes";
-import { GameState, PGNStateCallback } from "./PGNViewer";
+import { Move, Variation, GameState, PGNStateCallback } from "@/lib/types/pgnTypes";
 
 interface PGNViewerNotationProps {
     variation: Variation,

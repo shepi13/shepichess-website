@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Variation } from "../types/pgnTypes";
+import { Variation, VariationState } from "../types/pgnTypes";
 import { getFen } from "../utils/loadPgn";
-import { PGNStateCallback } from "@/components/chess/PGNViewer";
+import { PGNStateCallback } from "../types/pgnTypes";
 
-export default function useVariation(variation: Variation) {
+export default function useVariation(variation: Variation): VariationState {
     const [gameState, setGameState] = useState({variation: variation, halfMoveNum: 0});
 
     function setGameStateSafe(callback: PGNStateCallback)
@@ -28,7 +28,7 @@ export default function useVariation(variation: Variation) {
                     return {...prevState, variation: variation, halfMoveNum: 1};
                 }
             }
-            return initialMoveNum == 0 ? {...prevState, halfMoveNum: 1} : prevState;
+            return prevState;
         });
     }
 

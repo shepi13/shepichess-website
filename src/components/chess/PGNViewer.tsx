@@ -2,16 +2,13 @@
 
 import { Chessboard } from "react-chessboard";
 import { loadPgn } from "@/lib/utils/loadPgn";
-import { Variation, startFen } from "@/lib/types/pgnTypes";
+import { startFen } from "@/lib/types/pgnTypes";
 import PGNViewerButtons from "./PGNViewerButtons";
 import PGNViewerNotation from "./PGNViewerNotation";
 import useToggle from "@/lib/hooks/useToggle";
 import useVariation from "@/lib/hooks/useVariation";
 
-export interface GameState {
-    variation: Variation,
-    halfMoveNum: number,
-}
+
 export interface PGNViewerProps {
     pgn?: string, 
     start?: string, 
@@ -21,7 +18,6 @@ export interface PGNViewerProps {
     flip?: boolean,
     onDrop?: () => void,
 }
-export type PGNStateCallback = (state: GameState) => GameState;
 
 export default function PGNViewer({
     pgn="", 
