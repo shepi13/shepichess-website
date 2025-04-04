@@ -24,7 +24,7 @@ export default function RootLayout({
       <body>
       <SVGGrainyFilter />
       <div className="content">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <header>
               <NavBar />
             </header>
