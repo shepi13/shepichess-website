@@ -36,14 +36,14 @@ export default function usePosition(initialPosition: string = startFen, initialO
     }
 
     return {
-        game: game,
-        position: position,
-        flipped: flipped,
+        game,
+        position,
+        flipped,
         player: initialOrientation ? "b" : "w",
-        resetPosition: resetPosition, 
-        undoMove: undoMove, 
-        makeMove: makeMove,
+        resetPosition, 
+        undoMove, 
+        makeMove,
         setPosition: publicSetPosition,
-        toggleFlipped: toggleFlipped,
+        toggleFlipped,
     }
 }

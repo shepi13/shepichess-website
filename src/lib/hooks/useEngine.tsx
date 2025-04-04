@@ -45,5 +45,5 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
         workerRef.current?.postMessage("quit"); // Good to run this before unmounting.
     }
     
-    return {evaluatePosition: evaluatePosition, stop: stop, quit: quit}
+    return {evaluatePosition, stop, quit}
 }

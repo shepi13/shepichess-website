@@ -48,10 +48,9 @@ export default function useVariation(variation: Variation): VariationState {
         lastMove: () => setGameStateSafe(prev => ({...prev, variation: variation, halfMoveNum: variation.moves.length})),
         nextMove: () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum + 1})),
         prevMove: () => setGameStateSafe(prev => ({...prev, halfMoveNum: prev.halfMoveNum - 1})),
-        enterVariation: enterVariation,
-        exitVariation: exitVariation,
+        enterVariation,
+        exitVariation,
         setGameState: setGameStateSafe,
-        variation: gameState.variation,
-        halfMoveNum: gameState.halfMoveNum,
+        ...gameState,
     }
 }
