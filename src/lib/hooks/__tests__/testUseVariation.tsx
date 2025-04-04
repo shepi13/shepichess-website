@@ -1,4 +1,4 @@
-import { mockGetFen } from "./mockUseVariation";
+import { mockGetFen } from "./mocks/mockUseVariation";
 
 import { describe, test, expect, beforeEach } from "@jest/globals"
 import { renderHook, act } from "@testing-library/react";

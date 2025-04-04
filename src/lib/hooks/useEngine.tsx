@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-interface StockfishResult {
+export interface StockfishResult {
     bestMove: string,
     ponder: string,
     evaluation: string,
@@ -22,7 +22,7 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
             evaluation: message.match(/cp\s+(\S+)/)?.[1],
             possibleMate: message.match(/mate\s+(\S+)/)?.[1],
             pv: message.match(/ pv\s+(.*)/)?.[1],
-            depth: Number(message.match(/ depth\s+(\S+)/)?.[1]) ?? 0,
+            depth: Number(message.match(/ depth\s+(\S+)/)?.[1]) || 0,
         });
     }
 
@@ -43,6 +43,7 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
     }
     function quit() {
         workerRef.current?.postMessage("quit"); // Good to run this before unmounting.
+        workerRef.current?.terminate();
     }
     
     return {evaluatePosition, stop, quit}
