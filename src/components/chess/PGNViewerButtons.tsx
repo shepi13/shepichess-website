@@ -1,8 +1,4 @@
-interface PGNButtonSettings {
-    onClick: () => void,
-    disabled?: boolean,
-    children: React.ReactNode,
-}
+import { PGNButtonSettings } from "@/lib/types/types";
 
 interface PGNViewerButtonProps {
     leftButtons?: Array<PGNButtonSettings>, 
