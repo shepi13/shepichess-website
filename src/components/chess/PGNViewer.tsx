@@ -75,47 +75,45 @@ export default function PGNViewer({
     return (
         <div className=
             {
-                `border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5
+                `flex border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5
                 ${small && "md:w-4/5 xl:w-2/5"}`
             }
             onKeyDown={handleKeyDown} 
             tabIndex={1}
         >
-            <div className="flex h-full w-full">
-                <div className="w-3/5 h-full">
-                    <Chessboard 
-                        position={fen()} 
-                        arePiecesDraggable={false} 
-                        boardOrientation={flipped  ? "black" : "white"} 
-                        customArrows={currentMove ? currentMove.arrows : []}
-                        customBoardStyle={{"boxShadow": "3px 3px 5px rgba(0,0,0,.8)"}}
-                    />
-                    <PGNViewerButtons 
-                        leftButtons={[
-                            {
-                                onClick: firstMove, 
-                                disabled: halfMoveNum <= 0 && variation.id === mainVariation.id,
-                                children: "<<",
-                            },
-                            {onClick: prevMove, disabled: halfMoveNum <= 0, children: "<"},
-                            {onClick: nextMove, disabled: halfMoveNum >= variation.moves.length, children: ">"},
-                            {
-                                onClick: lastMove, 
-                                disabled: halfMoveNum >= mainVariation.moves.length && variation.id === mainVariation.id,
-                                children: ">>",
-                            }
-                        ]}
-                        rightButtons={[{onClick: flipBoard, children: "Flip Board"}]}
-                        leftContainerStyle="justify-left gap-2 xl:gap-4 pt-1 xl:pt-0"
-                    />
+            <div className="w-3/5 h-full">
+                <Chessboard 
+                    position={fen()} 
+                    arePiecesDraggable={false} 
+                    boardOrientation={flipped  ? "black" : "white"} 
+                    customArrows={currentMove ? currentMove.arrows : []}
+                    customBoardStyle={{"boxShadow": "3px 3px 5px rgba(0,0,0,.8)"}}
+                />
+                <PGNViewerButtons 
+                    leftButtons={[
+                        {
+                            onClick: firstMove, 
+                            disabled: halfMoveNum <= 0 && variation.id === mainVariation.id,
+                            children: "<<",
+                        },
+                        {onClick: prevMove, disabled: halfMoveNum <= 0, children: "<"},
+                        {onClick: nextMove, disabled: halfMoveNum >= variation.moves.length, children: ">"},
+                        {
+                            onClick: lastMove, 
+                            disabled: halfMoveNum >= mainVariation.moves.length && variation.id === mainVariation.id,
+                            children: ">>",
+                        }
+                    ]}
+                    rightButtons={[{onClick: flipBoard, children: "Flip Board"}]}
+                    leftContainerStyle="justify-left gap-2 xl:gap-4 pt-1 xl:pt-0"
+                />
+            </div>
+            <div className="w-1/2 p-2 lg:p-5 flex flex-col justify-between">
+                <div>{
+                    <PGNViewerNotation variation={mainVariation} gameState={{variation, halfMoveNum}} setGameState={setGameState} />}
                 </div>
-                <div className="w-1/2 p-2 lg:p-5 flex flex-col justify-between">
-                    <div>{
-                        <PGNViewerNotation variation={mainVariation} gameState={{variation, halfMoveNum}} setGameState={setGameState} />}
-                    </div>
-                    <div className="text-right">
-                        Engine Analysis!
-                    </div>
+                <div className="text-right">
+                    Engine Analysis!
                 </div>
             </div>
         </div>
