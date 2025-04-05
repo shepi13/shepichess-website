@@ -111,7 +111,7 @@ export default function PGNViewer({
                 </div>
                 <div className="w-1/2 p-2 lg:p-5 flex flex-col justify-between">
                     <div>{
-                        <PGNViewerNotation variation={mainVariation} gameState={{variation: variation, halfMoveNum: halfMoveNum}} setGameState={setGameState} />}
+                        <PGNViewerNotation variation={mainVariation} gameState={{variation, halfMoveNum}} setGameState={setGameState} />}
                     </div>
                     <div className="text-right">
                         Engine Analysis!

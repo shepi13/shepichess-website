@@ -5,7 +5,7 @@ import { Position, startFen } from "@/lib/types/pgnTypes";
 
 
 const testFen = "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3";
-const Nf3Fen = "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1"
+const Nf3Fen = "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1";
 
 describe("Hooks/usePosition", () => {
     describe("Test usePosition Methods", () => {

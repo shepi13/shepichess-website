@@ -21,7 +21,7 @@ export default function PGNViewerNotation({variation, gameState, setGameState, l
                 const isCurrentMove = (gameState && variation.id === gameState.variation.id && i+1 === gameState.halfMoveNum);
                 // Move Number only shows for either white player or on first move of variation
                 const move_number = move.color == "w" ? move.moveNumber + ". " : (i == 0 ? move.moveNumber + "... " : "");
-                const move_text = move.move + move.annotation || "";
+                const move_text = move.move + move.annotation;
                 return (
                     <div key={`${variation.start}_${i}`} className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}>
                         <div 
@@ -30,7 +30,8 @@ export default function PGNViewerNotation({variation, gameState, setGameState, l
                                 ${level > 0 && "italic"}
                                 ${isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg"}
                             `}
-                            onClick={setGameState && (() => setGameState(prev => ({...prev, variation: variation, halfMoveNum: i+1})))}
+                            onClick={setGameState && (() => setGameState(prev => ({...prev, variation, halfMoveNum: i+1})))}
+                            data-testid={move_number + move_text}
                         >
                             {move_number}
                             <span 
@@ -41,7 +42,7 @@ export default function PGNViewerNotation({variation, gameState, setGameState, l
                                 dangerouslySetInnerHTML={{__html: move_text + "&nbsp;"}}>
                             </span>
                         </div>
-                        {move.comment ? <span className="text-primary p-1"> {move.comment}</span> : <span> </span>}
+                        {move.comment ? <span className="text-primary p-1 ml-[-3px]">{move.comment} </span> : <span> </span>}
                         {move.variation && <PGNViewerNotation variation={move.variation} gameState={gameState} setGameState={setGameState} level={level+1}/>}
                     </div>
                 );
