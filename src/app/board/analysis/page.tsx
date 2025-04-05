@@ -1,4 +1,4 @@
-import { PlayAgainstComputerParams } from "@/components/chess/PlayAgainstComputer";
+import { PlayAgainstComputerParams } from "@/components/chess/PlayComputer";
 
 export default function Page() {
   return (

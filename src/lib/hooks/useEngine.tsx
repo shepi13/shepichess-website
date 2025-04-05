@@ -27,7 +27,7 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
     }
 
     useEffect(() => {
-        workerRef.current = new window.Worker("/stockfish/stockfish.js")
+        workerRef.current = new window.Worker("/stockfish/stockfish.js");
         workerRef.current.onmessage = onMessage;
         workerRef.current.postMessage("uci");
         workerRef.current.postMessage("isready");

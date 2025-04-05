@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { jest } from "@jest/globals"
 
-
-
 export const postMessageSpyMock = jest.fn()
 export const constructorSpyMock = jest.fn();
 export const terminateSpyMock = jest.fn();
 
-// @ts-expect-error
-global.Worker = class {
+const mockWorker = class {
     postMessage: jest.Mock<(data: string) => void>
     terminate: jest.Mock
     onmessage: ((arg0: MessageEvent) => void) | null
@@ -45,3 +42,6 @@ global.Worker = class {
         this.onmessage = null;
     }
 }
+
+// @ts-expect-error
+global.Worker = mockWorker
