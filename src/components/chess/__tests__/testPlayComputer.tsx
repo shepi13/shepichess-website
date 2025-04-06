@@ -8,6 +8,8 @@ import {
     PlayAgainstComputerParams,
 } from "../PlayComputer";
 
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const engineMock = mockUseEngine;
 const drawFen = "8/8/3k4/8/8/8/3K4/8 w - - 0 1";
 const whiteWinFen = "8/8/8/8/8/4K3/8/5k1Q b - - 0 1";
