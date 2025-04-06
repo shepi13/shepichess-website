@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { constructorSpyMock, postMessageSpyMock, terminateSpyMock } from "./mocks/mockUseEngine";
 
 import { describe, expect, jest, test } from "@jest/globals";
