@@ -37,8 +37,8 @@ export default function PGNViewerNotation({
                     move_number = move.moveNumber + ". ";
                 } else if (i == 0) {
                     move_number = move.moveNumber + "... ";
-                }                
-                
+                }
+
                 const move_text = move.move + move.annotation;
 
                 return (

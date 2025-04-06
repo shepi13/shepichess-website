@@ -1,9 +1,22 @@
 // Mocks for testPlayComputer
 
-import { startFen } from "@/lib/types/pgnTypes";
+import { Position, startFen } from "@/lib/types/pgnTypes";
 import { Chess } from "chess.js";
 
-export const mockUseEngine = jest.fn((callback) => {
+export let currentFen = "";
+export let evaluatedPosition = "";
+const mockPlayableChessBoard = ({ position }: { position: Position }) => {
+    currentFen = position.position;
+    return (
+        <div>
+            {position.position}
+            <button onClick={position.undoMove}>Undo</button>
+            <button onClick={position.toggleFlipped}>Flip</button>;
+        </div>
+    );
+};
+
+const mockUseEngine = jest.fn((callback) => {
     const evaluatePosition = jest.fn((fen: string, depth: number) => {
         const game = new Chess(fen);
         const randomMove = () => {
@@ -22,6 +35,7 @@ export const mockUseEngine = jest.fn((callback) => {
             pv: bestMove + " " + ponder,
             depth,
         });
+        evaluatedPosition = fen;
     });
     const stop = jest.fn();
     const quit = jest.fn();
@@ -40,7 +54,6 @@ useSearchParamsMock
     .mockReturnValue({ get: searchParamsEmpty });
 
 jest.mock("@/lib/hooks/useEngine", () => {
-    // Correct: returns a mock object
     return {
         __esModule: true,
         default: mockUseEngine,
@@ -49,4 +62,9 @@ jest.mock("@/lib/hooks/useEngine", () => {
 jest.mock("next/navigation", () => ({
     ...jest.requireActual("next/navigation"),
     useSearchParams: useSearchParamsMock,
+}));
+jest.mock("@/components/chess/PlayableChessBoard", () => ({
+    ...jest.requireActual("@/components/chess/PlayableChessBoard"),
+    __esModule: true,
+    default: mockPlayableChessBoard,
 }));
