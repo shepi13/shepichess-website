@@ -18,20 +18,21 @@ export function PlayAgainstComputer({start = startFen, playerColor = "", depth =
             position.makeMove(
                 bestMove.substring(0, 2) as Square, 
                 bestMove.substring(2, 4) as Square, 
-                position.game.turn() + (bestMove.substring(4, 5) ?? "q"),
+                position.game.turn() + bestMove.substring(4, 5)
             );
         }
     });
     const turn = position.game.turn();
     const player = position.flipped ? "b" : "w";
     const fen = position.game.fen();
+    const isGameOver = position.game.isGameOver();
     const makeEngineMove = useCallback(() => engine.evaluatePosition(fen, depth), [fen, depth, engine]);
 
     useEffect(() => {
-        if(turn != player) {
+        if(turn != player && !isGameOver) {
             makeEngineMove();
         }
-    }, [turn, player, makeEngineMove])
+    }, [turn, player, isGameOver, makeEngineMove])
 
     const undoHumanAndComputerMove = () => {
         position.undoMove();

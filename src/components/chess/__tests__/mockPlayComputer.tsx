@@ -1,5 +1,7 @@
-import { Chess } from "chess.js";
+// Mocks for testPlayComputer
 
+import { startFen } from "@/lib/types/pgnTypes";
+import { Chess } from "chess.js";
 
 export const mockUseEngine = jest.fn((callback) => {
     const evaluatePosition = jest.fn((fen: string, depth: number) => {
@@ -26,6 +28,13 @@ export const mockUseEngine = jest.fn((callback) => {
     return {evaluatePosition, stop, quit};
 });
 
+const searchParamsGet = jest.fn((key: "fen" | "color") => ({ fen: startFen, color: "w"}[key]));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const searchParamsEmpty = jest.fn((_key) => null);
+
+const useSearchParamsMock = jest.fn();
+useSearchParamsMock.mockReturnValueOnce({get: searchParamsGet}).mockReturnValue({get: searchParamsEmpty});
+
 jest.mock('@/lib/hooks/useEngine', () => {
     // Correct: returns a mock object
     return {
@@ -33,3 +42,7 @@ jest.mock('@/lib/hooks/useEngine', () => {
         default: mockUseEngine,
     }
 });
+jest.mock('next/navigation', () => ({
+    ...jest.requireActual('next/navigation'),
+    useSearchParams: useSearchParamsMock
+  }));
