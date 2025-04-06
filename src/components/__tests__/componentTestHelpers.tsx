@@ -2,16 +2,16 @@ import { act } from "@testing-library/react";
 import { createRoot, Root } from "react-dom/client";
 
 // @ts-expect-error ts doesn't recognize module
-import {mockAnimationsApi } from "jsdom-testing-mocks";
+import { mockAnimationsApi } from "jsdom-testing-mocks";
 
 mockAnimationsApi();
 
-export let root : Root, container: HTMLDivElement;
+export let root: Root, container: HTMLDivElement;
 beforeEach(() => {
     // Mock window.watchmedia
-    Object.defineProperty(window, 'matchMedia', {
+    Object.defineProperty(window, "matchMedia", {
         writable: true,
-        value: jest.fn().mockImplementation(query => ({
+        value: jest.fn().mockImplementation((query) => ({
             matches: false,
             media: query,
             onchange: null,
@@ -26,7 +26,7 @@ beforeEach(() => {
     container = document.createElement("div");
     document.body.appendChild(container);
 
-    act(() => root = createRoot(container));
+    act(() => (root = createRoot(container)));
 });
 
 afterEach(() => {

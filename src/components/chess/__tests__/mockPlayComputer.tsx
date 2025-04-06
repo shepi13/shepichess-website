@@ -7,9 +7,9 @@ export const mockUseEngine = jest.fn((callback) => {
     const evaluatePosition = jest.fn((fen: string, depth: number) => {
         const game = new Chess(fen);
         const randomMove = () => {
-            const move = game.moves({verbose: true})[0];
-            return move.from + move.to + (move.promotion ?? "")
-        }
+            const move = game.moves({ verbose: true })[0];
+            return move.from + move.to + (move.promotion ?? "");
+        };
 
         const bestMove = randomMove();
         game.move(game.moves()[0]);
@@ -25,24 +25,28 @@ export const mockUseEngine = jest.fn((callback) => {
     });
     const stop = jest.fn();
     const quit = jest.fn();
-    return {evaluatePosition, stop, quit};
+    return { evaluatePosition, stop, quit };
 });
 
-const searchParamsGet = jest.fn((key: "fen" | "color") => ({ fen: startFen, color: "w"}[key]));
+const searchParamsGet = jest.fn(
+    (key: "fen" | "color") => ({ fen: startFen, color: "w" })[key],
+);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const searchParamsEmpty = jest.fn((_key) => null);
 
 const useSearchParamsMock = jest.fn();
-useSearchParamsMock.mockReturnValueOnce({get: searchParamsGet}).mockReturnValue({get: searchParamsEmpty});
+useSearchParamsMock
+    .mockReturnValueOnce({ get: searchParamsGet })
+    .mockReturnValue({ get: searchParamsEmpty });
 
-jest.mock('@/lib/hooks/useEngine', () => {
+jest.mock("@/lib/hooks/useEngine", () => {
     // Correct: returns a mock object
     return {
         __esModule: true,
         default: mockUseEngine,
-    }
+    };
 });
-jest.mock('next/navigation', () => ({
-    ...jest.requireActual('next/navigation'),
-    useSearchParams: useSearchParamsMock
-  }));
+jest.mock("next/navigation", () => ({
+    ...jest.requireActual("next/navigation"),
+    useSearchParams: useSearchParamsMock,
+}));

@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 
 export interface StockfishResult {
-    bestMove: string,
-    ponder: string,
-    evaluation: string,
-    possibleMate: string,
-    pv: string
-    depth: number,
+    bestMove: string;
+    ponder: string;
+    evaluation: string;
+    possibleMate: string;
+    pv: string;
+    depth: number;
 }
 
 export default function useEngine(callback: (arg0: StockfishResult) => void) {
@@ -31,9 +31,9 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
         workerRef.current.onmessage = onMessage;
         workerRef.current.postMessage("uci");
         workerRef.current.postMessage("isready");
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     function evaluatePosition(fen: string, depth: number) {
         workerRef.current?.postMessage(`position fen ${fen}`);
         workerRef.current?.postMessage(`go depth ${depth}`);
@@ -45,6 +45,6 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
         workerRef.current?.postMessage("quit"); // Good to run this before unmounting.
         workerRef.current?.terminate();
     }
-    
-    return {evaluatePosition, stop, quit}
+
+    return { evaluatePosition, stop, quit };
 }
