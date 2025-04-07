@@ -1,7 +1,8 @@
 import { act } from "@testing-library/react";
 import { createRoot, Root } from "react-dom/client";
 
-// @ts-expect-error ts doesn't recognize module
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { mockAnimationsApi } from "jsdom-testing-mocks";
 
 mockAnimationsApi();

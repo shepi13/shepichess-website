@@ -6,15 +6,20 @@
 
 import { Square, Chess } from "chess.js";
 
+// Array of arrows for react-chessboard()
 export type Arrows = Array<[Square, Square, string]>;
-export interface Variation {
+
+// Tree of nested variations
+export type Variation = {
   id: number;
   start: string;
   moves: Array<Move>;
   parentVariation: Variation | null;
   parentMove: number;
 }
-export interface Move {
+
+// Move Data (indluding nested variations)
+export type Move = {
   moveNumber: number;
   color: string;
   move: string;
@@ -26,7 +31,8 @@ export interface Move {
   fenAfter: string;
 }
 
-export interface Position {
+// Position and related methods (returned by UsePosition hook)
+export type Position = {
   game: Chess;
   position: string;
   flipped: boolean;
@@ -38,7 +44,8 @@ export interface Position {
   toggleFlipped: () => void;
 }
 
-export interface VariationState {
+// Variation location and methods (returned by useVariation hook)
+export type VariationState = {
   fen: () => string;
   firstMove: () => void;
   lastMove: () => void;
@@ -50,11 +57,14 @@ export interface VariationState {
   variation: Variation;
   halfMoveNum: number;
 }
-export interface GameState {
+// Variation location (pure state)
+export type GameState = {
   variation: Variation;
   halfMoveNum: number;
 }
+// Callback to update gamestate
 export type PGNStateCallback = (state: GameState) => GameState;
 
+// Fen for chess starting position
 export const startFen =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

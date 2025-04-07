@@ -1,13 +1,12 @@
-/**
- * General types
- */
+// General Types
 
-// Type for nextJS useSearchParams()
+/** Type for nextJS useSearchParams() */
 export type NextSearchParams = {
   [key: string]: string | string[] | undefined;
 };
 
-export interface PGNButtonSettings {
+/** Type for PGN Button */
+export type PGNButtonSettings = {
   onClick: () => void;
   disabled?: boolean;
   children: React.ReactNode;

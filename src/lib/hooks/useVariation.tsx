@@ -4,11 +4,32 @@ import { getFen } from "../utils/chessUtils";
 import { PGNStateCallback } from "../types/pgnTypes";
 
 export default function useVariation(variation: Variation): VariationState {
+  /**
+   * React Custom Hook to track current location within a tree of variations
+   *
+   * @param variation - Main variation of the tree
+   * @returns {
+   * // Function that returns fen of current position
+   *  fen,
+   *
+   * // Functions to traverse variation tree
+   *  firstMove,
+   *  lastMove,
+   *  nextMove,
+   *  prevMove,
+   *  enterVariation,
+   *  exitVariation,
+   *
+   * // Function to set current gamestate safely using a callback (e.g. SetGameState((prev) => {...prev, halfMoveNum: 5}))
+   *  setGameState,
+   * }
+   */
   const [gameState, setGameState] = useState({
     variation: variation,
     halfMoveNum: 0,
   });
 
+  // Use setGameState, but guarantee that result is a valid location of the move tree
   function setGameStateSafe(callback: PGNStateCallback) {
     setGameState((prevState) => {
       const newState = callback(prevState);
@@ -23,6 +44,7 @@ export default function useVariation(variation: Variation): VariationState {
     });
   }
 
+  // Finds and enters the next variation in the move tree
   function enterVariation() {
     setGameStateSafe((prevState) => {
       const variationMoves = prevState.variation.moves;
@@ -46,6 +68,7 @@ export default function useVariation(variation: Variation): VariationState {
     });
   }
 
+  // Exits the current variation and enters its parent.
   function exitVariation() {
     setGameStateSafe((prev) => {
       return {

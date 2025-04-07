@@ -62,6 +62,14 @@ const pgnParseRegex = new RegExp(
   "g",
 );
 
+/**
+ *  Parses a PGN into variation objects (see pgnTypes.tsx)
+ *  Each move should be in the form of 2. Nf3! [arrows] {comments} (variations)
+ *
+ *  @param pgn - pgn to parse
+ *  @param start - fen for starting position
+ *  @returns - Parsed Variation object
+ */
 export function loadPgn(
   pgn: string,
   start: string,
@@ -69,15 +77,6 @@ export function loadPgn(
   parentVar: Variation | null = null,
   parentMove: number = 0,
 ): Variation {
-  /**
-   *  Parses a PGN into variation objects (see pgnTypes.tsx)
-   *  Each move should be in the form of 2. Nf3! [arrows] {comments} (variations)
-   *
-   *  @param pgn - pgn to parse
-   *  @param start - fen for starting position
-   *  @returns - Parsed Variation object
-   */
-
   // Replaces every outermost group of matching parenthesis with $( $), so we can easily match in regex
   pgn = preParsePgn(pgn);
 
@@ -151,13 +150,13 @@ function parseArrows(arrowPgn?: string) {
   return arrows;
 }
 
+/**
+ * Replaces outermost matching parenthesis with $(... $), for easier regex parsing
+ * Ignores any parenthesis inside pgn comments, represented by {...}
+ *
+ * @param pgn - the pgn to preprocess
+ */
 function preParsePgn(pgn: string): string {
-  /**
-   * Replaces outermost matching parenthesis with $(... $), for easier regex parsing
-   * Ignores any parenthesis inside pgn comments, represented by {...}
-   *
-   * @param pgn - the pgn to preprocess
-   */
   let level = 0;
   let inComment = false;
   let start = 0;
