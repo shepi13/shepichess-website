@@ -1,4 +1,5 @@
 import { startFen } from "@/lib/types/pgnTypes";
+
 import { getFen, moveIsGreat, moveIsMistake } from "../chessUtils";
 import { loadPgn } from "../loadPgn";
 

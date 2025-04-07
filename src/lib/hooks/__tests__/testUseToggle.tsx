@@ -1,5 +1,6 @@
-import { describe, test, expect } from "@jest/globals";
-import { renderHook, act } from "@testing-library/react";
+import { describe, expect, test } from "@jest/globals";
+import { act, renderHook } from "@testing-library/react";
+
 import { useToggle } from "../useToggle";
 
 describe("Hooks/useToggle", () => {

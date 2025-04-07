@@ -1,9 +1,8 @@
 import { act } from "@testing-library/react";
-import { createRoot, Root } from "react-dom/client";
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { mockAnimationsApi } from "jsdom-testing-mocks";
+import { Root, createRoot } from "react-dom/client";
 
 mockAnimationsApi();
 

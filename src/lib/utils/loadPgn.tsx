@@ -1,6 +1,6 @@
 import { Chess, Square } from "chess.js";
 
-import { Arrows, Variation, Move } from "@/lib/types/pgnTypes";
+import { Arrows, Move, Variation } from "@/lib/types/pgnTypes";
 
 // Lookup table for PGN numerical annotations (see https://en.wikipedia.org/wiki/Portable_Game_Notation#Standard_NAGs)
 const annotationLookup = [

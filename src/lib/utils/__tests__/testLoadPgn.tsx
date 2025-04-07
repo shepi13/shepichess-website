@@ -1,7 +1,8 @@
-import { describe, test, expect } from "@jest/globals";
-import { loadPgn } from "@/lib/utils/loadPgn";
-import { startFen } from "@/lib/types/pgnTypes";
+import { describe, expect, test } from "@jest/globals";
 import { Square } from "chess.js";
+
+import { startFen } from "@/lib/types/pgnTypes";
+import { loadPgn } from "@/lib/utils/loadPgn";
 
 describe("PGN Parser Test", () => {
   describe("Test PGN Annotations", () => {

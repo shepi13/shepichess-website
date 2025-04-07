@@ -1,6 +1,7 @@
 import { Chess, Square } from "chess.js";
 import { useMemo, useState } from "react";
-import { Position, startFen } from "../types/pgnTypes";
+
+import { Position, startFen } from "@/lib/types/pgnTypes";
 
 export function usePosition(
   initialPosition: string = startFen,

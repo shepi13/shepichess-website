@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
+
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 const SunSVG = () => (
   <Image alt="sun-icon" width={25} height={30} src="/icons/sun-1.svg" />

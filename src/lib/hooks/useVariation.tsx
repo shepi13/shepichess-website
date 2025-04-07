@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { Variation, VariationState } from "../types/pgnTypes";
-import { getFen } from "../utils/chessUtils";
-import { PGNStateCallback } from "../types/pgnTypes";
+
+import {
+  PGNStateCallback,
+  Variation,
+  VariationState,
+} from "@/lib/types/pgnTypes";
+import { getFen } from "@/lib/utils/chessUtils";
 
 export function useVariation(variation: Variation): VariationState {
   /**

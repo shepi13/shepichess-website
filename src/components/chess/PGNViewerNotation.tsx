@@ -1,8 +1,8 @@
 import {
-  Move,
-  Variation,
   GameState,
+  Move,
   PGNStateCallback,
+  Variation,
 } from "@/lib/types/pgnTypes";
 import { moveIsGreat, moveIsMistake } from "@/lib/utils/chessUtils";
 

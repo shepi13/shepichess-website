@@ -1,11 +1,12 @@
-import { container, root } from "@/components/__tests__/componentTestHelpers";
-
-import { describe, test, expect } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { fireEvent, screen } from "@testing-library/dom";
 import { getByRole } from "@testing-library/dom";
 import { act } from "@testing-library/react";
-import { ThemeToggle } from "../ThemeToggle";
+
+import { container, root } from "@/components/__tests__/componentTestHelpers";
+
 import { ThemeProvider } from "../ThemeProvider";
+import { ThemeToggle } from "../ThemeToggle";
 
 // We have to mock this for the theme toggle react-ui to work
 window.ResizeObserver = class {

@@ -1,11 +1,12 @@
 import { mockGetFen } from "./mocks/mockUseVariation";
 
-import { describe, test, expect, beforeEach } from "@jest/globals";
-import { renderHook, act } from "@testing-library/react";
-import { startFen, VariationState } from "@/lib/types/pgnTypes";
-import { useVariation } from "../useVariation";
+import { beforeEach, describe, expect, test } from "@jest/globals";
+import { act, renderHook } from "@testing-library/react";
 
+import { VariationState, startFen } from "@/lib/types/pgnTypes";
 import { loadPgn } from "@/lib/utils/loadPgn";
+
+import { useVariation } from "../useVariation";
 
 describe("Hooks/useVariation", () => {
   let result: { current: VariationState };

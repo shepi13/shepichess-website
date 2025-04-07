@@ -5,9 +5,11 @@ import {
 } from "./mocks/mockUseEngine";
 
 import { describe, expect, jest, test } from "@jest/globals";
-import { useEngine, StockfishResult } from "../useEngine";
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
+
 import { startFen } from "@/lib/types/pgnTypes";
+
+import { StockfishResult, useEngine } from "../useEngine";
 
 let bestMove: string,
   ponder: string,

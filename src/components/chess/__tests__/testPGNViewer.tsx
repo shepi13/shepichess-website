@@ -1,6 +1,9 @@
 import { act } from "@testing-library/react";
+
 import { root } from "@/components/__tests__/componentTestHelpers";
+
 import { startFen } from "@/lib/types/pgnTypes";
+
 import PGNViewer from "../PGNViewer";
 
 describe("Test PGNViewer", () => {

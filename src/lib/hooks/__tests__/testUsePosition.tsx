@@ -1,7 +1,9 @@
-import { describe, test, expect, beforeEach, jest } from "@jest/globals";
-import { renderHook, act } from "@testing-library/react";
-import { usePosition } from "../usePosition";
+import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import { act, renderHook } from "@testing-library/react";
+
 import { Position, startFen } from "@/lib/types/pgnTypes";
+
+import { usePosition } from "../usePosition";
 
 const testFen =
   "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3";

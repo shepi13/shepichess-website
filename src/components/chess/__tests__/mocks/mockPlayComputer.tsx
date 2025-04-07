@@ -1,7 +1,7 @@
 // Mocks for testPlayComputer
+import { Chess } from "chess.js";
 
 import { Position, startFen } from "@/lib/types/pgnTypes";
-import { Chess } from "chess.js";
 
 export let currentFen = "";
 export let evaluatedPosition = "";

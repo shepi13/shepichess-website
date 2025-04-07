@@ -1,9 +1,11 @@
 "use client";
 
-import PGNViewerButtons from "./PGNViewerButtons";
 import { Chessboard } from "react-chessboard";
-import { Position } from "@/lib/types/pgnTypes";
+
 import { usePosition } from "@/lib/hooks/usePosition";
+import { Position } from "@/lib/types/pgnTypes";
+
+import PGNViewerButtons from "./PGNViewerButtons";
 
 const buttonStyles =
   "font-bold text-large ring-1 p-1 rounded-md hover:text-primary-dark \

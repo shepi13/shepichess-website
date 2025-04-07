@@ -1,12 +1,15 @@
 import { currentFen, orientation } from "./mocks/mockPlayableChessBoard";
 
 import { act, getByRole } from "@testing-library/react";
-import { root, container } from "@/components/__tests__/componentTestHelpers";
+
+import { container, root } from "@/components/__tests__/componentTestHelpers";
+
+import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
+
 import PlayableChessBoardStateless, {
   PlayableChessBoard,
 } from "../PlayableChessBoard";
-import { usePosition } from "@/lib/hooks/usePosition";
 
 describe("Test PlayableChessBoard", () => {
   test("Test Playable Chessboard", () => {

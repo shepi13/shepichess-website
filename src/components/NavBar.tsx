@@ -1,9 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import navLinks from "@/data/navLinks";
 import Image from "next/image";
+import Link from "next/link";
+
+import navLinks from "@/data/navLinks";
+
 import { useToggle } from "@/lib/hooks/useToggle";
+
 import { ThemeToggle } from "./theme/ThemeToggle";
 
 export function NavBar() {

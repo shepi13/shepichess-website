@@ -3,8 +3,7 @@
  *
  * Used in loadPgn, usePosition, useEngine, etc.
  */
-
-import { Square, Chess } from "chess.js";
+import { Chess, Square } from "chess.js";
 
 /** Array of arrows for react-chessboard() */
 export type Arrows = Array<[Square, Square, string]>;

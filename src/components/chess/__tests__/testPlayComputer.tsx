@@ -1,11 +1,14 @@
 import {
-  evaluatedPosition,
   currentFen,
+  evaluatedPosition,
 } from "@/components/chess/__tests__/mocks/mockPlayComputer";
 
 import { act, getByRole, getByText, render } from "@testing-library/react";
+
 import { container, root } from "@/components/__tests__/componentTestHelpers";
+
 import { startFen } from "@/lib/types/pgnTypes";
+
 import {
   PlayAgainstComputer,
   PlayAgainstComputerParams,

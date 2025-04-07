@@ -1,7 +1,10 @@
 import { act, getByTestId, getByText } from "@testing-library/react";
-import { root, container } from "@/components/__tests__/componentTestHelpers";
-import { loadPgn } from "@/lib/utils/loadPgn";
+
+import { container, root } from "@/components/__tests__/componentTestHelpers";
+
 import { startFen } from "@/lib/types/pgnTypes";
+import { loadPgn } from "@/lib/utils/loadPgn";
+
 import PGNViewerNotation from "../PGNViewerNotation";
 
 describe("Test PGNViewerNotation", () => {

@@ -1,12 +1,14 @@
 "use client";
 
 import { Chessboard } from "react-chessboard";
-import { loadPgn } from "@/lib/utils/loadPgn";
-import { startFen } from "@/lib/types/pgnTypes";
-import PGNViewerButtons from "./PGNViewerButtons";
-import PGNViewerNotation from "./PGNViewerNotation";
+
 import { useToggle } from "@/lib/hooks/useToggle";
 import { useVariation } from "@/lib/hooks/useVariation";
+import { startFen } from "@/lib/types/pgnTypes";
+import { loadPgn } from "@/lib/utils/loadPgn";
+
+import PGNViewerButtons from "./PGNViewerButtons";
+import PGNViewerNotation from "./PGNViewerNotation";
 
 export interface PGNViewerProps {
   pgn?: string;
