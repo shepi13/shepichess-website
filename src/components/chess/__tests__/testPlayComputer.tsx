@@ -1,7 +1,7 @@
 import {
     evaluatedPosition,
     currentFen,
-} from "@/components/chess/__tests__/mockPlayComputer";
+} from "@/components/chess/__tests__/mocks/mockPlayComputer";
 
 import { act, getByRole, getByText, render } from "@testing-library/react";
 import { container, root } from "@/components/__tests__/componentTestHelpers";

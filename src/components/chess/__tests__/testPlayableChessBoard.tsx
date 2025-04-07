@@ -1,4 +1,4 @@
-import { currentFen, orientation } from "./mockPlayableChessBoard";
+import { currentFen, orientation } from "./mocks/mockPlayableChessBoard";
 
 import { act, getByRole } from "@testing-library/react";
 import { root, container } from "@/components/__tests__/componentTestHelpers";

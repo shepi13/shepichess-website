@@ -1,3 +1,5 @@
+// Mocks for testPlayableChessBoard
+
 export let currentFen = "";
 export let orientation = "";
 
