@@ -1,6 +1,6 @@
 import { describe, test, expect } from "@jest/globals";
 import { renderHook, act } from "@testing-library/react";
-import useToggle from "../useToggle";
+import { useToggle } from "../useToggle";
 
 describe("Hooks/useToggle", () => {
   test.each([true, false])("Toggle", (initVal) => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useToggle(initialVal: boolean): [boolean, () => void] {
+export function useToggle(initialVal: boolean): [boolean, () => void] {
   /**
    * Simple Toggle react hook
    *
