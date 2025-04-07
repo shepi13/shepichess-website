@@ -3,11 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import navLinks from "@/data/navLinks";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 import { useToggle } from "@/lib/hooks/useToggle";
 
-import { ThemeToggle } from "./theme/ThemeToggle";
+import { navLinks } from "@/data/navLinks";
 
 export function NavBar() {
   const [isOpen, toggleOpen] = useToggle(false);

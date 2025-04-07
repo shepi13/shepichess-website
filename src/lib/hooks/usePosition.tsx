@@ -3,6 +3,12 @@ import { useMemo, useState } from "react";
 
 import { Position, startFen } from "@/lib/types/pgnTypes";
 
+/**
+ *
+ * @param initialPosition - Fen of starting position
+ * @param initialOrientation - whether the board is flipped (false -> white's perspective)
+ * @returns - Position object with state/methods to make/undo moves or flip the board
+ */
 export function usePosition(
   initialPosition: string = startFen,
   initialOrientation: boolean = false,

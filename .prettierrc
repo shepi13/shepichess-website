@@ -26,6 +26,7 @@
     "<THIRD_PARTY_MODULES>",
     "^@/components/(.*)$",
     "^@/lib/(.*)$",
+    "^@/(.*)$",
     "^assets/(.*)$",
     "^@fontsource/(.*)$",
     "^[./]"

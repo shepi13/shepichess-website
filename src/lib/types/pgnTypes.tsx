@@ -5,7 +5,7 @@
  */
 import { Chess, Square } from "chess.js";
 
-/** Array of arrows for react-chessboard() */
+/** Array of arrows for react-chessboard */
 export type Arrows = Array<[Square, Square, string]>;
 
 /** Tree of nested variations */

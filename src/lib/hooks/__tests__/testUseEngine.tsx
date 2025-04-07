@@ -1,8 +1,4 @@
-import {
-  constructorSpyMock,
-  postMessageSpyMock,
-  terminateSpyMock,
-} from "./mocks/mockUseEngine";
+import { constructorSpyMock, postMessageSpyMock } from "./mocks/mockUseEngine";
 
 import { describe, expect, jest, test } from "@jest/globals";
 import { act, renderHook } from "@testing-library/react";
@@ -52,14 +48,5 @@ describe("Hooks/useEngine", () => {
 
     act(result.current.stop);
     expect(postMessageSpyMock).toBeCalledWith("stop");
-  });
-
-  test("UCI quit and Worker terminate", () => {
-    const { result } = renderHook(() => useEngine(uciCallback));
-    expect(constructorSpyMock).toBeCalledWith("/stockfish/stockfish.js");
-
-    act(result.current.quit);
-    expect(postMessageSpyMock).toBeCalledWith("quit");
-    expect(terminateSpyMock).toBeCalled();
   });
 });

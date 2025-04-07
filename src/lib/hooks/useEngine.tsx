@@ -80,5 +80,5 @@ export function useEngine(callback: (arg0: StockfishResult) => void) {
     return quit;
   }, [onMessage]);
 
-  return { evaluatePosition, stop, quit };
+  return { evaluatePosition, stop };
 }

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
-import "@/css/globals.css";
-
 import { SVGGrainyFilter } from "@/components/BackgroundFilter";
 import { Footer } from "@/components/Footer";
 import { NavBar } from "@/components/NavBar";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+
+import "@/css/globals.css";
 
 export const metadata: Metadata = {
   title: {

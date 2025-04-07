@@ -1,5 +1,6 @@
-import navLinks from "@/data/navLinks";
 import { act, getByRole } from "@testing-library/react";
+
+import { navLinks } from "@/data/navLinks";
 
 import { NavBar } from "../NavBar";
 import { container, root } from "./componentTestHelpers";

@@ -7,27 +7,27 @@ import {
 } from "@/lib/types/pgnTypes";
 import { getFen } from "@/lib/utils/chessUtils";
 
+/**
+ * React Custom Hook to track current location within a tree of variations
+ *
+ * @param variation - Main variation of the tree
+ * @returns {
+ * // Function that returns fen of current position
+ *  fen,
+ *
+ * // Functions to traverse variation tree
+ *  firstMove,
+ *  lastMove,
+ *  nextMove,
+ *  prevMove,
+ *  enterVariation,
+ *  exitVariation,
+ *
+ * // Function to set current gamestate safely using a callback (e.g. SetGameState((prev) => {...prev, halfMoveNum: 5}))
+ *  setGameState,
+ * } - Variation state with functions to traverse the current tree
+ */
 export function useVariation(variation: Variation): VariationState {
-  /**
-   * React Custom Hook to track current location within a tree of variations
-   *
-   * @param variation - Main variation of the tree
-   * @returns {
-   * // Function that returns fen of current position
-   *  fen,
-   *
-   * // Functions to traverse variation tree
-   *  firstMove,
-   *  lastMove,
-   *  nextMove,
-   *  prevMove,
-   *  enterVariation,
-   *  exitVariation,
-   *
-   * // Function to set current gamestate safely using a callback (e.g. SetGameState((prev) => {...prev, halfMoveNum: 5}))
-   *  setGameState,
-   * }
-   */
   const [gameState, setGameState] = useState({
     variation: variation,
     halfMoveNum: 0,
