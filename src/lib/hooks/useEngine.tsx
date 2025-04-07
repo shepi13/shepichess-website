@@ -2,6 +2,16 @@
 
 import { useCallback, useEffect, useRef } from "react";
 
+/**
+ * Parsed move data from stockfish
+ * 
+ * @property bestMove - The parsed best move
+ * @property ponder - The response to ponder
+ * @property evaluation - Evaluation in centipawns (from the perspective of the side to move)
+ * @property possibleMate - possible mate stockfish sees
+ * @property pv - Entire main variation suggested
+ * @property depth - Actual depth searched
+ */
 export interface StockfishResult {
   bestMove: string;
   ponder: string;
@@ -11,8 +21,7 @@ export interface StockfishResult {
   depth: number;
 }
 
-export default function useEngine(callback: (arg0: StockfishResult) => void) {
-  /**
+ /**
    * React custom hook to manage a stockfish engine.
    *
    * Sets up engine in web worker in useEffect, tracking it with a react ref.
@@ -23,11 +32,12 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
    * @param callback - Callback that will be passed a StockfishResult when the engine runs
    *
    * @returns {
-   *  evaluatePosition(fen, depth),   // evaluates position given a fen string
-   *  stop,                           // stops the current evaluation
-   * }
-   *
-   */
+ *  evaluatePosition(fen, depth),   // evaluates position given a fen string
+ *  stop,                           // stops the current evaluation
+ * }
+ *
+ */
+export default function useEngine(callback: (arg0: StockfishResult) => void) {
   const workerRef = useRef<Worker>(null);
 
   // Functions for interacting with Worker
