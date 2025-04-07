@@ -2,7 +2,6 @@ import { startFen } from "@/lib/types/pgnTypes";
 import { getFen, moveIsGreat, moveIsMistake } from "../chessUtils";
 import { loadPgn } from "../loadPgn";
 
-
 describe("Test Chess Utilities", () => {
   const fenAfter = "Find this string!";
   const variation = {

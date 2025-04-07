@@ -2,6 +2,7 @@
  * General types
  */
 
+// Type for nextJS useSearchParams()
 export type NextSearchParams = {
   [key: string]: string | string[] | undefined;
 };

@@ -29,13 +29,10 @@ const annotationLookup = [
   ["$7", "&square;"],
 ] as const;
 
-
-
 // PGN REGEXES
 // Creates Regex for matching content within start/end tags (for example between [], (), or {})
-const genBoundaryRegex = (start: string, end: string, matchName: string) => new RegExp(
-  "(?:" + start + "(?<" + matchName + ">.*?)" + end + ")?"
-);
+const genBoundaryRegex = (start: string, end: string, matchName: string) =>
+  new RegExp("(?:" + start + "(?<" + matchName + ">.*?)" + end + ")?");
 //Optional move number (Number followed by . or ...)
 const moveNumberRegex = /(?:[0-9]*\.+)?/;
 
@@ -43,7 +40,7 @@ const moveNumberRegex = /(?:[0-9]*\.+)?/;
 const moveRegex = /((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O)/;
 
 //Optional Annotations (!?=+- for direct annotation, e.g. $13 for pgn style notation)
-const annotationRegex = /((?:[/!?=+-]+ *|\$[0-9]+ *)*)?/
+const annotationRegex = /((?:[/!?=+-]+ *|\$[0-9]+ *)*)?/;
 
 // Arrows (in []), Comments (in {}), and Variations (in $(...$))
 // Order must always be arrows -> comments -> variations
@@ -51,18 +48,18 @@ const arrrowRegex = genBoundaryRegex("\\[", "\\]", "arrows");
 const commentRegex = genBoundaryRegex("\\{", "\\}", "comment");
 const variationRegex = genBoundaryRegex("\\$\\(", "\\$\\)", "variation");
 
-
 // Parse Move number, move, annotation, arrows, comments, and variations
 // e.g. 2. Nf3! $13 [f3e5red] {Attacks e5} $(2. Bc4?$)
-const pgnParseRegex = new RegExp([
-  moveNumberRegex.source,
-  moveRegex.source,
-  annotationRegex.source,
-  arrrowRegex.source,
-  commentRegex.source,
-  variationRegex.source,
-].join(/\s*/.source),
-  "g"
+const pgnParseRegex = new RegExp(
+  [
+    moveNumberRegex.source,
+    moveRegex.source,
+    annotationRegex.source,
+    arrrowRegex.source,
+    commentRegex.source,
+    variationRegex.source,
+  ].join(/\s*/.source),
+  "g",
 );
 
 export function loadPgn(
@@ -126,7 +123,6 @@ export function loadPgn(
   return currentVariation;
 }
 
-
 //Replaces PGN Numeric codes with display html, removing extra whitespace
 function getAnnotation(annotationPgn?: string) {
   if (!annotationPgn) return "";
@@ -138,10 +134,10 @@ function getAnnotation(annotationPgn?: string) {
 }
 
 /* Parses arrows of form "a2a4orange, b2b4red" into squares and colors
-*  that can be used with react-chessboard.
-*
-*  These should be stored inside square brackets in the pgn (e.g. [f8c5blue, f8e7red])
-*/
+ *  that can be used with react-chessboard.
+ *
+ *  These should be stored inside square brackets in the pgn (e.g. [f8c5blue, f8e7red])
+ */
 function parseArrows(arrowPgn?: string) {
   const arrows: Arrows = [];
   if (!arrowPgn) return arrows;

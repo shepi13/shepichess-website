@@ -14,9 +14,21 @@ export function getFen(variation: Variation, moveNumber: number) {
 }
 
 export function moveIsGreat(move: Move) {
-    return move.annotation?.startsWith("!") || move.annotation.startsWith("+!");
+  /**
+   * Check if move is good (can be used for notation styling)
+   *
+   * @param move - Move to check
+   * @returns if move is interesting (!?), great (!), or brilliant (!!)
+   */
+  return move.annotation?.startsWith("!") || move.annotation.startsWith("+!");
 }
 
 export function moveIsMistake(move: Move) {
-    return move.annotation?.startsWith("?") || move.annotation.startsWith("+?");
+  /**
+   * Check if move is a mistake (can be used for notation styling)
+   *
+   * @param move - Move to check
+   * @returns if move is dubious (?!), a mistake (?), or a blunder (??)
+   */
+  return move.annotation?.startsWith("?") || move.annotation.startsWith("+?");
 }
