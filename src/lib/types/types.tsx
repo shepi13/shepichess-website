@@ -3,11 +3,11 @@
  */
 
 export type NextSearchParams = {
-    [key: string]: string | string[] | undefined;
+  [key: string]: string | string[] | undefined;
 };
 
 export interface PGNButtonSettings {
-    onClick: () => void;
-    disabled?: boolean;
-    children: React.ReactNode;
+  onClick: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
 }

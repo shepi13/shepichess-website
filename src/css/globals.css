@@ -3,33 +3,33 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 
-    --color-primary: var(--primary);
-    --color-primary-light: var(--primary-light);
-    --color-primary-dark: var(--primary-dark);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
 
-    --color-secondary: var(--secondary);
-    --color-secondary-light: var(--secondary-light);
-    --color-secondary-dark: var(--secondary-dark);
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-dark: var(--secondary-dark);
 
-    --color-primaryblack: rgb(28, 27, 26);
-    --color-primaryblack-light: rgb(40, 38, 37);
-    --color-primaryblack-dark: rgb(0, 0, 0);
+  --color-primaryblack: rgb(28, 27, 26);
+  --color-primaryblack-light: rgb(40, 38, 37);
+  --color-primaryblack-dark: rgb(0, 0, 0);
 
-    --color-primarywhite: rgb(233, 230, 229);
-    --color-primarywhite-light: rgb(243, 242, 241);
-    --color-primarywhite-dark: rgb(220, 215, 214);
+  --color-primarywhite: rgb(233, 230, 229);
+  --color-primarywhite-light: rgb(243, 242, 241);
+  --color-primarywhite-dark: rgb(220, 215, 214);
 }
 
 /* sm:... breakpoint */
 :root {
-    --background-location: 50% 50%;
-    --background-size1: 80%;
-    --background-size2: 120%;
+  --background-location: 50% 50%;
+  --background-size1: 80%;
+  --background-size2: 120%;
 } /*
 @media (width >= 40rem) {
   :root {
@@ -41,122 +41,122 @@
 */
 
 :root {
+  --background: radial-gradient(
+    circle at var(--background-location),
+    #7a7070,
+    #aaaaaa var(--background-size1),
+    #b5b5ae var(--background-size2),
+    #e5e0e0 var(--background-size2)
+  );
+  --foreground: var(--color-primaryblack);
+  --primary: rgb(138, 12, 58);
+  --primary-light: rgb(164, 14, 69);
+  --primary-dark: rgb(117, 10, 49);
+
+  --secondary: rgb(223, 195, 135);
+  --secondary-light: rgb(228, 205, 154);
+  --secondary-dark: rgb(212, 175, 94);
+
+  /* Reverse colors for dark mode */
+  &.dark {
+    --primary: rgb(223, 195, 135);
+    --primary-light: rgb(212, 175, 94);
+    --primary-dark: rgb(228, 205, 154);
+
+    --secondary: rgb(138, 12, 58);
+    --secondary-light: rgb(117, 10, 49);
+    --secondary-dark: rgb(164, 14, 69);
+
     --background: radial-gradient(
-        circle at var(--background-location),
-        #7a7070,
-        #aaaaaa var(--background-size1),
-        #b5b5ae var(--background-size2),
-        #e5e0e0 var(--background-size2)
+      circle at var(--background-location),
+      #1a1010,
+      #222222 var(--background-size1),
+      #35352e var(--background-size2),
+      #151010 var(--background-size2)
     );
-    --foreground: var(--color-primaryblack);
-    --primary: rgb(138, 12, 58);
-    --primary-light: rgb(164, 14, 69);
-    --primary-dark: rgb(117, 10, 49);
-
-    --secondary: rgb(223, 195, 135);
-    --secondary-light: rgb(228, 205, 154);
-    --secondary-dark: rgb(212, 175, 94);
-
-    /* Reverse colors for dark mode */
-    &.dark {
-        --primary: rgb(223, 195, 135);
-        --primary-light: rgb(212, 175, 94);
-        --primary-dark: rgb(228, 205, 154);
-
-        --secondary: rgb(138, 12, 58);
-        --secondary-light: rgb(117, 10, 49);
-        --secondary-dark: rgb(164, 14, 69);
-
-        --background: radial-gradient(
-            circle at var(--background-location),
-            #1a1010,
-            #222222 var(--background-size1),
-            #35352e var(--background-size2),
-            #151010 var(--background-size2)
-        );
-        --foreground: var(--color-primarywhite);
-    }
+    --foreground: var(--color-primarywhite);
+  }
 }
 
 @layer base {
-    html {
-        height: 100%;
-    }
+  html {
+    height: 100%;
+  }
 
-    body {
-        height: 100%;
-        color: var(--foreground);
-        background-attachment: fixed;
-        font-family: Arial, Helvetica, sans-serif;
-    }
+  body {
+    height: 100%;
+    color: var(--foreground);
+    background-attachment: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+  }
 
-    .main-heading::after {
-        content: "";
-        display: block;
-        position: relative;
-        top: 0.33em;
-        border-bottom: 1px solid hsla(0, 0%, 50%, 0.33);
-    }
+  .main-heading::after {
+    content: "";
+    display: block;
+    position: relative;
+    top: 0.33em;
+    border-bottom: 1px solid hsla(0, 0%, 50%, 0.33);
+  }
 
-    .main-heading {
-        @apply mb-10;
-    }
+  .main-heading {
+    @apply mb-10;
+  }
 
-    hr {
-        @apply mb-5;
-    }
+  hr {
+    @apply mb-5;
+  }
 
-    h1,
-    h2 {
-        @apply text-primary;
-    }
+  h1,
+  h2 {
+    @apply text-primary;
+  }
 
-    h3 {
-        @apply text-secondary-dark drop-shadow-[0_0.8px_0.8px_var(--primary-dark)];
-    }
+  h3 {
+    @apply text-secondary-dark drop-shadow-[0_0.8px_0.8px_var(--primary-dark)];
+  }
 
-    h4,
-    h5 {
-        @apply drop-shadow-[0_1px_1px_var(--primary-dark)];
-    }
+  h4,
+  h5 {
+    @apply drop-shadow-[0_1px_1px_var(--primary-dark)];
+  }
 
-    h3,
-    h4,
-    h5,
-    p {
-        @apply mb-3;
-    }
+  h3,
+  h4,
+  h5,
+  p {
+    @apply mb-3;
+  }
 
-    h1 {
-        @apply text-[calc(1.375rem+1.5vw)] xl:text-5xl;
-    }
-    h2 {
-        @apply text-[calc(1.325rem+0.9vw)] xl:text-4xl;
-    }
-    h3 {
-        @apply text-[calc(1.3rem+0.6vw)] xl:text-3xl;
-    }
-    h4 {
-        @apply text-[calc(1.275rem+0.3vw)] xl:text-2xl;
-    }
-    h5 {
-        @apply text-xl;
-    }
+  h1 {
+    @apply text-[calc(1.375rem+1.5vw)] xl:text-5xl;
+  }
+  h2 {
+    @apply text-[calc(1.325rem+0.9vw)] xl:text-4xl;
+  }
+  h3 {
+    @apply text-[calc(1.3rem+0.6vw)] xl:text-3xl;
+  }
+  h4 {
+    @apply text-[calc(1.275rem+0.3vw)] xl:text-2xl;
+  }
+  h5 {
+    @apply text-xl;
+  }
 
-    .content::before {
-        background: var(--background);
-        background-size: cover;
-        filter: url(#grainy) brightness(220%) opacity(0.4);
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        min-height: 100%;
-        z-index: -1;
+  .content::before {
+    background: var(--background);
+    background-size: cover;
+    filter: url(#grainy) brightness(220%) opacity(0.4);
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    z-index: -1;
 
-        &.dark {
-            filter: url(#grainy) brightness(100%);
-        }
+    &.dark {
+      filter: url(#grainy) brightness(100%);
     }
+  }
 }
