@@ -1,6 +1,6 @@
 import { act, getByRole } from "@testing-library/react";
 import { root, container } from "./componentTestHelpers";
-import NavBar from "../NavBar";
+import { NavBar } from "../NavBar";
 import navLinks from "@/data/navLinks";
 
 // We have to mock this for the theme toggle react-ui to work

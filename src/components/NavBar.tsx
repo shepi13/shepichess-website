@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import navLinks from "@/data/navLinks";
-import ThemeToggle from "./theme/ThemeToggle";
 import Image from "next/image";
 import { useToggle } from "@/lib/hooks/useToggle";
+import { ThemeToggle } from "./theme/ThemeToggle";
 
-export default function NavBar() {
+export function NavBar() {
   const [isOpen, toggleOpen] = useToggle(false);
 
   return (

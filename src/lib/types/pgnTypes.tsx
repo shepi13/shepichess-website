@@ -16,7 +16,7 @@ export type Variation = {
   moves: Array<Move>;
   parentVariation: Variation | null;
   parentMove: number;
-}
+};
 
 /** Move Data (including nested variations) */
 export type Move = {
@@ -29,7 +29,7 @@ export type Move = {
   arrows: Arrows;
   fullMatch: string;
   fenAfter: string;
-}
+};
 
 /** Position and related methods (returned by UsePosition hook) */
 export type Position = {
@@ -42,7 +42,7 @@ export type Position = {
   makeMove: (arg0: Square, arg1: Square, arg2: string) => boolean;
   setPosition: (arg0: string) => void;
   toggleFlipped: () => void;
-}
+};
 
 /** Variation location and methods (returned by useVariation hook) */
 export type VariationState = {
@@ -56,12 +56,12 @@ export type VariationState = {
   setGameState: (arg0: PGNStateCallback) => void;
   variation: Variation;
   halfMoveNum: number;
-}
+};
 /** Location within variation */
 export type GameState = {
   variation: Variation;
   halfMoveNum: number;
-}
+};
 /** Callback to update GameState */
 export type PGNStateCallback = (state: GameState) => GameState;
 

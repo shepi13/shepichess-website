@@ -18,7 +18,7 @@ const darkmodeOptions = [
   { img: MoonSVG, text: "Dark" },
 ];
 
-export default function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({ className }: { className?: string }) {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 

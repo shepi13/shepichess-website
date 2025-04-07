@@ -9,7 +9,7 @@ type ThemeProps = {
   enableSystem: boolean;
 };
 
-export default function ThemeProvider({
+export function ThemeProvider({
   children,
   ...props
 }: React.PropsWithChildren<ThemeProps>) {
