@@ -2,7 +2,7 @@ import { Chess, Square } from "chess.js";
 import { useMemo, useState } from "react";
 import { Position, startFen } from "../types/pgnTypes";
 
-export default function usePosition(
+export function usePosition(
   initialPosition: string = startFen,
   initialOrientation: boolean = false,
 ): Position {

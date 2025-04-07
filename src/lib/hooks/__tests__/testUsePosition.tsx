@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach, jest } from "@jest/globals";
 import { renderHook, act } from "@testing-library/react";
-import usePosition from "../usePosition";
+import { usePosition } from "../usePosition";
 import { Position, startFen } from "@/lib/types/pgnTypes";
 
 const testFen =

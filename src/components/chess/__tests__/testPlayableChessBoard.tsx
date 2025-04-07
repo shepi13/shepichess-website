@@ -6,7 +6,7 @@ import { startFen } from "@/lib/types/pgnTypes";
 import PlayableChessBoardStateless, {
   PlayableChessBoard,
 } from "../PlayableChessBoard";
-import usePosition from "@/lib/hooks/usePosition";
+import { usePosition } from "@/lib/hooks/usePosition";
 
 describe("Test PlayableChessBoard", () => {
   test("Test Playable Chessboard", () => {
