@@ -1,0 +1,21 @@
+{
+    "excludeNotDocumentedKinds": [
+        "Module",
+        "Namespace",
+        "Enum",
+        "Variable",
+        "Function",
+        "Class",
+        "Interface",
+        "Constructor",
+        "Method",
+        "CallSignature",
+        "IndexSignature",
+        "ConstructorSignature",
+        "Accessor",
+        "GetSignature",
+        "SetSignature",
+        "TypeAlias",
+        "Reference"
+    ]
+}
