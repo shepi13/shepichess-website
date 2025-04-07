@@ -1,6 +1,6 @@
 "use client";
 
-import useEngine from "@/lib/hooks/useEngine";
+import { useEngine } from "@/lib/hooks/useEngine";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
 import { Chess, Square } from "chess.js";

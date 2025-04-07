@@ -56,7 +56,7 @@ useSearchParamsMock
 jest.mock("@/lib/hooks/useEngine", () => {
   return {
     __esModule: true,
-    default: mockUseEngine,
+    useEngine: mockUseEngine,
   };
 });
 jest.mock("next/navigation", () => ({

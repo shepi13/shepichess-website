@@ -37,7 +37,7 @@ export interface StockfishResult {
  * }
  *
  */
-export default function useEngine(callback: (arg0: StockfishResult) => void) {
+export function useEngine(callback: (arg0: StockfishResult) => void) {
   const workerRef = useRef<Worker>(null);
 
   // Functions for interacting with Worker
