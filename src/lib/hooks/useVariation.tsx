@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Variation, VariationState } from "../types/pgnTypes";
-import { getFen } from "../utils/loadPgn";
+import { getFen } from "../utils/chessUtils";
 import { PGNStateCallback } from "../types/pgnTypes";
 
 export default function useVariation(variation: Variation): VariationState {

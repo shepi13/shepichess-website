@@ -29,41 +29,41 @@ const annotationLookup = [
   ["$7", "&square;"],
 ] as const;
 
-/*
-/
-    (?:[0-9]*\.+)?                  #Optional move number (Number followed by . or ...)
-     *
-    ((?:[A-Za-z]+[0-9])             # Move (Letters followed by number, eg. Ng5)
-    |0-0-0|0-0|O-O-O|O-O)           # or castling
-     *
-    ((?:[/!?=+-]+ *|\$[0-9]+ *)*)?  # Optional Annotations (!?=+- for direct annotation, e.g. $13 for pgn style notation)
-     *
-    (?:\[(.*?)\])?                  # Optional Arrows (Capture values inside [], will not be nested)
-     *
-    (?:\{(.*?)\})?                  # Optional Comment (Capture values inside {}), comments cannot be nested
-     *
-    (?:\$\((.*?)\$\))?              # Optional Variations (Capture values inside $( to $), this will not be nested after preprocessing)
-/g
 
-Note that order must always be annotations -> arrows -> comments -> variations. This makes the most sense logistically, as variations
-are directly tied to the move, arrows to the position, then comments to the current text, and variations to the next move.
-*/
-const pgnParseRegex =
-  /(?:[0-9]*\.+)? *((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O) *((?:[/!?=+-]+ *|\$[0-9]+ *)*)? *(?:\[(.*?)\])? *(?:\{(.*?)\})? *(?:\$\((.*?)\$\))?/g;
 
-// Lookup position string for current variation/move
-export function getFen(variation: Variation, moveNumber: number) {
-  /**
-   * Returns the fen for a variation after a specific move number (1 indexed)
-   *
-   * @param variation - variation to search
-   * @param moveNumber - half move count (relative to variation start)
-   */
-  if (moveNumber === 0) {
-    return variation.start;
-  }
-  return variation.moves[moveNumber - 1].fenAfter;
-}
+// PGN REGEXES
+// Creates Regex for matching content within start/end tags (for example between [], (), or {})
+const genBoundaryRegex = (start: string, end: string, matchName: string) => new RegExp(
+  "(?:" + start + "(?<" + matchName + ">.*?)" + end + ")?"
+);
+//Optional move number (Number followed by . or ...)
+const moveNumberRegex = /(?:[0-9]*\.+)?/;
+
+//Move (Letters followed by number, eg. Ng5), or castling
+const moveRegex = /((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O)/;
+
+//Optional Annotations (!?=+- for direct annotation, e.g. $13 for pgn style notation)
+const annotationRegex = /((?:[/!?=+-]+ *|\$[0-9]+ *)*)?/
+
+// Arrows (in []), Comments (in {}), and Variations (in $(...$))
+// Order must always be arrows -> comments -> variations
+const arrrowRegex = genBoundaryRegex("\\[", "\\]", "arrows");
+const commentRegex = genBoundaryRegex("\\{", "\\}", "comment");
+const variationRegex = genBoundaryRegex("\\$\\(", "\\$\\)", "variation");
+
+
+// Parse Move number, move, annotation, arrows, comments, and variations
+// e.g. 2. Nf3! $13 [f3e5red] {Attacks e5} $(2. Bc4?$)
+const pgnParseRegex = new RegExp([
+  moveNumberRegex.source,
+  moveRegex.source,
+  annotationRegex.source,
+  arrrowRegex.source,
+  commentRegex.source,
+  variationRegex.source,
+].join(/\s*/.source),
+  "g"
+);
 
 export function loadPgn(
   pgn: string,
@@ -75,7 +75,6 @@ export function loadPgn(
   /**
    *  Parses a PGN into variation objects (see pgnTypes.tsx)
    *  Each move should be in the form of 2. Nf3! [arrows] {comments} (variations)
-   *  See pgnParseRegex above for a more detailed parsing explanation
    *
    *  @param pgn - pgn to parse
    *  @param start - fen for starting position
@@ -97,7 +96,7 @@ export function loadPgn(
     parentVariation: parentVar,
     parentMove: parentMove,
   };
-  // Save 10000 id numbers for variations on current level
+  // Use 10000 id numbers for variations on current level, so next level starts 10000 higher
   let newId = id + 10000;
 
   tokens.forEach((token, index) => {
@@ -105,17 +104,20 @@ export function loadPgn(
     const sideToMove = game.turn();
     const beforeFen = game.fen();
 
+    //Verify move is legal (replace 0-0 with O-O so either casltling notation works)
     game.move(token[1].replace(/0/g, "O"));
+
+    // Add parsed move to movelist, recursively calling loadPgn for nested variations
     moves.push({
       color: sideToMove,
       moveNumber: moveNumber,
       move: token[1],
       annotation: getAnnotation(token[2]),
-      comment: token[4] || "",
-      variation: token[5]
+      comment: token.groups?.comment ?? "",
+      variation: token.groups?.variation
         ? loadPgn(token[5], beforeFen, ++newId, currentVariation, index + 1)
         : null,
-      arrows: parseArrows(token[3]),
+      arrows: parseArrows(token.groups?.arrows),
       fullMatch: token[0],
       fenAfter: game.fen(),
     });
@@ -124,11 +126,9 @@ export function loadPgn(
   return currentVariation;
 }
 
+
+//Replaces PGN Numeric codes with display html, removing extra whitespace
 function getAnnotation(annotationPgn?: string) {
-  /**
-   * Replaces PGN Numeric codes with display html, removing extra whitespace
-   * @param annotationPgn - The matched annotation from our pgn regex
-   */
   if (!annotationPgn) return "";
   annotationPgn = annotationPgn.replaceAll(/\s*\$/g, " $");
   for (const [key, val] of annotationLookup) {
@@ -137,16 +137,12 @@ function getAnnotation(annotationPgn?: string) {
   return annotationPgn.trim();
 }
 
-function parseArrows(arrowPgn: string) {
-  /**
-   * Parses arrows of form "a2a4orange, b2b4red" into squares and colors
-   * that can be used with react-chessboard.
-   *
-   * These should be stored inside square brackets in the pgn (e.g. [f8c5blue, f8e7red])
-   *
-   * @param arrowPgn - The parsed arrows from the pgn regex
-   * @ returns arrows - An Array<Square, Square, string> representing the arrow and corresponding colors
-   */
+/* Parses arrows of form "a2a4orange, b2b4red" into squares and colors
+*  that can be used with react-chessboard.
+*
+*  These should be stored inside square brackets in the pgn (e.g. [f8c5blue, f8e7red])
+*/
+function parseArrows(arrowPgn?: string) {
   const arrows: Arrows = [];
   if (!arrowPgn) return arrows;
 
@@ -172,6 +168,8 @@ function preParsePgn(pgn: string): string {
   const topLevelPairs = [];
   for (let i = 0; i < pgn.length; i++) {
     const char = pgn[i];
+
+    // Ignore all characters inside PGN Comments ({...})
     if (inComment && char != "}") continue;
 
     switch (char) {
@@ -181,6 +179,7 @@ function preParsePgn(pgn: string): string {
       case "}":
         inComment = false;
         continue;
+      // Track nested parenthesis level, saving locations if we find a top level match
       case "(":
         if (level === 0) {
           start = i;
@@ -196,6 +195,7 @@ function preParsePgn(pgn: string): string {
     }
   }
 
+  // Rebuild string with all top level matches replaced
   let result = "";
   let location = 0;
   for (const pair of topLevelPairs) {

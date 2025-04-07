@@ -1,44 +1,7 @@
 import { describe, test, expect } from "@jest/globals";
-import { loadPgn, getFen } from "@/lib/utils/loadPgn";
+import { loadPgn } from "@/lib/utils/loadPgn";
 import { startFen } from "@/lib/types/pgnTypes";
 import { Square } from "chess.js";
-
-describe("getFen test", () => {
-  const fenAfter = "Find this string!";
-  const variation = {
-    start: startFen,
-    id: 0,
-    parentVariation: null,
-    parentMove: 0,
-    moves: [
-      {
-        moveNumber: 1,
-        color: "w",
-        move: "e4",
-        annotation: "",
-        comment: "",
-        variation: null,
-        arrows: [],
-        fullMatch: "e4",
-        fenAfter: fenAfter,
-      },
-    ],
-  };
-  test("Starting Fen", () => {
-    const fen = getFen(variation, 0);
-    expect(fen).toBe(startFen);
-  });
-  test("Fen at Move", () => {
-    const fen = getFen(variation, 1);
-    expect(fen).toBe(fenAfter);
-  });
-  test("Fen integration test", () => {
-    const variation = loadPgn("1. e4 e5 2. Nf3", startFen);
-    expect(getFen(variation, 3)).toBe(
-      "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-    );
-  });
-});
 
 describe("PGN Parser Test", () => {
   describe("Test PGN Annotations", () => {

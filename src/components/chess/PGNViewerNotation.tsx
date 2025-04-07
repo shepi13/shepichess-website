@@ -4,6 +4,7 @@ import {
   GameState,
   PGNStateCallback,
 } from "@/lib/types/pgnTypes";
+import { moveIsGreat, moveIsMistake } from "@/lib/utils/chessUtils";
 
 interface PGNViewerNotationProps {
   variation: Variation;
@@ -65,8 +66,8 @@ export default function PGNViewerNotation({
               {move_number}
               <span
                 className={`
-                                    ${move.annotation && move.annotation.startsWith("!") && "text-lime-600 dark:text-lime-400"}
-                                    ${move.annotation && move.annotation.startsWith("?") && "text-sky-900 dark:text-sky-200"}
+                                    ${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"}
+                                    ${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"}
                                 `}
                 dangerouslySetInnerHTML={{
                   __html: move_text + "&nbsp;",
