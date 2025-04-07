@@ -5,11 +5,11 @@ import { useSearchParams } from "next/navigation";
 import { Chess, Square } from "chess.js";
 import { Suspense, useCallback, useEffect } from "react";
 
+import PlayableChessBoardStateless from "@/components/chess/PlayableChessBoard";
+
 import { useEngine } from "@/lib/hooks/useEngine";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
-
-import PlayableChessBoardStateless from "./PlayableChessBoard";
 
 export function PlayAgainstComputer({
   start = startFen,

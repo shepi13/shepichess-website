@@ -2,13 +2,13 @@
 
 import { Chessboard } from "react-chessboard";
 
+import PGNViewerButtons from "@/components/chess/PGNViewerButtons";
+import PGNViewerNotation from "@/components/chess/PGNViewerNotation";
+
 import { useToggle } from "@/lib/hooks/useToggle";
 import { useVariation } from "@/lib/hooks/useVariation";
 import { startFen } from "@/lib/types/pgnTypes";
 import { loadPgn } from "@/lib/utils/loadPgn";
-
-import PGNViewerButtons from "./PGNViewerButtons";
-import PGNViewerNotation from "./PGNViewerNotation";
 
 export interface PGNViewerProps {
   pgn?: string;
