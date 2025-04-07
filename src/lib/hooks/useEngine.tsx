@@ -39,10 +39,10 @@ export default function useEngine(callback: (arg0: StockfishResult) => void) {
         workerRef.current?.postMessage(`go depth ${depth}`);
     }
     function stop() {
-        workerRef.current?.postMessage("stop"); // Run when changing positions
+        workerRef.current?.postMessage("stop");
     }
     function quit() {
-        workerRef.current?.postMessage("quit"); // Good to run this before unmounting.
+        workerRef.current?.postMessage("quit");
         workerRef.current?.terminate();
     }
 

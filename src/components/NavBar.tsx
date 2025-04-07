@@ -10,7 +10,7 @@ export default function NavBar() {
     const [isOpen, toggleOpen] = useToggle(false);
 
     return (
-        <nav className="sm:flex sm:justify-between p-5 lg:px-15">
+        <header className="sm:flex sm:justify-between p-5 lg:px-15">
             <div className="flex justify-between grow basis-0">
                 <div className="h-14 md:h-20">
                     <Link href="/">
@@ -42,7 +42,7 @@ export default function NavBar() {
                     </button>
                 </div>
             </div>
-            <div className={`${isOpen || "hidden"} sm:flex sm:items-center`}>
+            <nav className={`${isOpen || "hidden"} sm:flex sm:items-center`}>
                 {navLinks.map((link) => (
                     <Link
                         key={link.title}
@@ -53,12 +53,12 @@ export default function NavBar() {
                         {link.title}
                     </Link>
                 ))}
-            </div>
+            </nav>
             <div
                 className={`${isOpen || "hidden"} sm:hidden lg:flex grow basis-0 justify-end`}
             >
                 <ThemeToggle className="hover:text-secondary cursor-pointer capitalize font-semibold mx-3 mt-2 mb-10 lg:mb-3" />
             </div>
-        </nav>
+        </header>
     );
 }
