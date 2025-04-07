@@ -3,7 +3,7 @@ import { mockGetFen } from "./mocks/mockUseVariation";
 import { describe, test, expect, beforeEach } from "@jest/globals";
 import { renderHook, act } from "@testing-library/react";
 import { startFen, VariationState } from "@/lib/types/pgnTypes";
-import useVariation from "../useVariation";
+import { useVariation } from "../useVariation";
 
 import { loadPgn } from "@/lib/utils/loadPgn";
 

@@ -6,7 +6,7 @@ import { startFen } from "@/lib/types/pgnTypes";
 import PGNViewerButtons from "./PGNViewerButtons";
 import PGNViewerNotation from "./PGNViewerNotation";
 import useToggle from "@/lib/hooks/useToggle";
-import useVariation from "@/lib/hooks/useVariation";
+import { useVariation } from "@/lib/hooks/useVariation";
 
 export interface PGNViewerProps {
   pgn?: string;

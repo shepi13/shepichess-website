@@ -3,7 +3,7 @@ import { Variation, VariationState } from "../types/pgnTypes";
 import { getFen } from "../utils/chessUtils";
 import { PGNStateCallback } from "../types/pgnTypes";
 
-export default function useVariation(variation: Variation): VariationState {
+export function useVariation(variation: Variation): VariationState {
   /**
    * React Custom Hook to track current location within a tree of variations
    *
