@@ -21,6 +21,9 @@ const darkmodeOptions = [
 
 /**
  * Theme Menu with options to choose between light and dark mode
+ *
+ * @param props
+ * @param props.className - styles to use for the main menu button.
  */
 export function ThemeToggle({ className }: { className?: string }) {
   const { setTheme, resolvedTheme } = useTheme();

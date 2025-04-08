@@ -12,8 +12,15 @@ const buttonStyles =
                  hover:shadow-[3px_3px_5px_rgba(0,0,0,.8)] hover:drop-shadow-[2px_2px_3px_rgba(0,0,0,.2)] \
                  dark:hover:shadow-[3px_3px_5px_rgba(255,255,255,.8)] dark:hover:drop-shadow-[2px_2px_3px_rgba(255,255,255,.2)]";
 
-// For use by components that manage state using usePosition
-export default function PlayableChessBoardStateless({
+/**
+ * Playable chess board component with no state management.
+ * For use by components that manage state using usePosition.
+ *
+ * @param props
+ * @param props.position - Position object returned by usePosition, allows the parent to manage this state
+ * @param props.flipText - Text for flip board button, default to "Flip Board!"
+ */
+export function PlayableChessBoardStateless({
   position,
   flipText = "Flip Board!",
 }: {
@@ -56,7 +63,14 @@ export default function PlayableChessBoardStateless({
   );
 }
 
-// Simple display board
+/**
+ * Simple display board, manages it's own state.
+ * Allows the user to make moves, undo moves, or reset the board to the initial position
+ *
+ * @param props
+ * @param props.start - Initial board position
+ * @param props.flipped - Whether the board should be flipped to black's perspective
+ */
 export function PlayableChessBoard({
   start,
   flipped = false,

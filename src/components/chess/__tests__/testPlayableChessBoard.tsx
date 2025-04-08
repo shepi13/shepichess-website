@@ -7,8 +7,9 @@ import { container, root } from "@/components/__tests__/componentTestHelpers";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
 
-import PlayableChessBoardStateless, {
+import {
   PlayableChessBoard,
+  PlayableChessBoardStateless,
 } from "../PlayableChessBoard";
 
 describe("Test PlayableChessBoard", () => {

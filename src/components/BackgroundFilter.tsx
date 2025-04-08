@@ -1,5 +1,7 @@
 /**
- * 
+ * SVG filter with turbulence to create a grainy effect.
+ * Used in the main background of the website.
+ *
  * @returns Grainy background filter
  */
 export function SVGGrainyFilter() {

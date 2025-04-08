@@ -66,5 +66,5 @@ jest.mock("next/navigation", () => ({
 jest.mock("@/components/chess/PlayableChessBoard", () => ({
   ...jest.requireActual("@/components/chess/PlayableChessBoard"),
   __esModule: true,
-  default: mockPlayableChessBoard,
+  PlayableChessBoardStateless: mockPlayableChessBoard,
 }));

@@ -5,12 +5,22 @@ import { useSearchParams } from "next/navigation";
 import { Chess, Square } from "chess.js";
 import { Suspense, useCallback, useEffect } from "react";
 
-import PlayableChessBoardStateless from "@/components/chess/PlayableChessBoard";
+import { PlayableChessBoardStateless } from "@/components/chess/PlayableChessBoard";
 
 import { useEngine } from "@/lib/hooks/useEngine";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
 
+/**
+ * Component that renders a chessboard and buttons to play chess against stockfish
+ *
+ * @param props
+ * @param props.start - Fen for initial position,
+ * @param props.playerColor - Initial color
+ * @param props.depth - Depth for stockfish to use
+ *
+ * @returns Chessboard where the user can play against a computer
+ */
 export function PlayAgainstComputer({
   start = startFen,
   playerColor = "",
