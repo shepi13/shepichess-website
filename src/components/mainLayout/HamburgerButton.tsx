@@ -1,9 +1,8 @@
-
 /**
  * Hamburger button for use in a clickable menu
- * 
+ *
  * @param props
- * @param props.onClick - Click handler that should be executed when button is clicked 
+ * @param props.onClick - Click handler that should be executed when button is clicked
  * @returns Button/SVG JSX for a clickable hamburger menu
  */
 export function HamburgerButton({ onClick }: { onClick: () => void }) {

@@ -3,13 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { HamburgerButton } from "@/components/mainLayout/HamburgerButton";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 import { useToggle } from "@/lib/hooks/useToggle";
 
 import { navLinks } from "@/data/navLinks";
-
-import { HamburgerButton } from "./HamburgerButton";
 
 /**
  * Component for main header and navbar
