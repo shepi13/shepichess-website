@@ -1,7 +1,7 @@
 import { act } from "@testing-library/react";
 
-import { SVGGrainyFilter } from "../mainLayout/BackgroundFilter";
-import { container, root } from "./componentTestHelpers";
+import { SVGGrainyFilter } from "@/components/mainLayout/BackgroundFilter";
+import { container, root } from "@/lib/test/componentTestHelpers";
 
 describe("Test Background Filter SVG", () => {
   test("Contains #grainy filter", () => {

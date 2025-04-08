@@ -1,6 +1,6 @@
 import { act, getByTestId, getByText } from "@testing-library/react";
 
-import { container, root } from "@/components/__tests__/componentTestHelpers";
+import { container, root } from "@/lib/test/componentTestHelpers";
 
 import { startFen } from "@/lib/types/pgnTypes";
 import { loadPgn } from "@/lib/utils/loadPgn";

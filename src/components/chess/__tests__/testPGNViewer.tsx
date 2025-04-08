@@ -1,6 +1,6 @@
 import { act } from "@testing-library/react";
 
-import { root } from "@/components/__tests__/componentTestHelpers";
+import { root } from "@/lib/test/componentTestHelpers";
 
 import { startFen } from "@/lib/types/pgnTypes";
 

@@ -5,7 +5,7 @@ import {
 
 import { act, getByRole, getByText, render } from "@testing-library/react";
 
-import { container, root } from "@/components/__tests__/componentTestHelpers";
+import { container, root } from "@/lib/test/componentTestHelpers";
 
 import { startFen } from "@/lib/types/pgnTypes";
 

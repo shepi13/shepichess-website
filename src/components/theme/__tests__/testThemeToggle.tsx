@@ -1,9 +1,7 @@
-import { describe, expect, test } from "@jest/globals";
-import { fireEvent, screen } from "@testing-library/dom";
-import { getByRole } from "@testing-library/dom";
+import { fireEvent, getByRole, screen } from "@testing-library/dom";
 import { act } from "@testing-library/react";
 
-import { container, root } from "@/components/__tests__/componentTestHelpers";
+import { container, root } from "@/lib/test/componentTestHelpers";
 
 import { ThemeProvider } from "../ThemeProvider";
 import { ThemeToggle } from "../ThemeToggle";

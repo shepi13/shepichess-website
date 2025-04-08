@@ -2,7 +2,7 @@ import { currentFen, orientation } from "./mocks/mockPlayableChessBoard";
 
 import { act, getByRole } from "@testing-library/react";
 
-import { container, root } from "@/components/__tests__/componentTestHelpers";
+import { container, root } from "@/lib/test/componentTestHelpers";
 
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
