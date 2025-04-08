@@ -2,8 +2,8 @@
 
 import { Chessboard } from "react-chessboard";
 
-import PGNViewerButtons from "@/components/chess/PGNViewerButtons";
-import PGNViewerNotation from "@/components/chess/PGNViewerNotation";
+import { PGNViewerButtons } from "@/components/chess/PGNViewerButtons";
+import { PGNViewerNotation } from "@/components/chess/PGNViewerNotation";
 
 import { useToggle } from "@/lib/hooks/useToggle";
 import { useVariation } from "@/lib/hooks/useVariation";

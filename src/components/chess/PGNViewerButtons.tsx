@@ -1,6 +1,18 @@
 import { PGNButtonSettings } from "@/lib/types/types";
 
-interface PGNViewerButtonProps {
+/**
+ * Properties that can be passed to PGNViewerButtons component.
+ * Includes buttons to show and styling info. Styling is set to a reasonable
+ * default if not provided.
+ *
+ * @property leftButtons - Array of buttons to display (left-justified)
+ * @property rightButtons - Array of buttons to display (right-justified)
+ * @property leftButtonStyle - Tailwind classes for leftButtons
+ * @property rightButtonStyle - Tailwind classes for rightButtons
+ * @property leftContainerStyle - Tailwind classes for flex container holding leftButtons
+ * @property rightContainer - Tailwind classes for flex container holding rightButtons
+ */
+export interface PGNViewerButtonProps {
   leftButtons?: Array<PGNButtonSettings>;
   rightButtons?: Array<PGNButtonSettings>;
   leftButtonStyle?: string;
@@ -15,7 +27,13 @@ const defaultFlipButtonStyle =
   "text-base md:text-lg hover:text-secondary-dark ";
 const defaultFlexStyle = "justify-between ";
 
-export default function PGNViewerButtons({
+/**
+ * Component that holds buttons for interacting with a chessboard.
+ *
+ * @param props - PGN button props to describe which buttons to show along with custom styles
+ * @returns React Element containing specified buttons
+ */
+export function PGNViewerButtons({
   leftButtons = [],
   rightButtons = [],
   leftButtonStyle = defaultButtonStyle,

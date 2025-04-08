@@ -6,7 +6,16 @@ import {
 } from "@/lib/types/pgnTypes";
 import { moveIsGreat, moveIsMistake } from "@/lib/utils/chessUtils";
 
-interface PGNViewerNotationProps {
+/**
+ * Properties passed to PGNViewerNotation. Describes variation to display and current
+ * move for highlighting.
+ *
+ * @property variation - Variation tree to display
+ * @property gameState - Current location of variation tree (used for highlighting)
+ * @property setGameState - Setter for variation location (used to set position when user clicks on a move)
+ * @property level - Used internally to style subvariations differently than the main one.
+ */
+export interface PGNViewerNotationProps {
   variation: Variation;
   gameState?: GameState;
   setGameState?: (arg0: PGNStateCallback) => void;
@@ -19,7 +28,17 @@ const variationStylesByLevel = new Map([
   [-1, "text-3xs lg:text-base"],
 ]);
 
-export default function PGNViewerNotation({
+/**
+ * Component that displays a variation tree, with styling
+ *
+ * Highlights great moves/blunders, and supports comments and nested variations (using
+ * recursion), as well as PGN annotations.
+ *
+ * @param props - Current variation and GameState
+ *
+ * @returns HTML/JSX for pgn notation component.
+ */
+export function PGNViewerNotation({
   variation,
   gameState,
   setGameState,

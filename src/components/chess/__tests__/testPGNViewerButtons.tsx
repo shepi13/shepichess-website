@@ -4,7 +4,7 @@ import { container, root } from "@/components/__tests__/componentTestHelpers";
 
 import { PGNButtonSettings } from "@/lib/types/types";
 
-import PGNViewerButtons from "../PGNViewerButtons";
+import { PGNViewerButtons } from "../PGNViewerButtons";
 
 describe("Test PGNViewerButtons Component", () => {
   let leftButton: PGNButtonSettings, rightButton: PGNButtonSettings;
