@@ -1,3 +1,7 @@
+/**
+ * 
+ * @returns Grainy background filter
+ */
 export function SVGGrainyFilter() {
   return (
     <svg width="0" height="0">

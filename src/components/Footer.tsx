@@ -1,3 +1,7 @@
+/**
+ * 
+ * @returns Footer for main layout
+ */
 export function Footer() {
   return (
     <footer>

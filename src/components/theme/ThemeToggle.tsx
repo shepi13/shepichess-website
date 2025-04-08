@@ -19,6 +19,9 @@ const darkmodeOptions = [
   { img: MoonSVG, text: "Dark" },
 ];
 
+/**
+ * Theme Menu with options to choose between light and dark mode
+ */
 export function ThemeToggle({ className }: { className?: string }) {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);

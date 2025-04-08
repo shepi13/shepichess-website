@@ -9,6 +9,9 @@ import { useToggle } from "@/lib/hooks/useToggle";
 
 import { navLinks } from "@/data/navLinks";
 
+/**
+ * @returns Main NavBar and Header
+ */
 export function NavBar() {
   const [isOpen, toggleOpen] = useToggle(false);
 
