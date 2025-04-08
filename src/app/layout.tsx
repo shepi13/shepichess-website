@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { SVGGrainyFilter } from "@/components/BackgroundFilter";
-import { Footer } from "@/components/Footer";
-import { NavBar } from "@/components/NavBar";
+import { SVGGrainyFilter } from "@/components/mainLayout/BackgroundFilter";
+import { Footer } from "@/components/mainLayout/Footer";
+import { Header } from "@/components/mainLayout/Header";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 import "@/css/globals.css";
@@ -27,7 +27,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <div className="content flex flex-col min-h-screen justify-between">
             <div>
-              <NavBar />
+              <Header />
               <main className="px-5">{children}</main>
             </div>
             <Footer />

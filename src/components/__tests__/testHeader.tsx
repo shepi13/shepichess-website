@@ -2,7 +2,7 @@ import { act, getByRole } from "@testing-library/react";
 
 import { navLinks } from "@/data/navLinks";
 
-import { NavBar } from "../NavBar";
+import { Header } from "../mainLayout/Header";
 import { container, root } from "./componentTestHelpers";
 
 // We have to mock this for the theme toggle react-ui to work
@@ -14,7 +14,7 @@ window.ResizeObserver = class {
 
 describe("Test Nav Bar", () => {
   test("Renders Logo", () => {
-    act(() => root.render(<NavBar />));
+    act(() => root.render(<Header />));
 
     const logo = getByRole(container, "img");
     const homeLink = getByRole(container, "link", { name: "shepichess" });
@@ -24,7 +24,7 @@ describe("Test Nav Bar", () => {
   });
 
   test.each(navLinks)("Renders Links", ({ href, title }) => {
-    act(() => root.render(<NavBar />));
+    act(() => root.render(<Header />));
 
     const element = getByRole(container, "link", { name: title });
     expect(element).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe("Test Nav Bar", () => {
   test.each(navLinks)(
     "Show/Hide links when mobile button is clicked",
     ({ title }) => {
-      act(() => root.render(<NavBar />));
+      act(() => root.render(<Header />));
 
       let element = getByRole(container, "link", { name: title });
       expect(element.parentElement).toHaveClass("hidden");
