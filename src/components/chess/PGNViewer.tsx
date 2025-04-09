@@ -58,7 +58,7 @@ export default function PGNViewer({
 
   // Handle arrow key functions to scroll through pgn
   function handleKeyDown(event: React.KeyboardEvent) {
-    event.preventDefault();
+    let handled = true;
     switch (event.key) {
       case "ArrowUp":
         firstMove();
@@ -82,14 +82,16 @@ export default function PGNViewer({
       case "Escape":
         exitVariation();
         break;
+      default:
+        handled = false;
     }
+    if(handled) event.preventDefault();
   }
 
   return (
     <div
       className="flex border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5"
       onKeyDown={handleKeyDown}
-      tabIndex={-1}
       aria-label="PGN Viewer"
     >
       <div className="w-3/5 h-full">
@@ -108,24 +110,22 @@ export default function PGNViewer({
           leftButtons={[
             {
               onClick: firstMove,
-              disabled: halfMoveNum <= 0 && variation.id === mainVariation.id,
+              disabled: false,
               children: "<<",
             },
             {
               onClick: prevMove,
-              disabled: halfMoveNum <= 0,
+              disabled: false,
               children: "<",
             },
             {
               onClick: nextMove,
-              disabled: halfMoveNum >= variation.moves.length,
+              disabled: false,
               children: ">",
             },
             {
               onClick: lastMove,
-              disabled:
-                halfMoveNum >= mainVariation.moves.length &&
-                variation.id === mainVariation.id,
+              disabled: false,
               children: ">>",
             },
           ]}
