@@ -7,6 +7,7 @@ import { Root, createRoot } from "react-dom/client";
 mockAnimationsApi();
 
 export let root: Root, container: HTMLDivElement;
+
 beforeEach(() => {
   // Mock window.watchmedia
   Object.defineProperty(window, "matchMedia", {

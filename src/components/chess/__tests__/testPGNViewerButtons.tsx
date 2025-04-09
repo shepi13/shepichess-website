@@ -1,7 +1,6 @@
 import { act, getByRole } from "@testing-library/react";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
-
 import { PGNButtonSettings } from "@/lib/types/types";
 
 import { PGNViewerButtons } from "../PGNViewerButtons";

@@ -23,7 +23,6 @@ export interface PGNViewerProps {
 export default function PGNViewer({
   pgn = "",
   start = startFen,
-  small = false,
 }: PGNViewerProps) {
   /**
    * React Component that renders a chessboard, adding functionality for pgn parsing,
@@ -34,7 +33,6 @@ export default function PGNViewer({
    *
    * @param pgn - the pgn describing the move tree (see lib/loadPgn for format)
    * @param start - the fen of the starting position (defaults to the standard chess setup)
-   * @param small - if the display board should be small (TODO: rework into proper styling params before release)
    *
    */
 
@@ -89,21 +87,23 @@ export default function PGNViewer({
 
   return (
     <div
-      className={`flex border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5
-                ${small && "md:w-4/5 xl:w-2/5"}`}
+      className="flex border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5"
       onKeyDown={handleKeyDown}
-      tabIndex={1}
+      tabIndex={-1}
+      aria-label="PGN Viewer"
     >
       <div className="w-3/5 h-full">
-        <Chessboard
-          position={fen()}
-          arePiecesDraggable={false}
-          boardOrientation={flipped ? "black" : "white"}
-          customArrows={currentMove ? currentMove.arrows : []}
-          customBoardStyle={{
-            boxShadow: "3px 3px 5px rgba(0,0,0,.8)",
-          }}
-        />
+        <div aria-hidden="true">
+          <Chessboard
+            position={fen()}
+            arePiecesDraggable={false}
+            boardOrientation={flipped ? "black" : "white"}
+            customArrows={currentMove ? currentMove.arrows : []}
+            customBoardStyle={{
+              boxShadow: "3px 3px 5px rgba(0,0,0,.8)",
+            }}
+          />
+        </div>
         <PGNViewerButtons
           leftButtons={[
             {

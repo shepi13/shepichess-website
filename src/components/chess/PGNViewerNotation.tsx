@@ -66,7 +66,7 @@ export function PGNViewerNotation({
             key={`${variation.start}_${i}`}
             className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}
           >
-            <div
+            <button
               className={`p-1 cursor-pointer text-nowrap inline
                                 ${level > 0 && "italic"}
                                 ${isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg"}
@@ -80,7 +80,7 @@ export function PGNViewerNotation({
                     halfMoveNum: i + 1,
                   })))
               }
-              data-testid={move_number + move_text}
+              aria-label={"Move: " + move_number + move_text}
             >
               {move_number}
               <span
@@ -92,9 +92,12 @@ export function PGNViewerNotation({
                   __html: move_text + "&nbsp;",
                 }}
               ></span>
-            </div>
+            </button>
             {move.comment ? (
-              <span className="text-primary p-1 ml-[-3px]">
+              <span
+                className="text-primary p-1 ml-[-3px]"
+                aria-label={"Comment: " + move.comment}
+              >
                 {move.comment}{" "}
               </span>
             ) : (

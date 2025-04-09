@@ -1,7 +1,6 @@
-import { act, getByTestId, getByText } from "@testing-library/react";
+import { act, getByLabelText, getByText } from "@testing-library/react";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
-
 import { startFen } from "@/lib/types/pgnTypes";
 import { loadPgn } from "@/lib/utils/loadPgn";
 
@@ -41,12 +40,12 @@ describe("Test PGNViewerNotation", () => {
         />,
       ),
     );
-    const currentMove = getByTestId(container, moveId);
+    const currentMove = getByLabelText(container, "Move: " + moveId);
     expect(currentMove).toBeInTheDocument();
     expect(currentMove.className.includes("bg-")).toBe(true);
   });
   test.each(["e5", "2. d4?", "2. c3"])("Click Move", (moveId) => {
-    let currentMove = getByTestId(container, moveId);
+    let currentMove = getByLabelText(container, "Move: " + moveId);
     expect(currentMove.className.includes("bg-")).toBe(false);
 
     act(() => {
@@ -56,7 +55,7 @@ describe("Test PGNViewerNotation", () => {
       );
     });
 
-    currentMove = getByTestId(container, moveId);
+    currentMove = getByLabelText(container, "Move: " + moveId);
     expect(setGameState).toHaveBeenCalled();
     expect(currentMove.className.includes("bg-")).toBe(true);
   });

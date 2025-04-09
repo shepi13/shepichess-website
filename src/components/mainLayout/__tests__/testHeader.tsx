@@ -1,9 +1,10 @@
 import { act, getByRole } from "@testing-library/react";
 
-import { navLinks } from "@/data/navLinks";
-
 import { Header } from "@/components/mainLayout/Header";
+
 import { container, root } from "@/lib/test/componentTestHelpers";
+
+import { navLinks } from "@/data/navLinks";
 
 // We have to mock this for the theme toggle react-ui to work
 window.ResizeObserver = class {
