@@ -2,8 +2,8 @@
  * For a detailed explanation regarding each configuration property, visit:
  * https://jestjs.io/docs/configuration
  */
-import nextJest from 'next/jest.js'
-import type {Config} from 'jest';
+import type { Config } from 'jest';
+import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({dir: "./"});
 
@@ -34,6 +34,8 @@ const config: Config = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     "/__tests__/",
+    "app/.*layout.tsx",
+    "app/.*page.tsx"
   ],
 
   // Indicates which provider should be used to instrument code for coverage
