@@ -85,7 +85,7 @@ export default function PGNViewer({
       default:
         handled = false;
     }
-    if(handled) event.preventDefault();
+    if (handled) event.preventDefault();
   }
 
   return (
