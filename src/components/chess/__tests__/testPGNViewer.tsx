@@ -1,7 +1,18 @@
 import { currentFen, orientation } from "./mocks/mockPlayableChessBoard";
+import {
+  mockEvaluatePosition,
+  mockUseEngineWorker,
+} from "@/lib/hooks/__tests__/mocks/mockUseEngine";
 
-import { act, fireEvent, getByLabelText } from "@testing-library/react";
+import {
+  act,
+  createEvent,
+  fireEvent,
+  getByLabelText,
+} from "@testing-library/react";
 import { Chess } from "chess.js";
+
+import { EngineProvider } from "@/components/EngineProvider";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
 import { startFen } from "@/lib/types/pgnTypes";
@@ -10,8 +21,49 @@ import PGNViewer from "../PGNViewer";
 
 describe("Test PGNViewer", () => {
   test("Test default props", () => {
-    act(() => root.render(<PGNViewer />));
+    act(() =>
+      root.render(
+        <EngineProvider>
+          <PGNViewer />
+        </EngineProvider>,
+      ),
+    );
     expect(currentFen).toBe(startFen);
+  });
+
+  test("Test Engine Analysis", () => {
+    // Init engine (initially disabled)
+    act(() =>
+      root.render(
+        <EngineProvider>
+          <PGNViewer />
+        </EngineProvider>,
+      ),
+    );
+    const analysisToggle = getByLabelText(container, "Stockfish toggle");
+    const pv = getByLabelText(container, "stockfish-pv");
+    const depth = getByLabelText(container, "stockfish-depth");
+    const evaluation = getByLabelText(container, "stockfish-eval");
+    expect(analysisToggle).toBeInTheDocument();
+    expect(pv).toBeInTheDocument();
+    expect(depth).toBeInTheDocument();
+    expect(evaluation).toBeInTheDocument();
+    expect(mockUseEngineWorker).toHaveBeenCalled();
+    expect(mockEvaluatePosition).not.toHaveBeenCalled();
+
+    // Test engine enable
+    act(() => analysisToggle.click());
+    expect(mockUseEngineWorker).toHaveBeenCalled();
+    expect(mockEvaluatePosition).toHaveBeenCalled();
+    expect(pv.hasAttribute("hidden")).toBe(false);
+    expect(depth.hasAttribute("hidden")).toBe(false);
+    expect(evaluation.hasAttribute("hidden")).toBe(false);
+
+    // Test disable
+    act(() => analysisToggle.click());
+    expect(pv.hasAttribute("hidden")).toBe(true);
+    expect(depth.hasAttribute("hidden")).toBe(true);
+    expect(evaluation.hasAttribute("hidden")).toBe(true);
   });
 
   describe("Test Key Handlers", () => {
@@ -19,7 +71,31 @@ describe("Test PGNViewer", () => {
       "1. e4 e5 2. Nf3! [c2c3red] {Hello!} (2. d4? (2. c3) exd4 (2...d6))";
 
     beforeEach(() => {
-      act(() => root.render(<PGNViewer {...{ pgn, start: startFen }} />));
+      act(() =>
+        root.render(
+          <EngineProvider>
+            <PGNViewer {...{ pgn, start: startFen, small: true }} />
+          </EngineProvider>,
+        ),
+      );
+    });
+
+    test("Prevent default only if handled", () => {
+      const viewer = getByLabelText(container, "PGN Viewer");
+      let keydownEvent = createEvent.keyDown(viewer, {
+        key: "a",
+        code: "Keya",
+      });
+      act(() => {
+        fireEvent(viewer, keydownEvent);
+      });
+      expect(keydownEvent.defaultPrevented).toBe(false);
+
+      keydownEvent = createEvent.keyDown(viewer, { key: "f", code: "Keyf" });
+      act(() => {
+        fireEvent(viewer, keydownEvent);
+      });
+      expect(keydownEvent.defaultPrevented).toBe(true);
     });
 
     // Key Handler and Button Tests

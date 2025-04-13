@@ -1,15 +1,19 @@
-import { constructorSpyMock, postMessageSpyMock } from "./mocks/mockUseEngine";
+import {
+  constructorSpyMock,
+  postMessageSpyMock,
+  terminateSpyMock,
+} from "./mocks/mockStockfishWorker";
 
 import { describe, expect, jest, test } from "@jest/globals";
 import { act, renderHook } from "@testing-library/react";
 
 import { startFen } from "@/lib/types/pgnTypes";
 
-import { StockfishResult, useEngine } from "../useEngine";
+import { StockfishResult, useEngine } from "../useEngineWorker";
 
 let bestMove: string,
   ponder: string,
-  evaluation: string,
+  evaluation: number,
   pv: string,
   depth: number;
 
@@ -21,7 +25,7 @@ const uciCallback = jest.fn();
 
 describe("Hooks/useEngine", () => {
   test("Successful UCI Init", () => {
-    renderHook(() => useEngine(uciCallback));
+    renderHook(() => useEngine(uciCallback, true));
     expect(constructorSpyMock).toBeCalledWith("/stockfish/stockfish.js");
     expect(postMessageSpyMock).toBeCalledWith("uci");
     expect(postMessageSpyMock).toBeCalledWith("isready");
@@ -29,7 +33,7 @@ describe("Hooks/useEngine", () => {
   });
 
   test("Evaluate Position with callback", () => {
-    const { result } = renderHook(() => useEngine(saveStateCallback));
+    const { result } = renderHook(() => useEngine(saveStateCallback, true));
     act(() => result.current.evaluatePosition(startFen, 10));
 
     expect(bestMove).toBe("e2e4");
@@ -43,10 +47,31 @@ describe("Hooks/useEngine", () => {
   });
 
   test("UCI Stop", () => {
-    const { result } = renderHook(() => useEngine(uciCallback));
+    const { result } = renderHook(() => useEngine(uciCallback, true));
     expect(constructorSpyMock).toBeCalledWith("/stockfish/stockfish.js");
 
     act(result.current.stop);
     expect(postMessageSpyMock).toBeCalledWith("stop");
+  });
+
+  test("Enable/Disable worker", () => {
+    // Test enabled
+    const { rerender } = renderHook(
+      (enabled) => useEngine(uciCallback, enabled),
+      { initialProps: true },
+    );
+    expect(constructorSpyMock).toBeCalledWith("/stockfish/stockfish.js");
+    expect(postMessageSpyMock).not.toBeCalledWith("quit");
+    expect(terminateSpyMock).not.toBeCalled();
+
+    // Reset
+    constructorSpyMock.mockClear();
+    postMessageSpyMock.mockClear();
+
+    // Test Disabled
+    rerender(false);
+    expect(postMessageSpyMock).toBeCalledWith("quit");
+    expect(terminateSpyMock).toBeCalled();
+    expect(constructorSpyMock).not.toBeCalled();
   });
 });

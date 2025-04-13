@@ -15,7 +15,7 @@ import { useCallback, useEffect, useRef } from "react";
 export interface StockfishResult {
   bestMove: string;
   ponder: string;
-  evaluation: string;
+  evaluation: number;
   possibleMate: string;
   pv: string;
   depth: number;
@@ -37,24 +37,28 @@ export interface StockfishResult {
  * }
  *
  */
-export function useEngine(callback: (arg0: StockfishResult) => void) {
+export function useEngine(
+  callback: (arg0: StockfishResult) => void,
+  enabled: boolean,
+) {
   const workerRef = useRef<Worker>(null);
 
   // Functions for interacting with Worker
-  function evaluatePosition(fen: string, depth: number) {
+  const evaluatePosition = useCallback((fen: string, depth: number) => {
     workerRef.current?.postMessage(`position fen ${fen}`);
     workerRef.current?.postMessage(`go depth ${depth}`);
-  }
-  function stop() {
+  }, []);
+  const stop = useCallback(() => {
     workerRef.current?.postMessage("stop");
-  }
-  function quit() {
+  }, []);
+  const quit = useCallback(() => {
     workerRef.current?.postMessage("quit");
     workerRef.current?.terminate();
-  }
+    workerRef.current = null;
+  }, []);
 
   // OnMessage handler for engine, using useCallback because it is a dependency for future hooks
-  const onMessage = useCallback(
+  const messageHandler = useCallback(
     (event: MessageEvent) => {
       const message = event.data;
       callback({
@@ -71,14 +75,14 @@ export function useEngine(callback: (arg0: StockfishResult) => void) {
 
   // Setup worker only after initial mount, and use a quit cleanup function.
   useEffect(() => {
-    workerRef.current = new window.Worker("/stockfish/stockfish.js");
-    workerRef.current.onmessage = onMessage;
-    workerRef.current.postMessage("uci");
-    workerRef.current.postMessage("isready");
-
-    // Return cleanup function
-    return quit;
-  }, [onMessage]);
+    if (enabled) {
+      workerRef.current = new window.Worker("/stockfish/stockfish.js");
+      workerRef.current.onmessage = messageHandler;
+      workerRef.current.postMessage("uci");
+      workerRef.current.postMessage("isready");
+      return quit;
+    }
+  }, [quit, enabled, messageHandler]);
 
   return { evaluatePosition, stop };
 }

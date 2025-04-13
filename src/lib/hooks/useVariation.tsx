@@ -29,7 +29,7 @@ import { getFen } from "@/lib/utils/chessUtils";
  */
 export function useVariation(variation: Variation): VariationState {
   const [gameState, setGameState] = useState({
-    variation: variation,
+    variation,
     halfMoveNum: 0,
   });
 
@@ -84,18 +84,20 @@ export function useVariation(variation: Variation): VariationState {
 
   return {
     fen: () => getFen(gameState.variation, gameState.halfMoveNum),
+    // firstMove and lastMove also jump to main variation
     firstMove: () =>
       setGameStateSafe((prev) => ({
         ...prev,
-        variation: variation,
+        variation,
         halfMoveNum: 0,
       })),
     lastMove: () =>
       setGameStateSafe((prev) => ({
         ...prev,
-        variation: variation,
+        variation,
         halfMoveNum: variation.moves.length,
       })),
+    // prevMove/nextMove only set move number
     nextMove: () =>
       setGameStateSafe((prev) => ({
         ...prev,

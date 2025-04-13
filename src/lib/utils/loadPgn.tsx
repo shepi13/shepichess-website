@@ -33,6 +33,7 @@ const annotationLookup = [
 // Creates Regex for matching content within start/end tags (for example between [], (), or {})
 const genBoundaryRegex = (start: string, end: string, matchName: string) =>
   new RegExp("(?:" + start + "(?<" + matchName + ">.*?)" + end + ")?");
+
 //Optional move number (Number followed by . or ...)
 const moveNumberRegex = /(?:[0-9]*\.+)?/;
 

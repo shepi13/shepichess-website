@@ -1,3 +1,5 @@
+import { Chess } from "chess.js";
+
 import { Move, Variation } from "../types/pgnTypes";
 
 /**
@@ -31,4 +33,16 @@ export function moveIsGreat(move: Move) {
  */
 export function moveIsMistake(move: Move) {
   return move.annotation?.startsWith("?") || move.annotation.startsWith("+?");
+}
+
+/**
+ * Returns side to move of a fen string
+ *
+ * @param fen - current position
+ *
+ * @returns "w" | "b"
+ *
+ */
+export function sideToMove(fen: string) {
+  return new Chess(fen).turn();
 }

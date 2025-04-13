@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { EngineProvider } from "@/components/EngineProvider";
 import { SVGGrainyFilter } from "@/components/mainLayout/BackgroundFilter";
 import { Footer } from "@/components/mainLayout/Footer";
 import { Header } from "@/components/mainLayout/Header";
@@ -25,13 +26,15 @@ export default function RootLayout({
       <body>
         <SVGGrainyFilter />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <div className="content flex flex-col min-h-screen justify-between">
-            <div>
-              <Header />
-              <main className="px-5">{children}</main>
+          <EngineProvider>
+            <div className="content flex flex-col min-h-screen justify-between">
+              <div>
+                <Header />
+                <main className="px-5">{children}</main>
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
+          </EngineProvider>
         </ThemeProvider>
       </body>
     </html>

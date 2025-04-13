@@ -7,7 +7,7 @@ import { Suspense, useCallback, useEffect } from "react";
 
 import { PlayableChessBoardStateless } from "@/components/chess/PlayableChessBoard";
 
-import { useEngine } from "@/lib/hooks/useEngine";
+import { useEngine } from "@/lib/hooks/useEngineWorker";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
 
@@ -28,16 +28,23 @@ export function PlayAgainstComputer({
 }) {
   playerColor = playerColor || new Chess(start).turn();
 
+  // React hooks for position/engine state
   const position = usePosition(start, playerColor.startsWith("b"));
-  const engine = useEngine(({ bestMove }) => {
-    if (bestMove) {
-      position.makeMove(
-        bestMove.substring(0, 2) as Square,
-        bestMove.substring(2, 4) as Square,
-        position.game.turn() + bestMove.substring(4, 5),
-      );
-    }
-  });
+  const engineCallback = useCallback(
+    ({ bestMove }: { bestMove: string }) => {
+      if (bestMove) {
+        position.makeMove(
+          bestMove.substring(0, 2) as Square,
+          bestMove.substring(2, 4) as Square,
+          position.game.turn() + bestMove.substring(4, 5),
+        );
+      }
+    },
+    [position],
+  );
+  const engine = useEngine(engineCallback, true);
+
+  // Make engine move effect
   const turn = position.game.turn();
   const player = position.flipped ? "b" : "w";
   const fen = position.game.fen();
@@ -46,18 +53,21 @@ export function PlayAgainstComputer({
     () => engine.evaluatePosition(fen, depth),
     [fen, depth, engine],
   );
-
   useEffect(() => {
     if (turn != player && !isGameOver) {
       makeEngineMove();
     }
   }, [turn, player, isGameOver, makeEngineMove]);
 
+  // Undo button handler
   const undoHumanAndComputerMove = () => {
     position.undoMove();
     if (turn == player) position.undoMove();
   };
 
+  // --- Render logic ---
+
+  // Show result
   let result;
   if (isGameOver) {
     if (position.game.isDraw()) {
@@ -69,6 +79,7 @@ export function PlayAgainstComputer({
     result = <h3>{turn == "w" ? "White to Move" : "Black to Move"}</h3>;
   }
 
+  //JSX Content
   return (
     <>
       {result}

@@ -53,7 +53,7 @@ useSearchParamsMock
   .mockReturnValueOnce({ get: searchParamsGet })
   .mockReturnValue({ get: searchParamsEmpty });
 
-jest.mock("@/lib/hooks/useEngine", () => {
+jest.mock("@/lib/hooks/useEngineWorker", () => {
   return {
     __esModule: true,
     useEngine: mockUseEngine,

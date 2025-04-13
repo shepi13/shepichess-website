@@ -2,7 +2,9 @@ import { ImageProps } from "next/image";
 
 import { SVGProps } from "react";
 
-const lightColors = {
+export const lightColors = {
+  primary: "fill-primary",
+  secondary: "fill-secondary",
   black: "fill-black",
   white: "fill-white",
   gold: "fill-[#dfc387]",
@@ -18,7 +20,9 @@ const lightColors = {
   slate900: "fill-slate-900",
 };
 
-const darkColors = {
+export const darkColors = {
+  primary: "bg-primary",
+  secondary: "bg-secondary",
   black: "bg-black",
   white: "bg-white",
   gold: "bg-[#dfc387]",
@@ -34,7 +38,25 @@ const darkColors = {
   slate900: "bg-slate-900",
 };
 
-const strokeColors = {
+export const hoverColors = {
+  primary: "hover:fill-primary",
+  secondary: "hover:fill-secondary",
+  black: "hover:fill-black",
+  white: "hover:fill-white",
+  gold: "hover:fill-[#dfc387]",
+  maroon: "hover:fill-[#8a0c3a]",
+  slate100: "hover:fill-slate-100",
+  slate200: "hover:fill-slate-200",
+  slate300: "hover:fill-slate-300",
+  slate400: "hover:fill-slate-400",
+  slate500: "hover:fill-slate-500",
+  slate600: "hover:fill-slate-600",
+  slate700: "hover:fill-slate-700",
+  slate800: "hover:fill-slate-800",
+  slate900: "hover:fill-slate-900",
+};
+
+export const strokeColors = {
   none: "stroke-none",
   black: "stroke-black",
 };
@@ -48,6 +70,7 @@ export type ChessBoardIconProps = {
   alt?: string;
   className?: string;
   strokeColor?: keyof typeof strokeColors;
+  hoverColor?: keyof typeof hoverColors | null;
 } & Omit<ImageProps, "src" | "alt" | "fill">;
 
 export function ChessBoardIcon({
@@ -57,15 +80,18 @@ export function ChessBoardIcon({
   alt = "Checkerboard Icon",
   className = "",
   strokeColor = "none",
+  hoverColor = null,
   ...imageProps
 }: ChessBoardIconProps) {
   // Return correct component with props
+  hoverColor = hoverColor || lightColor;
   const props = {
     ...imageProps,
     className: [
       lightColors[lightColor],
       darkColors[darkColor],
       strokeColors[strokeColor],
+      hoverColors[hoverColor],
     ].join(" "),
   } as SVGProps<SVGSVGElement>;
   const { viewBox, path } = getChessBoardSVGData(numSquares);

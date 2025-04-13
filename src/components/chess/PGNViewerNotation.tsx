@@ -24,8 +24,8 @@ export interface PGNViewerNotationProps {
 
 const variationStylesByLevel = new Map([
   [0, "text-xs lg:text-xl"],
-  [1, "text-2xs lg:text-lg"],
-  [-1, "text-3xs lg:text-base"],
+  [1, "text-xs lg:text-lg"],
+  [-1, "text-xs lg:text-base"],
 ]);
 
 /**
