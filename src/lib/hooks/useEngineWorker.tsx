@@ -76,7 +76,7 @@ export function useEngine(
   // Setup worker only after initial mount, and use a quit cleanup function.
   useEffect(() => {
     if (enabled) {
-      workerRef.current = new window.Worker("/stockfish/stockfish.js");
+      workerRef.current = new window.Worker("/stockfish/src/stockfish-nnue-16-single.js");
       workerRef.current.onmessage = messageHandler;
       workerRef.current.postMessage("uci");
       workerRef.current.postMessage("isready");
