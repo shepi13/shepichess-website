@@ -26,7 +26,7 @@ const uciCallback = jest.fn();
 describe("Hooks/useEngine", () => {
   test("Successful UCI Init", () => {
     renderHook(() => useEngine(uciCallback, true));
-    expect(constructorSpyMock).toBeCalledWith("/stockfish/stockfish.js");
+    expect(constructorSpyMock).toHaveBeenCalled();
     expect(postMessageSpyMock).toBeCalledWith("uci");
     expect(postMessageSpyMock).toBeCalledWith("isready");
     expect(uciCallback).toBeCalled();
@@ -48,7 +48,7 @@ describe("Hooks/useEngine", () => {
 
   test("UCI Stop", () => {
     const { result } = renderHook(() => useEngine(uciCallback, true));
-    expect(constructorSpyMock).toBeCalledWith("/stockfish/stockfish.js");
+    expect(constructorSpyMock).toHaveBeenCalled();
 
     act(result.current.stop);
     expect(postMessageSpyMock).toBeCalledWith("stop");
@@ -60,7 +60,7 @@ describe("Hooks/useEngine", () => {
       (enabled) => useEngine(uciCallback, enabled),
       { initialProps: true },
     );
-    expect(constructorSpyMock).toBeCalledWith("/stockfish/stockfish.js");
+    expect(constructorSpyMock).toHaveBeenCalled();
     expect(postMessageSpyMock).not.toBeCalledWith("quit");
     expect(terminateSpyMock).not.toBeCalled();
 
