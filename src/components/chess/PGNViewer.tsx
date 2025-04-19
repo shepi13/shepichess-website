@@ -21,7 +21,7 @@ export interface PGNViewerProps {
   pgn?: string;
   start?: string;
   small?: boolean;
-  showNotation?: boolean;
+  puzzle?: boolean;
   draggable?: boolean;
   flip?: boolean;
   onDrop?: () => void;
@@ -131,7 +131,7 @@ export default function PGNViewer({
             { onClick: lastMove, children: ">>" },
           ]}
           rightButtons={[{ onClick: flipBoard, children: "Flip Board" }]}
-          leftContainerStyle="justify-left gap-2 xl:gap-4 pt-1 xl:pt-0"
+          leftContainerStyle="justify-left items-center gap-2 xl:gap-4 pt-1 xl:pt-0"
         />
       </div>
       <div className="w-1/2 p-2 pb-2 lg:p-5 lg:pb-2 flex flex-col justify-between items-end-safe">
@@ -144,13 +144,17 @@ export default function PGNViewer({
             />
           }
         </div>
-        <div className="flex flex-col justify-end font-semibold gap-2 text-xs md:text-sm xl:text-base min-w-1/2 xl:pl-6">
-          <div aria-label="stockfish-pv" hidden={!stockfishEnabled}>
+        <div className="flex flex-col justify-end font-semibold gap-2 min-w-1/2 xl:pl-6">
+          <div
+            aria-label="stockfish-pv"
+            hidden={!stockfishEnabled}
+            className="text-xs md:text-sm xl:text-base"
+          >
             {stockfishData.pv}
           </div>
           <div
             className={
-              "flex items-center gap-1 lg:gap-2 xl:gap-3 " +
+              "flex items-center gap-1 lg:gap-2 xl:gap-3 text-xs " +
               (stockfishEnabled ? "justify-between" : "justify-end")
             }
           >
@@ -161,17 +165,17 @@ export default function PGNViewer({
               Eval: {(stockfishData.evaluation / 100) * (whiteToMove ? 1 : -1)}
             </p>
             <button
-              className="mb-1 cursor-pointer pointer-events-none border-1 dark:border-primary "
+              className="w-5 md:w-6 lg:w-7 xl:w-8 mb-1 cursor-pointer pointer-events-none border-2 border-primary dark:border-2 rounded-md overflow-hidden hover:border-black dark:hover:border-slate-200"
               title="Toggle Analysis"
               aria-label="Stockfish toggle"
               onClick={toggleEnabled}
             >
               <ChessBoardIcon
-                lightColor="slate200"
+                lightColor="lightBrown"
                 darkColor="black"
                 numSquares={4}
-                className="w-4 xs:w-5 md:w-6 lg: w-7 xl:w-8 overflow-hidden pointer-events-auto hover:shadow-md dark:hover:border-secondary"
-                hoverColor="slate300"
+                className=" pointer-events-auto hover:shadow-md dark:hover:border-secondary"
+                hoverColor="darkBrown"
               />
             </button>
           </div>
