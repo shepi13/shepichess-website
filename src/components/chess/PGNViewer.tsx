@@ -69,6 +69,7 @@ export default function PGNViewer({
   const currentMove =
     halfMoveNum != 0 ? variation.moves[halfMoveNum - 1] : null;
   const whiteToMove = sideToMove(fen()) == "w";
+  const arrows = currentMove ? [...currentMove.arrows] : [];
 
   // Handle arrow key functions to scroll through pgn
   function handleKeyDown(event: React.KeyboardEvent) {
@@ -116,7 +117,7 @@ export default function PGNViewer({
             position={fen()}
             arePiecesDraggable={false}
             boardOrientation={flipped ? "black" : "white"}
-            customArrows={currentMove ? currentMove.arrows : []}
+            customArrows={arrows}
             customBoardStyle={{
               boxShadow: "3px 3px 5px rgba(0,0,0,.8)",
             }}
@@ -124,26 +125,10 @@ export default function PGNViewer({
         </div>
         <PGNViewerButtons
           leftButtons={[
-            {
-              onClick: firstMove,
-              disabled: false,
-              children: "<<",
-            },
-            {
-              onClick: prevMove,
-              disabled: false,
-              children: "<",
-            },
-            {
-              onClick: nextMove,
-              disabled: false,
-              children: ">",
-            },
-            {
-              onClick: lastMove,
-              disabled: false,
-              children: ">>",
-            },
+            { onClick: firstMove, children: "<<" },
+            { onClick: prevMove, children: "<" },
+            { onClick: nextMove, children: ">" },
+            { onClick: lastMove, children: ">>" },
           ]}
           rightButtons={[{ onClick: flipBoard, children: "Flip Board" }]}
           leftContainerStyle="justify-left gap-2 xl:gap-4 pt-1 xl:pt-0"
@@ -159,7 +144,7 @@ export default function PGNViewer({
             />
           }
         </div>
-        <div className="flex flex-col justify-end font-semibold gap-2 text-xs md:text-sm xl:text-base min-w-1/2 xl:pl-8">
+        <div className="flex flex-col justify-end font-semibold gap-2 text-xs md:text-sm xl:text-base min-w-1/2 xl:pl-6">
           <div aria-label="stockfish-pv" hidden={!stockfishEnabled}>
             {stockfishData.pv}
           </div>
@@ -176,7 +161,7 @@ export default function PGNViewer({
               Eval: {(stockfishData.evaluation / 100) * (whiteToMove ? 1 : -1)}
             </p>
             <button
-              className="mb-1 lg:border-1 xl:border-2 dark:border-slate-400 rounded-md p-[3px] cursor-pointer overflow-hidden hover:border-primary pointer-events-none"
+              className="mb-1 cursor-pointer pointer-events-none border-1 dark:border-primary "
               title="Toggle Analysis"
               aria-label="Stockfish toggle"
               onClick={toggleEnabled}
@@ -185,8 +170,8 @@ export default function PGNViewer({
                 lightColor="slate200"
                 darkColor="black"
                 numSquares={4}
-                className="border-1 lg:border-2 dark:border-1 w-4 xs:w-5 md:w-6 xl:w-7 overflow-hidden pointer-events-auto"
-                hoverColor={"secondary"}
+                className="w-4 xs:w-5 md:w-6 lg: w-7 xl:w-8 overflow-hidden pointer-events-auto hover:shadow-md dark:hover:border-secondary"
+                hoverColor="slate300"
               />
             </button>
           </div>

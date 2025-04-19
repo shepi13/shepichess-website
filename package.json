@@ -12,7 +12,8 @@
     "docs": "globstar -- typedoc --entryPoints \"src/**/*.tsx\"",
     "format:check": "npx prettier -c src",
     "format:write": "npx prettier --write src",
-    "postinstall": "mkdir public/stockfish && cp -r node_modules/stockfish/src/ public/stockfish/"
+    "postinstall": "mkdir public/stockfish && cp -r node_modules/stockfish/src/ public/stockfish/",
+    "precommit": "npm run format:write && npm run lint && npm run build && npm run test"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",

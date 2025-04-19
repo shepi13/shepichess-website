@@ -52,6 +52,7 @@ export function useEngineAnalysis(
     (stockfishData: StockfishResult) => {
       if (stockfishData.pv && stockfishData.pv.split(" ").length >= pvLength) {
         if (stockfishData.depth >= 8) {
+          stockfishData.bestMove = stockfishData.pv.split(" ", 1)[0];
           stockfishData.pv = convertVariationToSan(
             fen,
             stockfishData.pv,
