@@ -25,7 +25,7 @@ const defaultButtonStyle =
   "text-lg md:text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl";
 const defaultFlipButtonStyle =
   "text-base md:text-lg hover:text-secondary-dark ";
-const defaultFlexStyle = "justify-between ";
+const defaultFlexStyle = "justify-between items-center ";
 
 /**
  * Component that holds buttons for interacting with a chessboard.
