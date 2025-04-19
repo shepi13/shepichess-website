@@ -145,7 +145,11 @@ export default function PGNViewer({
           }
         </div>
         <div className="flex flex-col justify-end font-semibold gap-2 min-w-1/2 xl:pl-6">
-          <div aria-label="stockfish-pv" hidden={!stockfishEnabled} className="text-xs md:text-sm xl:text-base">
+          <div
+            aria-label="stockfish-pv"
+            hidden={!stockfishEnabled}
+            className="text-xs md:text-sm xl:text-base"
+          >
             {stockfishData.pv}
           </div>
           <div
