@@ -134,8 +134,8 @@ export default function PGNViewer({
           leftContainerStyle="justify-left items-center gap-2 xl:gap-4 pt-1 xl:pt-0"
         />
       </div>
-      <div className="w-1/2 p-2 pb-2 lg:p-5 lg:pb-2 flex flex-col justify-between items-end-safe">
-        <div aria-label="Notation Viewer" className="w-full">
+      <div className="w-1/2 p-1 pt-2 pl-2 lg:p-2 lg:pl-4 lg:pt-4 flex flex-col justify-between items-end-safe">
+        <div aria-label="Notation Viewer" className="w-full h-full mb-2">
           {
             <PGNViewerNotation
               variation={mainVariation}

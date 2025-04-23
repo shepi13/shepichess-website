@@ -60,6 +60,7 @@ export const hoverColors = {
   slate700: "hover:fill-slate-700",
   slate800: "hover:fill-slate-800",
   slate900: "hover:fill-slate-900",
+  none: "",
 };
 
 export const strokeColors = {
@@ -76,7 +77,7 @@ export type ChessBoardIconProps = {
   alt?: string;
   className?: string;
   strokeColor?: keyof typeof strokeColors;
-  hoverColor?: keyof typeof hoverColors | null;
+  hoverColor?: keyof typeof hoverColors;
 } & Omit<ImageProps, "src" | "alt" | "fill">;
 
 export function ChessBoardIcon({
@@ -86,11 +87,10 @@ export function ChessBoardIcon({
   alt = "Checkerboard Icon",
   className = "",
   strokeColor = "none",
-  hoverColor = null,
+  hoverColor = "none",
   ...imageProps
 }: ChessBoardIconProps) {
   // Return correct component with props
-  hoverColor = hoverColor || lightColor;
   const props = {
     ...imageProps,
     className: [

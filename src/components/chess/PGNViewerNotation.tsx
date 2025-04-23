@@ -46,7 +46,7 @@ export function PGNViewerNotation({
 }: PGNViewerNotationProps) {
   return (
     <>
-      {level > 0 ? <span>( </span> : ""}
+      {level > 0 ? <span> (</span> : ""}
       {variation.moves.map((move: Move, i: number) => {
         const isCurrentMove =
           variation.id === gameState?.variation.id &&
@@ -67,10 +67,10 @@ export function PGNViewerNotation({
             className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}
           >
             <button
-              className={`p-1 cursor-pointer text-nowrap inline
-                                ${level > 0 && "italic"}
-                                ${isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg"}
-                            `}
+              className={`px-1 py-0 sm:py-[1px] xl:py-[3px] cursor-pointer text-nowrap inline outline-none
+                          ${level > 0 && "italic"}
+                          ${(isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg border-1 shadow-md") || "border-none"}
+                        `}
               onClick={
                 setGameState &&
                 (() =>
@@ -85,20 +85,18 @@ export function PGNViewerNotation({
               {move_number}
               <span
                 className={`
-                                    ${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"}
-                                    ${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"}
-                                `}
-                dangerouslySetInnerHTML={{
-                  __html: move_text + "&nbsp;",
-                }}
+                              ${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"}
+                              ${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"}
+                          `}
+                dangerouslySetInnerHTML={{ __html: move_text }}
               ></span>
             </button>
             {move.comment ? (
               <span
-                className="text-primary p-1 ml-[-3px]"
+                className="text-primary px-1 ml-[-3px]"
                 aria-label={"Comment: " + move.comment}
               >
-                {move.comment}{" "}
+                {" " + move.comment}
               </span>
             ) : (
               <span> </span>
@@ -114,7 +112,7 @@ export function PGNViewerNotation({
           </div>
         );
       })}
-      {level > 0 ? <span>)</span> : ""}
+      {level > 0 ? <span>) </span> : ""}
     </>
   );
 }
