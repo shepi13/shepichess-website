@@ -1,17 +1,20 @@
 "use client";
 
-import Image from "next/image";
-
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+
+import { useWindowSize } from "@/lib/hooks/useWindowSize";
+
+import { NavDropdownStyle } from "../mainLayout/Header";
 
 const SunSVG = () => (
-  <Image alt="sun-icon" width={25} height={30} src="/icons/sun-1.svg" />
+  <SunIcon className="size-6 fill-yellow-300 stroke-[1px] stroke-primaryblack-light dark:fill-yellow-200 dark:stroke-none" />
 );
 
 const MoonSVG = () => (
-  <Image alt="moon-icon" width={25} height={25} src="/icons/moon-1.svg" />
+  <MoonIcon className="size-6 fill-primaryblack-light dark:fill-primarywhite-dark" />
 );
 
 const darkmodeOptions = [
@@ -28,6 +31,10 @@ const darkmodeOptions = [
 export function ThemeToggle({ className }: { className?: string }) {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const windowSize = useWindowSize();
+
+  const anchor =
+    !windowSize || windowSize.width > 640 ? "bottom start" : undefined;
 
   useEffect(() => {
     setMounted(true);
@@ -39,23 +46,29 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   return (
     <Menu>
-      <MenuButton className={className} aria-label="Choose Theme">
+      <MenuButton
+        className={
+          className +
+          " inline-flex items-center gap-1 data-open:border-primary data-open:border-b-1"
+        }
+        aria-label="Choose Theme"
+      >
         {resolvedTheme} Mode
+        <ChevronDownIcon className="size-5" />
       </MenuButton>
       <MenuItems
-        anchor="bottom"
+        anchor={anchor}
         transition
-        className="bg-primarywhite-light dark:bg-primaryblack-light absolute right-0 w-32 ring-opacity-5 ring-1 ring-black rounded-lg shadow-md
-                transition data-[enter]:duration-250 data-[leave]:duration-20 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 p-1"
+        className={NavDropdownStyle + " w-32"}
       >
         {darkmodeOptions.map((option) => {
           const { img: Component } = option;
           return (
-            <MenuItem key={option.text}>
+            <MenuItem key={option.text} as={Fragment}>
               {({ focus }) => (
                 <button
-                  className={`group h-10 justify-between flex items-center cursor-pointer w-full text-md rounded-md px-3 py-2 
-                                        ${focus && "bg-secondary-dark"}`}
+                  className={`group h-10 justify-between flex items-center cursor-pointer w-full text-md rounded-md px-3 py-2
+                              ${focus && "bg-secondary"}`}
                   onClick={() => {
                     setTheme(option.text.toLowerCase());
                   }}
