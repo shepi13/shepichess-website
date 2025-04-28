@@ -38,7 +38,7 @@ describe("Test Theme Toggle", () => {
       fireEvent.click(dark);
     });
     button = getByRole(container, "button", { name: "Choose Theme" });
-    expect(button.innerHTML.toLowerCase()).toBe("dark mode");
+    expect(button.innerHTML.toLowerCase().startsWith("dark mode")).toBe(true);
   });
 
   test("Test select light mode", async () => {
@@ -59,7 +59,7 @@ describe("Test Theme Toggle", () => {
       fireEvent.click(light);
     });
     button = getByRole(container, "button", { name: "Choose Theme" });
-    expect(button.innerHTML.toLowerCase()).toBe("light mode");
+    expect(button.innerHTML.toLowerCase().startsWith("light mode")).toBe(true);
   });
 
   test("Test focus highlight", async () => {

@@ -135,7 +135,7 @@ export default function PGNViewer({
         />
       </div>
       <div className="w-1/2 p-1 pt-2 pl-2 lg:p-2 lg:pl-4 lg:pt-4 flex flex-col justify-between items-end-safe">
-        <div aria-label="Notation Viewer" className="w-full h-full mb-2">
+        <div aria-label="Notation Viewer" className="w-full mb-2 h-3/5">
           {
             <PGNViewerNotation
               variation={mainVariation}
@@ -144,7 +144,7 @@ export default function PGNViewer({
             />
           }
         </div>
-        <div className="flex flex-col justify-end font-semibold gap-2 min-w-1/2 xl:pl-6">
+        <div className="flex flex-col justify-end font-semibold gap-1 min-w-1/2 px-3 xl:px-6">
           <div
             aria-label="stockfish-pv"
             hidden={!stockfishEnabled}
@@ -154,7 +154,7 @@ export default function PGNViewer({
           </div>
           <div
             className={
-              "flex items-center gap-1 lg:gap-2 xl:gap-3 text-xs " +
+              "flex items-center gap-1 lg:gap-2 xl:gap-3 text-xs lg:text-sm " +
               (stockfishEnabled ? "justify-between" : "justify-end")
             }
           >
@@ -164,8 +164,11 @@ export default function PGNViewer({
             <p aria-label="stockfish-eval" hidden={!stockfishEnabled}>
               Eval: {(stockfishData.evaluation / 100) * (whiteToMove ? 1 : -1)}
             </p>
+            <p aria-label="stockfish-title" hidden={stockfishEnabled}>
+              Stockfish 16
+            </p>
             <button
-              className="w-5 md:w-6 lg:w-7 xl:w-8 mb-1 cursor-pointer pointer-events-none border-2 border-primary dark:border-2 rounded-md overflow-hidden hover:border-black dark:hover:border-slate-200"
+              className="w-6 lg:w-7 xl:w-8 mb-1 cursor-pointer pointer-events-none border-1 lg:border-2 rounded-md overflow-hidden border-stone-700 dark:border-stone-300"
               title="Toggle Analysis"
               aria-label="Stockfish toggle"
               onClick={toggleEnabled}
