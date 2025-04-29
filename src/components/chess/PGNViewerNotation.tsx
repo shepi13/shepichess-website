@@ -101,9 +101,9 @@ export function PGNViewerNotation({
             ) : (
               <span> </span>
             )}
-            {move.variation && (
+            {move.variations.length > 0 && (
               <PGNViewerNotation
-                variation={move.variation}
+                variation={move.variations[0]}
                 gameState={gameState}
                 setGameState={setGameState}
                 level={level + 1}

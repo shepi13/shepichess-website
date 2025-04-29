@@ -26,7 +26,7 @@ describe("PGN Parser Test", () => {
       "Annotations Nested",
       (annotations, expected) => {
         const testPgn = "1.e4 e5 (1... c5" + annotations + ")";
-        const variation = loadPgn(testPgn, startFen).moves[1].variation;
+        const variation = loadPgn(testPgn, startFen).moves[1].variations[0];
         expect(variation).not.toBeNull();
 
         if (variation !== null) {
@@ -40,7 +40,7 @@ describe("PGN Parser Test", () => {
       const variation = loadPgn(testPgn, startFen);
       expect(variation.moves[0].annotation).toBe("");
       expect(variation.moves[1].annotation).toBe("");
-      const nestedVariation = variation.moves[1].variation;
+      const nestedVariation = variation.moves[1].variations[0];
       if (nestedVariation) {
         expect(nestedVariation.moves[0].annotation).toBe("");
       }
@@ -68,7 +68,7 @@ describe("PGN Parser Test", () => {
     });
     test.each(arrowTable)("Arrows Nested", (arrows, expected) => {
       const testPgn = "1.e4 e5 (1... c5 " + arrows + ")";
-      const variation = loadPgn(testPgn, startFen).moves[1].variation;
+      const variation = loadPgn(testPgn, startFen).moves[1].variations[0];
       expect(variation).not.toBeNull();
       if (variation !== null) {
         expect(variation.moves[0].arrows).toStrictEqual(expected);
@@ -80,7 +80,7 @@ describe("PGN Parser Test", () => {
       const variation = loadPgn(testPgn, startFen);
       expect(variation.moves[0].arrows).toStrictEqual([]);
       expect(variation.moves[1].arrows).toStrictEqual([]);
-      const nestedVariation = variation.moves[1].variation;
+      const nestedVariation = variation.moves[1].variations[0];
       if (nestedVariation) {
         expect(nestedVariation.moves[0].arrows).toStrictEqual([]);
       }
@@ -101,7 +101,7 @@ describe("PGN Parser Test", () => {
     });
     test.each(commentTable)("Comments Nested", (comment, expected) => {
       const testPgn = "1.e4 e5 (1... c5 " + comment + ")";
-      const variation = loadPgn(testPgn, startFen).moves[1].variation;
+      const variation = loadPgn(testPgn, startFen).moves[1].variations[0];
       expect(variation).not.toBeNull();
       if (variation !== null) {
         expect(variation.moves[0].comment).toStrictEqual(expected);
@@ -113,7 +113,7 @@ describe("PGN Parser Test", () => {
     test("Test Single Variation", () => {
       const testPgn = "1. e4 e5 2. Nf3 (2. f4)";
       const mainVar = loadPgn(testPgn, startFen);
-      const variation = mainVar.moves[2].variation;
+      const variation = mainVar.moves[2].variations[0];
       expect(variation).not.toBeNull();
       expect(variation?.start).toEqual(
         "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
@@ -130,7 +130,7 @@ describe("PGN Parser Test", () => {
     test("Test Nested Variation", () => {
       const testPgn = "1. e4 e5 2. Nf3 (2. f4 (2. Nc3))";
       const mainVar = loadPgn(testPgn, startFen);
-      const variation = mainVar.moves[2].variation?.moves[0].variation;
+      const variation = mainVar.moves[2].variations[0]?.moves[0].variations[0];
       expect(variation).not.toBeNull();
       expect(variation?.start).toEqual(
         "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
@@ -143,7 +143,7 @@ describe("PGN Parser Test", () => {
           "rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
       });
       expect(variation?.parentVariation?.id).toStrictEqual(
-        mainVar.moves[2].variation?.id,
+        mainVar.moves[2].variations[0]?.id,
       );
     });
   });
@@ -156,7 +156,7 @@ describe("PGN Parser Test", () => {
       testPgn,
       "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
     );
-    expect(mainVar.moves[0].variation?.moves[7]).toMatchObject({
+    expect(mainVar.moves[0].variations[0]?.moves[7]).toMatchObject({
       move: "0-0",
       annotation: "! &eplus;",
       comment: "Comment!",

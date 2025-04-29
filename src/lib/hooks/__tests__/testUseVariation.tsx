@@ -25,7 +25,7 @@ describe("Hooks/useVariation", () => {
     const move = variation.moves[halfMoveNum - 1];
     expect(move.move).toBe("Nf3");
     expect(move.moveNumber).toBe(2);
-    expect(move.variation).not.toBeFalsy();
+    expect(move.variations.length).toBeGreaterThan(0);
     expect(variation.parentVariation).toBeNull();
   });
 
@@ -108,11 +108,11 @@ describe("Hooks/useVariation", () => {
     const move = variation.moves[halfMoveNum - 1];
     expect(move.move).toBe("Nf3");
     expect(move.moveNumber).toBe(2);
-    expect(move.variation).not.toBeFalsy();
+    expect(move.variations.length).toBeGreaterThan(0);
     expect(variation.parentVariation).toBeNull();
     // Test trying to leave top level variation
     act(result.current.exitVariation);
-    expect(move.variation).not.toBeFalsy();
+    expect(move.variations.length).toBeGreaterThan(0);
     expect(variation.parentVariation).toBeNull();
   });
 
@@ -139,5 +139,14 @@ describe("Hooks/useVariation", () => {
       })),
     );
     expect(result.current.halfMoveNum).toBe(0);
+  });
+
+  test("Test multiple variations", () => {
+    const variationTree = loadPgn("1. e4 e5 (1... c5) (1... e6)", startFen);
+    ({ result } = renderHook(() => useVariation(variationTree)));
+    const variations = result.current.variation.moves[1].variations;
+    expect(variations.length).toBe(2);
+    expect(variations[0].moves[0].move).toBe("c5");
+    expect(variations[1].moves[0].move).toBe("e6");
   });
 });
