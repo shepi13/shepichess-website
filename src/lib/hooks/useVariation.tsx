@@ -59,11 +59,11 @@ export function useVariation(variation: Variation): VariationState {
         moveNum < variationMoves.length;
         moveNum++
       ) {
-        const variation = variationMoves[moveNum].variation;
-        if (variation) {
+        if (variationMoves[moveNum].variations.length > 0) {
+          const variation = variationMoves[moveNum].variations[0];
           return {
             ...prevState,
-            variation: variation,
+            variation,
             halfMoveNum: 1,
           };
         }

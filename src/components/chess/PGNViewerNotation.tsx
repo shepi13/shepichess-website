@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import {
   GameState,
   Move,
@@ -46,7 +48,6 @@ export function PGNViewerNotation({
 }: PGNViewerNotationProps) {
   return (
     <>
-      {level > 0 ? <span> (</span> : ""}
       {variation.moves.map((move: Move, i: number) => {
         const isCurrentMove =
           variation.id === gameState?.variation.id &&
@@ -101,18 +102,19 @@ export function PGNViewerNotation({
             ) : (
               <span> </span>
             )}
-            {move.variation && (
-              <PGNViewerNotation
-                variation={move.variation}
-                gameState={gameState}
-                setGameState={setGameState}
-                level={level + 1}
-              />
-            )}
+            {move.variations.length > 0 ? <span> (</span> : ""}
+            {move.variations.map((variation, i) => (
+              <Fragment key={variation.id}>
+                <PGNViewerNotation
+                  {...{ variation, gameState, setGameState, level: level + 1 }}
+                />
+                {i < move.variations.length - 1 ? <span>, </span> : ""}
+              </Fragment>
+            ))}
+            {move.variations.length > 0 ? <span>) </span> : ""}
           </div>
         );
       })}
-      {level > 0 ? <span>) </span> : ""}
     </>
   );
 }

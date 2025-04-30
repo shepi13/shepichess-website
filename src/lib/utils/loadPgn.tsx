@@ -31,8 +31,13 @@ const annotationLookup = [
 
 // PGN REGEXES
 // Creates Regex for matching content within start/end tags (for example between [], (), or {})
-const genBoundaryRegex = (start: string, end: string, matchName: string) =>
-  new RegExp("(?:" + start + "(?<" + matchName + ">.*?)" + end + ")?");
+const genBoundaryRegex = (
+  start: string,
+  end: string,
+  matchName: string,
+  flags: string = "",
+) =>
+  new RegExp("(?:" + start + "(?<" + matchName + ">.*?)" + end + ")?", flags);
 
 //Optional move number (Number followed by . or ...)
 const moveNumberRegex = /(?:[0-9]*\.+)?/;
@@ -47,10 +52,13 @@ const annotationRegex = /((?:[/!?=+-]+ *|\$[0-9]+ *)*)?/;
 // Order must always be arrows -> comments -> variations
 const arrrowRegex = genBoundaryRegex("\\[", "\\]", "arrows");
 const commentRegex = genBoundaryRegex("\\{", "\\}", "comment");
-const variationRegex = genBoundaryRegex("\\$\\(", "\\$\\)", "variation");
+
+// Support multiple variations -> $(var1$) $(var2$)
+const variationRegex = genBoundaryRegex("\\$\\(", "\\$\\)", "variation", "g");
+const multipleVariationsRegex = /(?<variations>(\$\(.*?\$\)\s*)*)/;
 
 // Parse Move number, move, annotation, arrows, comments, and variations
-// e.g. 2. Nf3! $13 [f3e5red] {Attacks e5} $(2. Bc4?$)
+// e.g. 2. Nf3! $13 [f3e5red] {Attacks e5} $(2. Bc4?$) $(2. Bd3??$)
 const pgnParseRegex = new RegExp(
   [
     moveNumberRegex.source,
@@ -58,7 +66,7 @@ const pgnParseRegex = new RegExp(
     annotationRegex.source,
     arrrowRegex.source,
     commentRegex.source,
-    variationRegex.source,
+    multipleVariationsRegex.source,
   ].join(/\s*/.source),
   "g",
 );
@@ -79,7 +87,7 @@ export function loadPgn(
   parentMove: number = 0,
 ): Variation {
   // Replaces every outermost group of matching parenthesis with $( $), so we can easily match in regex
-  pgn = preParsePgn(pgn);
+  pgn = markPgnVariations(pgn);
 
   // Use chessjs game just to verify pgn moves are legal, since it doesn't support variations or custom pgn starting positions
   const game = new Chess(start);
@@ -87,11 +95,11 @@ export function loadPgn(
   const tokens = [...pgn.matchAll(pgnParseRegex)];
   const moves: Array<Move> = [];
   const currentVariation = {
-    id: id,
-    start: start,
-    moves: moves,
+    id,
+    start,
+    moves,
+    parentMove,
     parentVariation: parentVar,
-    parentMove: parentMove,
   };
   // Use 10000 id numbers for variations on current level, so next level starts 10000 higher
   let newId = id + 10000;
@@ -104,18 +112,32 @@ export function loadPgn(
     //Verify move is legal (replace 0-0 with O-O so either casltling notation works)
     game.move(token[1].replace(/0/g, "O"));
 
+    // Handle variations
+    const variations = [];
+    if (token.groups && token.groups.variations) {
+      // Reparse multiple variation string into each single variation
+      const variationTokens = token.groups.variations.matchAll(variationRegex);
+      for (const variationToken of variationTokens) {
+        const varPgn = variationToken.groups?.variation ?? null;
+
+        // Recursively add variation to the tree
+        if (varPgn) {
+          variations.push(
+            loadPgn(varPgn, beforeFen, ++newId, currentVariation, index + 1),
+          );
+        }
+      }
+    }
+
     // Add parsed move to movelist, recursively calling loadPgn for nested variations
     moves.push({
       color: sideToMove,
-      moveNumber: moveNumber,
+      moveNumber,
+      variations,
       move: token[1],
       annotation: getAnnotation(token[2]),
       comment: token.groups?.comment ?? "",
-      variation: token.groups?.variation
-        ? loadPgn(token[5], beforeFen, ++newId, currentVariation, index + 1)
-        : null,
       arrows: parseArrows(token.groups?.arrows),
-      fullMatch: token[0],
       fenAfter: game.fen(),
     });
   });
@@ -157,7 +179,7 @@ function parseArrows(arrowPgn?: string) {
  *
  * @param pgn - the pgn to preprocess
  */
-function preParsePgn(pgn: string): string {
+function markPgnVariations(pgn: string): string {
   let level = 0;
   let inComment = false;
   let start = 0;

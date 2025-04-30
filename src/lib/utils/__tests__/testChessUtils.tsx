@@ -1,6 +1,13 @@
+import { inspect } from "util";
+
 import { startFen } from "@/lib/types/pgnTypes";
 
-import { getFen, moveIsGreat, moveIsMistake } from "../chessUtils";
+import {
+  getFen,
+  makeVariationsNested,
+  moveIsGreat,
+  moveIsMistake,
+} from "../chessUtils";
 import { loadPgn } from "../loadPgn";
 
 describe("Test Chess Utilities", () => {
@@ -17,7 +24,7 @@ describe("Test Chess Utilities", () => {
         move: "e4",
         annotation: "",
         comment: "",
-        variation: null,
+        variations: [],
         arrows: [],
         fullMatch: "e4",
         fenAfter: fenAfter,
@@ -52,5 +59,23 @@ describe("Test Chess Utilities", () => {
     expect(moveIsMistake(variation.moves[0])).toBe(true);
     variation.moves[0].annotation = "??";
     expect(moveIsMistake(variation.moves[0])).toBe(true);
+  });
+
+  test.each([
+    ["1. e4 c5 (1...e5) (1...e6)", "1. e4 c5 (1...e5 (1...e6))"],
+    ["1. e4 (1. c4) (1. b3)", "1. e4 (1. c4 (1.b3))"],
+    [
+      "1. e4 c5 (1...e5 (1...e6)) (1...c6)",
+      "1. e4 c5 (1...e5 (1...e6 (1...c6)))",
+    ],
+    [
+      "1. e4 e5 (1...c5 2. Nf3 (2. Nc3) (2. g3)) (1...e6)",
+      "1. e4 e5 (1...c5 (1... e6) 2. Nf3 (2. Nc3 (2. g3)))",
+    ],
+  ])("makeVariationsNested", (flatPgn, nestedPgn) => {
+    const result = makeVariationsNested(loadPgn(flatPgn, startFen));
+    const expected = loadPgn(nestedPgn, startFen);
+
+    expect(inspect(result)).toStrictEqual(inspect(expected));
   });
 });

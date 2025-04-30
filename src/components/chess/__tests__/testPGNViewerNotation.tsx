@@ -1,4 +1,4 @@
-import { act, getByLabelText, getByText } from "@testing-library/react";
+import { act, getByLabelText, getByText, screen } from "@testing-library/react";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
 import { startFen } from "@/lib/types/pgnTypes";
@@ -61,5 +61,16 @@ describe("Test PGNViewerNotation", () => {
   });
   test("Comment rendered", () => {
     expect(getByText(container, "Hello!")).toBeInTheDocument();
+  });
+
+  test("Flat subvariations", () => {
+    const variation = loadPgn("1. e4 e5 (1...e6) (1...c5)", startFen);
+    act(() =>
+      root.render(
+        <PGNViewerNotation {...{ variation, gameState, setGameState }} />,
+      ),
+    );
+    expect(screen.getByText("e6")).toBeInTheDocument();
+    expect(screen.getByText("c5")).toBeInTheDocument();
   });
 });
