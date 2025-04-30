@@ -138,7 +138,6 @@ export function loadPgn(
       annotation: getAnnotation(token[2]),
       comment: token.groups?.comment ?? "",
       arrows: parseArrows(token.groups?.arrows),
-      fullMatch: token[0],
       fenAfter: game.fen(),
     });
   });

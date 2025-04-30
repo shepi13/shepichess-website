@@ -26,7 +26,6 @@ export type Move = {
   comment: string;
   variations: Array<Variation>;
   arrows: Arrows;
-  fullMatch: string;
   fenAfter: string;
 };
 
