@@ -1,7 +1,6 @@
-
 /**
  * NavLink type
- * 
+ *
  * @property title - link display title
  * @property href - link target
  * @property sublinks - dropdown links

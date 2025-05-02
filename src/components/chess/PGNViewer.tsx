@@ -19,13 +19,13 @@ const VariationDisplayLength = 5;
 
 /**
  * Properties accepted by PGNViewer Component
- * 
+ *
  * @property pgn - PGN to display
  * @default "" - No moves parsed, only the initial position
- * 
+ *
  * @property start - start position to parse the PGN from
  * @default startFen - initial chess position
- * 
+ *
  * @property flipped - whether or not the board should be flipped
  */
 export interface PGNViewerProps {
