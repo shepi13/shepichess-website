@@ -17,37 +17,45 @@ import { ChessBoardIcon } from "../ChessBoardIcon";
 const MaxDepth = 21;
 const VariationDisplayLength = 5;
 
+/**
+ * Properties accepted by PGNViewer Component
+ * 
+ * @property pgn - PGN to display
+ * @default "" - No moves parsed, only the initial position
+ * 
+ * @property start - start position to parse the PGN from
+ * @default startFen - initial chess position
+ * 
+ * @property flipped - whether or not the board should be flipped
+ */
 export interface PGNViewerProps {
   pgn?: string;
   start?: string;
-  small?: boolean;
   puzzle?: boolean;
-  draggable?: boolean;
-  flip?: boolean;
-  onDrop?: () => void;
+  flipped?: boolean;
 }
 
+/**
+ * React Component that renders a chessboard, adding functionality for pgn parsing,
+ * move tree traversal with buttons/key handlers, flipping the board, and displaying
+ * notation in a prettified way that also links to specific board positions when clicked.
+ *
+ * It also supports displaying comments, arrows, and annotations stored in a simplified variation of pgn format
+ *
+ * @param pgn - the pgn describing the move tree (see lib/loadPgn for format)
+ * @param start - the fen of the starting position (defaults to the standard chess setup)
+ * @param flipped - whether the board should initially be flipped (user can toggle this)
+ *
+ */
 export default function PGNViewer({
   pgn = "",
   start = startFen,
-  small = false,
+  flipped = false,
 }: PGNViewerProps) {
-  /**
-   * React Component that renders a chessboard, adding functionality for pgn parsing,
-   * move tree traversal with buttons/key handlers, flipping the board, and displaying
-   * notation in a prettified way that also links to specific board positions when clicked.
-   *
-   * It also supports displaying comments, arrows, and annotations stored in a simplified variation of pgn format
-   *
-   * @param pgn - the pgn describing the move tree (see lib/loadPgn for format)
-   * @param start - the fen of the starting position (defaults to the standard chess setup)
-   *
-   */
-
   const mainVariation = loadPgn(pgn, start);
 
   // Current state of display board
-  const [flipped, flipBoard] = useToggle(false);
+  const [flipState, flipBoard] = useToggle(flipped);
   const {
     variation,
     halfMoveNum,
@@ -105,8 +113,7 @@ export default function PGNViewer({
 
   return (
     <div
-      className={`flex border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 mb-5
-        ${small && "md:w-4/5 xl:w-1/2"}`}
+      className="flex border-primaryblack-light dark:border-primarywhite-dark border-solid border-3"
       onKeyDown={handleKeyDown}
       tabIndex={-1}
       aria-label="PGN Viewer"
@@ -116,7 +123,7 @@ export default function PGNViewer({
           <Chessboard
             position={fen()}
             arePiecesDraggable={false}
-            boardOrientation={flipped ? "black" : "white"}
+            boardOrientation={flipState ? "black" : "white"}
             customArrows={arrows}
             customBoardStyle={{
               boxShadow: "3px 3px 5px rgba(0,0,0,.8)",
