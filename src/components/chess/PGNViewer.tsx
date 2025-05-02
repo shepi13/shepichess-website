@@ -47,7 +47,7 @@ export interface PGNViewerProps {
  * @param flipped - whether the board should initially be flipped (user can toggle this)
  *
  */
-export default function PGNViewer({
+export function PGNViewer({
   pgn = "",
   start = startFen,
   flipped = false,
