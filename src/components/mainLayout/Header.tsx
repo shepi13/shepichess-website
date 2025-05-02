@@ -21,7 +21,7 @@ export function Header() {
   const [isOpen, toggleOpen] = useToggle(false);
 
   return (
-    <header className="sm:flex sm:justify-between p-5 lg:px-15">
+    <header className="sm:flex sm:justify-between">
       <div className="flex justify-between grow basis-0">
         <div className="h-14 md:h-20">
           <Link href="/">

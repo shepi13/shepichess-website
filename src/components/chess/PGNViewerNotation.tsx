@@ -1,11 +1,6 @@
 import { Fragment } from "react";
 
-import {
-  GameState,
-  Move,
-  PGNStateCallback,
-  Variation,
-} from "@/lib/types/pgnTypes";
+import { GameState, PGNStateCallback, Variation } from "@/lib/types/pgnTypes";
 import { moveIsGreat, moveIsMistake } from "@/lib/utils/chessUtils";
 
 /**
@@ -46,75 +41,78 @@ export function PGNViewerNotation({
   setGameState,
   level = 0,
 }: PGNViewerNotationProps) {
-  return (
-    <>
-      {variation.moves.map((move: Move, i: number) => {
-        const isCurrentMove =
-          variation.id === gameState?.variation.id &&
-          i + 1 === gameState.halfMoveNum;
-        // Move Number only shows for either white player or on first move of variation
-        let move_number = "";
-        if (move.color == "w") {
-          move_number = move.moveNumber + ". ";
-        } else if (i == 0) {
-          move_number = move.moveNumber + "... ";
-        }
+  const notationJSXElems = [];
+  for (const [i, move] of variation.moves.entries()) {
+    const isCurrentMove =
+      variation.id === gameState?.variation.id &&
+      i + 1 === gameState.halfMoveNum;
+    const move_text = move.move + move.annotation;
+    const clickHandler =
+      setGameState &&
+      (() =>
+        setGameState((prev) => ({
+          ...prev,
+          variation,
+          halfMoveNum: i + 1,
+        })));
+    // Move Number only shows for either white player or on first move of variation
+    let move_number = "";
+    if (move.color == "w") {
+      move_number = move.moveNumber + ". ";
+    } else if (i == 0) {
+      move_number = move.moveNumber + "... ";
+    }
 
-        const move_text = move.move + move.annotation;
+    notationJSXElems.push(
+      <div
+        key={`${variation.start}_${i}`}
+        className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}
+      >
+        {/* Move */}
+        <button
+          className={`px-1 py-0 sm:py-[1px] xl:py-[3px] cursor-pointer text-nowrap inline outline-none
+                      ${level > 0 && "italic"}
+                      ${(isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg border-1 shadow-md") || "border-none"}
+                    `}
+          onClick={clickHandler}
+          aria-label={"Move: " + move_number + move_text}
+        >
+          {move_number}
+          <span
+            className={`
+                        ${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"}
+                        ${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"}
+                      `}
+            dangerouslySetInnerHTML={{ __html: move_text }}
+          ></span>
+        </button>
 
-        return (
-          <div
-            key={`${variation.start}_${i}`}
-            className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}
+        {/* PGN Comment for move */}
+        {move.comment ? (
+          <span
+            className="text-primary px-1 ml-[-3px]"
+            aria-label={"Comment: " + move.comment}
           >
-            <button
-              className={`px-1 py-0 sm:py-[1px] xl:py-[3px] cursor-pointer text-nowrap inline outline-none
-                          ${level > 0 && "italic"}
-                          ${(isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg border-1 shadow-md") || "border-none"}
-                        `}
-              onClick={
-                setGameState &&
-                (() =>
-                  setGameState((prev) => ({
-                    ...prev,
-                    variation,
-                    halfMoveNum: i + 1,
-                  })))
-              }
-              aria-label={"Move: " + move_number + move_text}
-            >
-              {move_number}
-              <span
-                className={`
-                              ${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"}
-                              ${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"}
-                          `}
-                dangerouslySetInnerHTML={{ __html: move_text }}
-              ></span>
-            </button>
-            {move.comment ? (
-              <span
-                className="text-primary px-1 ml-[-3px]"
-                aria-label={"Comment: " + move.comment}
-              >
-                {" " + move.comment}
-              </span>
-            ) : (
-              <span> </span>
-            )}
-            {move.variations.length > 0 ? <span> (</span> : ""}
-            {move.variations.map((variation, i) => (
-              <Fragment key={variation.id}>
-                <PGNViewerNotation
-                  {...{ variation, gameState, setGameState, level: level + 1 }}
-                />
-                {i < move.variations.length - 1 ? <span>, </span> : ""}
-              </Fragment>
-            ))}
-            {move.variations.length > 0 ? <span>) </span> : ""}
-          </div>
-        );
-      })}
-    </>
-  );
+            {" " + move.comment}
+          </span>
+        ) : (
+          <span> </span>
+        )}
+
+        {/* Variations for move */}
+        {move.variations.length > 0 ? <span> (</span> : ""}
+        {move.variations.map((variation, i) => (
+          <Fragment key={variation.id}>
+            <PGNViewerNotation
+              {...{ variation, gameState, setGameState, level: level + 1 }}
+            />
+            {i < move.variations.length - 1 ? <span>, </span> : ""}
+          </Fragment>
+        ))}
+        {move.variations.length > 0 ? <span>) </span> : ""}
+      </div>,
+    );
+  }
+
+  return <>{notationJSXElems}</>;
 }
