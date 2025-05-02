@@ -17,7 +17,7 @@ import { EngineProvider } from "@/components/EngineProvider";
 import { container, root } from "@/lib/test/componentTestHelpers";
 import { startFen } from "@/lib/types/pgnTypes";
 
-import PGNViewer from "../PGNViewer";
+import { PGNViewer } from "../PGNViewer";
 
 describe("Test PGNViewer", () => {
   test("Test default props", () => {
