@@ -1,11 +1,17 @@
-/** Navigation links in header */
-
+/**
+ * NavLink type
+ *
+ * @property title - link display title
+ * @property href - link target
+ * @property sublinks - dropdown links
+ */
 export type NavLinkProps = {
   title: string;
   href: string;
   sublinks?: Array<Omit<NavLinkProps, "sublinks">>;
 };
 
+/** Navigation links in header */
 export const navLinks: Array<NavLinkProps> = [
   { href: "/coaching", title: "Coaching" },
   { href: "/study", title: "Chess Study" },

@@ -41,16 +41,7 @@ export function PGNViewerButtons({
   leftContainerStyle = defaultFlexStyle,
   rightContainerStyle = defaultFlexStyle,
 }: PGNViewerButtonProps) {
-  /**
-   * React component that renders buttons in the format used by PGNViewer.
-   *
-   * Has a flip board button, as well as nav buttons with functionality decided by parent
-   *
-   * @param moveButtons - The onClick handlers, disabled flag, and html children for each nav button
-   * @param onFlipBoard - The function to flip the board
-   */
-
-  function getButtons(left: boolean) {
+  const getButtons = (left: boolean) => {
     // eslint-disable-next-line react/display-name
     return (button: PGNButtonSettings, i: number) => {
       const buttonStyle = left ? leftButtonStyle : rightButtonStyle;
@@ -65,7 +56,7 @@ export function PGNViewerButtons({
         </button>
       );
     };
-  }
+  };
 
   return (
     <div className="flex justify-between p-1 lg:p-5 pr-0">

@@ -2,6 +2,9 @@ import { ImageProps } from "next/image";
 
 import { SVGProps } from "react";
 
+/**
+ * Tailwind classes for light square color (fill)
+ */
 export const lightColors = {
   primary: "fill-primary",
   secondary: "fill-secondary",
@@ -22,6 +25,9 @@ export const lightColors = {
   slate900: "fill-slate-900",
 };
 
+/**
+ * Tailwind classes for dark square color (background)
+ */
 export const darkColors = {
   primary: "bg-primary",
   secondary: "bg-secondary",
@@ -42,6 +48,9 @@ export const darkColors = {
   slate900: "bg-slate-900",
 };
 
+/**
+ * Tailwind classes for hover color (hover:fill)
+ */
 export const hoverColors = {
   primary: "hover:fill-primary",
   secondary: "hover:fill-secondary",
@@ -63,6 +72,9 @@ export const hoverColors = {
   none: "",
 };
 
+/**
+ * Tailwind classes for stroke colors
+ */
 export const strokeColors = {
   none: "stroke-none",
   black: "stroke-black",
