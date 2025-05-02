@@ -27,10 +27,10 @@ export default function RootLayout({
         <SVGGrainyFilter />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <EngineProvider>
-            <div className="content flex flex-col min-h-screen justify-between">
-              <div>
+            <div className="content flex flex-col min-h-screen justify-between items-center">
+              <div className="p-5 w-screen md:w-4/5 xl:w-2/3 flex flex-col gap-25">
                 <Header />
-                <main className="px-5">{children}</main>
+                <main>{children}</main>
               </div>
               <Footer />
             </div>

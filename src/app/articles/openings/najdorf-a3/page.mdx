@@ -11,16 +11,10 @@ There are several moves that white can play intending to meet black's classical 
 #### a3
 
 <PGNViewer
-  pgn="1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. a3!?"
-  small
-/>
-
-This move looks too quiet to be threatening, but it actually has a subtle and strong point:
-
-<PGNViewer
-  start="rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/P1N5/1PP2PPP/R1BQKB1R b KQkq - 0 6"
-  pgn="6... e5 {After 6... e6, we can continue in an English attack style with 7. Be3. An alternative is also 7. Rg1!? intending a quick g4. } 7. Nf5 d5 8. Bg5 d4 9. Bxf6 gxf6!"
-  small
+  pgn={
+    "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. a3!? {This move looks too quiet to be threatening, but it actually has a subtle and strong point:   } " +
+    "6... e5 {After} (6... e6 7. Rg1!? [g2g4red] (7. Be3 {Is similar to an english attack but black has committed e6}) ) 7. Nf5!? d5 8. Bg5 d4 9. Bxf6 gxf6!"
+  }
 />
 
 #### This is the main starting position of the 6. a3 line.
@@ -30,7 +24,6 @@ Here we see that a3 is useful, to prevent Bb4+, and sometimes to be able to play
 <PGNViewer
   start="rnbqkb1r/1p3p1p/p4p2/4pN2/3pP3/P1N5/1PP2PPP/R2QKB1R w KQkq - 0 10"
   pgn="10. Na2!? Bxf5 {Black can avoid this capture, but white will continue with Bd3, Qe2, and eventually c3 to chip away at the center} 11. exf5 Qd5 {11... Nd7 is well met by 12. b4!, showing another use for a3! Other moves allow Bd3 followed by 0-0, controlling e4 with a good position for white.} 12. Be2!? e4 13. 0-0"
-  small
 />
 
 We've reached the most interesting position, where black has a massive center and white's pieces look misplaced. Yet black has nowhere to put his king and must be extremely careful as white's position can suddenly explode through the center, and tactics involving Nc3 -> Nxe4 are looming large.
@@ -52,7 +45,6 @@ This is the more solid option, as the knight defends d4 and blocks the c file. H
 <PGNViewer
   start="r3kb1r/1p3p1p/p1n2p2/3q1P2/3pp3/P7/NPP1BPPP/R2Q1RK1 w kq - 2 14"
   pgn="14. Nc3! Qe5 {Qxf5 blunders 15. Bg4 followed by Nxe4 using the pin on the e file} 15. f4! exf3 {Qe7 nd5 Qd6 Bc4 leads to a double edged position where white has clear compensation for the center} 16. Bxf3 0-0-0 17. Ne4 Bd6!? {Not the only move but the simplest} 18. Nxd6 Qxd6 19. Bxc6 Qxc6 { After all of the fireworks, the position remains equal. }"
-  small
 />
 
 ---
@@ -64,7 +56,6 @@ The most aggressive option for black, intending to stop white's Nc3 tactic by me
 <PGNViewer
   start="r3kb1r/1p1n1p1p/p4p2/3q1P2/3pp3/P7/NPP1BPPP/R2Q1RK1 w kq - 2 14"
   pgn="14. Nc3? Qe5 15. f4 exf3 16. Bxf3 dxc3! 17. Re1 0-0-0 {Black will be better as white never gets a chance to play Bxc6. He can continue with Nxe5, cxb5, and Bxb2}"
-  small
 />
 
 ---
@@ -76,7 +67,6 @@ The most aggressive option for black, intending to stop white's Nc3 tactic by me
 <PGNViewer
   start="r3kb1r/1p1n1p1p/p4p2/3q1P2/3pp3/P7/NPP1BPPP/R2Q1RK1 w kq - 2 14"
   pgn="14. c4! Qe5 { 14...Qd6 15. Bh5!? 0-0-0 16. Bxf7 is also unclear } 15. Re1 0-0-0 16. Bf3 exf3! 17. Rxe5 Nxe5 18. gxf3"
-  small
 />
 
 #### Black has sacrificed a queen, but clearly has some compensation, so the battle continues:
@@ -86,7 +76,6 @@ However, black must play very precisely to hold the balance:
 <PGNViewer
   start="2kr1b1r/1p3p1p/p4p2/4nP2/2Pp4/P4P2/NP3P1P/R2Q2K1 b - - 0 18"
   pgn="18...d3! 19. Nc3 Rd4! 20. Nd5 Kb8 21. Qb3!"
-  small
 />
 
 Suddenly white has to be precise as well. 21...Nxf3+ must be met with Kg2, while 21...Rg8+ must be met with Kh1.
