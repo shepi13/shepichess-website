@@ -10,6 +10,7 @@ import { PlayableChessBoardStateless } from "@/components/chess/PlayableChessBoa
 import { useEngine } from "@/lib/hooks/useEngineWorker";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
+import { moveSoundPath } from "@/lib/types/types";
 
 /**
  * Component that renders a chessboard and buttons to play chess against stockfish
@@ -29,7 +30,11 @@ export function PlayAgainstComputer({
   playerColor = playerColor || new Chess(start).turn();
 
   // React hooks for position/engine state
-  const position = usePosition(start, playerColor.startsWith("b"), true);
+  const position = usePosition(
+    start,
+    playerColor.startsWith("b"),
+    moveSoundPath,
+  );
   const engineCallback = useCallback(
     ({ bestMove }: { bestMove: string }) => {
       if (bestMove) {

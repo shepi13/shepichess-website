@@ -78,7 +78,7 @@ export function useVariation(
 
   // Finds and enters the next variation in the move tree, playing the move with sound
   function enterVariation() {
-    const success = setGameStateSafe((prevState) => {
+    return setGameStateSafe((prevState) => {
       const variationMoves = prevState.variation.moves;
       const initialMoveNum = prevState.halfMoveNum;
       /* Find next variation if exists */
@@ -98,11 +98,6 @@ export function useVariation(
       }
       return prevState;
     });
-    if (success && moveSound && moveSound.paused) {
-      moveSound.currentTime = 0;
-      moveSound.play();
-    }
-    return success;
   }
 
   // Exits the current variation and enters its parent.
@@ -115,17 +110,17 @@ export function useVariation(
     });
   }
 
-  // Plays a move and the move sound
-  function nextMove() {
-    const success = setGameStateSafe((prev) => ({
-      ...prev,
-      halfMoveNum: prev.halfMoveNum + 1,
-    }));
-    if (success && moveSound && moveSound.paused) {
-      moveSound.currentTime = 0;
-      moveSound.play();
-    }
-    return success;
+  // Adds a move sound to a method
+  function addSound(handler: () => boolean) {
+    return () => {
+      if (!moveSound) return handler();
+      if (moveSound.paused && handler()) {
+        moveSound.currentTime = 0;
+        moveSound.play();
+        return true;
+      }
+      return false;
+    };
   }
 
   return {
@@ -144,13 +139,18 @@ export function useVariation(
         halfMoveNum: variation.moves.length,
       })),
     // prevMove/nextMove only set move number
-    nextMove,
+    nextMove: addSound(() =>
+      setGameStateSafe((prev) => ({
+        ...prev,
+        halfMoveNum: prev.halfMoveNum + 1,
+      })),
+    ),
     prevMove: () =>
       setGameStateSafe((prev) => ({
         ...prev,
         halfMoveNum: prev.halfMoveNum - 1,
       })),
-    enterVariation,
+    enterVariation: addSound(enterVariation),
     exitVariation,
     setGameState: setGameStateSafe,
     ...gameState,

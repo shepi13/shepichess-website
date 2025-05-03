@@ -14,7 +14,7 @@ import { useAudio } from "./useAudio";
 export function usePosition(
   initialPosition: string = startFen,
   initialOrientation: boolean = false,
-  audio: boolean = false,
+  audioSrc: string = "",
 ): Position {
   // Track Position State using chess.js Chess object and fen.
   const game = useMemo(() => new Chess(initialPosition), [initialPosition]);
@@ -23,7 +23,7 @@ export function usePosition(
   const [flipped, setFlipped] = useState(initialOrientation);
 
   // Sound
-  const moveSound = useAudio("/sounds/move.ogg");
+  const moveSound = useAudio(audioSrc);
 
   const resetPosition = () => {
     game.load(initialPosition);
@@ -47,7 +47,7 @@ export function usePosition(
     }
     // Set position and play audio if successful
     setPosition(game.fen());
-    if (audio && moveSound) {
+    if (moveSound) {
       moveSound.currentTime = 0;
       moveSound.play();
     }

@@ -6,6 +6,7 @@ import { PGNViewerButtons } from "@/components/chess/PGNViewerButtons";
 
 import { usePosition } from "@/lib/hooks/usePosition";
 import { Position } from "@/lib/types/pgnTypes";
+import { moveSoundPath } from "@/lib/types/types";
 
 const buttonStyles =
   "font-bold text-large ring-1 p-1 rounded-md hover:text-primary-dark \
@@ -78,6 +79,6 @@ export function PlayableChessBoard({
   start: string;
   flipped?: boolean;
 }) {
-  const position = usePosition(start, flipped, true);
+  const position = usePosition(start, flipped, moveSoundPath);
   return <PlayableChessBoardStateless position={position} />;
 }
