@@ -1,56 +1,84 @@
 import { useState } from "react";
 
-import {
-  PGNStateCallback,
-  Variation,
-  VariationState,
-} from "@/lib/types/pgnTypes";
+import { PGNStateCallback, Variation } from "@/lib/types/pgnTypes";
 import { getFen } from "@/lib/utils/chessUtils";
+
+import { useAudio } from "./useAudio";
+
+/**
+ * Variation location and methods (returned by useVariation hook)
+ *
+ * @property fen - Function that returns fen of current position
+ *
+ * Move traversal functions (return success (boolean)):
+ * @property firstMove
+ * @property lastMove,
+ * @property nextMove,
+ * @property prevMove,
+ *
+ * Variation traversal functions (return success (boolean)):
+ * @property enterVariation,
+ * @property exitVariation,
+ *
+ * // Function to set current gamestate safely using a callback (e.g. SetGameState((prev) => {...prev, halfMoveNum: 5}))
+ * @property setGameState (() => boolean)
+ *
+ * // Game State
+ * @property variation - current variation
+ * @property halfMoveNum - current move location
+ * }
+ */
+export type VariationState = {
+  fen: () => string;
+  firstMove: () => boolean;
+  lastMove: () => boolean;
+  nextMove: () => boolean;
+  prevMove: () => boolean;
+  enterVariation: () => boolean;
+  exitVariation: () => boolean;
+  setGameState: (arg0: PGNStateCallback) => boolean;
+  variation: Variation;
+  halfMoveNum: number;
+};
 
 /**
  * React Custom Hook to track current location within a tree of variations
  *
  * @param variation - Main variation of the tree
- * @returns {
- * // Function that returns fen of current position
- *  fen,
- *
- * // Functions to traverse variation tree
- *  firstMove,
- *  lastMove,
- *  nextMove,
- *  prevMove,
- *  enterVariation,
- *  exitVariation,
- *
- * // Function to set current gamestate safely using a callback (e.g. SetGameState((prev) => {...prev, halfMoveNum: 5}))
- *  setGameState,
- * } - Variation state with functions to traverse the current tree
+ * @returns - Variation state with functions to traverse the current tree
  */
-export function useVariation(variation: Variation): VariationState {
+export function useVariation(
+  variation: Variation,
+  audioSrc: string = "",
+): VariationState {
   const [gameState, setGameState] = useState({
     variation,
     halfMoveNum: 0,
   });
+  const moveSound = useAudio(audioSrc);
 
   // Use setGameState, but guarantee that result is a valid location of the move tree
-  function setGameStateSafe(callback: PGNStateCallback) {
+  function setGameStateSafe(callback: PGNStateCallback): boolean {
+    let success = false;
     setGameState((prevState) => {
       const newState = callback(prevState);
       if (
         !newState.variation ||
         newState.halfMoveNum < 0 ||
-        newState.halfMoveNum > newState.variation.moves.length
+        newState.halfMoveNum > newState.variation.moves.length ||
+        prevState === newState
       ) {
         return prevState;
       }
+      success = true;
       return newState;
     });
+    return success;
   }
 
-  // Finds and enters the next variation in the move tree
+  // Finds and enters the next variation in the move tree, playing the move with sound
   function enterVariation() {
-    setGameStateSafe((prevState) => {
+    return setGameStateSafe((prevState) => {
       const variationMoves = prevState.variation.moves;
       const initialMoveNum = prevState.halfMoveNum;
       /* Find next variation if exists */
@@ -74,12 +102,25 @@ export function useVariation(variation: Variation): VariationState {
 
   // Exits the current variation and enters its parent.
   function exitVariation() {
-    setGameStateSafe((prev) => {
+    return setGameStateSafe((prev) => {
       return {
         variation: prev.variation.parentVariation || variation,
         halfMoveNum: prev.variation.parentMove,
       };
     });
+  }
+
+  // Adds a move sound to a method
+  function addSound(handler: () => boolean) {
+    return () => {
+      if (!moveSound) return handler();
+      if (moveSound.paused && handler()) {
+        moveSound.currentTime = 0;
+        moveSound.play();
+        return true;
+      }
+      return false;
+    };
   }
 
   return {
@@ -98,17 +139,18 @@ export function useVariation(variation: Variation): VariationState {
         halfMoveNum: variation.moves.length,
       })),
     // prevMove/nextMove only set move number
-    nextMove: () =>
+    nextMove: addSound(() =>
       setGameStateSafe((prev) => ({
         ...prev,
         halfMoveNum: prev.halfMoveNum + 1,
       })),
+    ),
     prevMove: () =>
       setGameStateSafe((prev) => ({
         ...prev,
         halfMoveNum: prev.halfMoveNum - 1,
       })),
-    enterVariation,
+    enterVariation: addSound(enterVariation),
     exitVariation,
     setGameState: setGameStateSafe,
     ...gameState,

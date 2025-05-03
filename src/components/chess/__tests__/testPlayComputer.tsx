@@ -1,3 +1,4 @@
+import { audioState } from "./mocks/mockAudio";
 import {
   currentFen,
   evaluatedPosition,
@@ -28,6 +29,8 @@ describe("Test PlayComputer", () => {
     expect(evaluatedPosition).toBe(startFen);
     // Any move should've been made
     expect(currentFen).not.toBe(startFen);
+    // Sound should have played
+    expect(audioState.play).toHaveBeenCalled();
   });
 
   test("Test Undo Move", () => {

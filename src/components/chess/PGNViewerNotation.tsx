@@ -41,12 +41,15 @@ export function PGNViewerNotation({
   setGameState,
   level = 0,
 }: PGNViewerNotationProps) {
+  // Loop through every move and build a JSX for the entire notation tree.
   const notationJSXElems = [];
   for (const [i, move] of variation.moves.entries()) {
     const isCurrentMove =
       variation.id === gameState?.variation.id &&
       i + 1 === gameState.halfMoveNum;
     const move_text = move.move + move.annotation;
+
+    // Click to jump to move
     const clickHandler =
       setGameState &&
       (() =>
@@ -55,6 +58,7 @@ export function PGNViewerNotation({
           variation,
           halfMoveNum: i + 1,
         })));
+
     // Move Number only shows for either white player or on first move of variation
     let move_number = "";
     if (move.color == "w") {
@@ -88,15 +92,13 @@ export function PGNViewerNotation({
         </button>
 
         {/* PGN Comment for move */}
-        {move.comment ? (
+        {move.comment && (
           <span
-            className="text-primary px-1 ml-[-3px]"
+            className="text-primary px-1 ml-[-3px] whitespace-pre-wrap"
             aria-label={"Comment: " + move.comment}
           >
             {" " + move.comment}
           </span>
-        ) : (
-          <span> </span>
         )}
 
         {/* Variations for move */}

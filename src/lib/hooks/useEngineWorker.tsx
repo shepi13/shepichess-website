@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef } from "react";
 
+import { stockfishPath } from "@/lib/types/types";
+
 /**
  * Parsed move data from stockfish
  *
@@ -76,9 +78,7 @@ export function useEngine(
   // Setup worker only after initial mount, and use a quit cleanup function.
   useEffect(() => {
     if (enabled) {
-      workerRef.current = new window.Worker(
-        "/stockfish/src/stockfish-nnue-16-single.js",
-      );
+      workerRef.current = new window.Worker(stockfishPath);
       workerRef.current.onmessage = messageHandler;
       workerRef.current.postMessage("uci");
       workerRef.current.postMessage("isready");

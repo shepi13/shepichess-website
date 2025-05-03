@@ -42,19 +42,6 @@ export type Position = {
   toggleFlipped: () => void;
 };
 
-/** Variation location and methods (returned by useVariation hook) */
-export type VariationState = {
-  fen: () => string;
-  firstMove: () => void;
-  lastMove: () => void;
-  nextMove: () => void;
-  prevMove: () => void;
-  enterVariation: () => void;
-  exitVariation: () => void;
-  setGameState: (arg0: PGNStateCallback) => void;
-  variation: Variation;
-  halfMoveNum: number;
-};
 /** Location within variation */
 export type GameState = {
   variation: Variation;

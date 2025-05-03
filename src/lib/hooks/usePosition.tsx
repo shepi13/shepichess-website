@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 
 import { Position, startFen } from "@/lib/types/pgnTypes";
 
+import { useAudio } from "./useAudio";
+
 /**
  *
  * @param initialPosition - Fen of starting position
@@ -12,11 +14,16 @@ import { Position, startFen } from "@/lib/types/pgnTypes";
 export function usePosition(
   initialPosition: string = startFen,
   initialOrientation: boolean = false,
+  audioSrc: string = "",
 ): Position {
+  // Track Position State using chess.js Chess object and fen.
   const game = useMemo(() => new Chess(initialPosition), [initialPosition]);
 
   const [position, setPosition] = useState(initialPosition);
   const [flipped, setFlipped] = useState(initialOrientation);
+
+  // Sound
+  const moveSound = useAudio(audioSrc);
 
   const resetPosition = () => {
     game.load(initialPosition);
@@ -27,6 +34,7 @@ export function usePosition(
     setPosition(game.fen());
   };
   const makeMove = (start: Square, end: Square, piece: string) => {
+    // Confirm move is legal
     try {
       game.move({
         from: start,
@@ -37,7 +45,12 @@ export function usePosition(
       console.log(error);
       return false;
     }
+    // Set position and play audio if successful
     setPosition(game.fen());
+    if (moveSound) {
+      moveSound.currentTime = 0;
+      moveSound.play();
+    }
     return true;
   };
   const publicSetPosition = (newPosition: string) => {
