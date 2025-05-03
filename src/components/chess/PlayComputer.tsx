@@ -29,7 +29,7 @@ export function PlayAgainstComputer({
   playerColor = playerColor || new Chess(start).turn();
 
   // React hooks for position/engine state
-  const position = usePosition(start, playerColor.startsWith("b"));
+  const position = usePosition(start, playerColor.startsWith("b"), true);
   const engineCallback = useCallback(
     ({ bestMove }: { bestMove: string }) => {
       if (bestMove) {

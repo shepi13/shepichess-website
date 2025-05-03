@@ -78,6 +78,6 @@ export function PlayableChessBoard({
   start: string;
   flipped?: boolean;
 }) {
-  const position = usePosition(start, flipped);
+  const position = usePosition(start, flipped, true);
   return <PlayableChessBoardStateless position={position} />;
 }

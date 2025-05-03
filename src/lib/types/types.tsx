@@ -11,3 +11,6 @@ export type PGNButtonSettings = {
   disabled?: boolean;
   children: React.ReactNode;
 };
+
+export const moveSoundPath = "/sounds/move.ogg";
+export const stockfishPath = "/stockfish/src/stockfish-nnue-16-single.js";

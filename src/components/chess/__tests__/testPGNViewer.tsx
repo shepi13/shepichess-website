@@ -1,3 +1,4 @@
+import { audioState } from "./mocks/mockAudio";
 import { currentFen, orientation } from "./mocks/mockPlayableChessBoard";
 import {
   mockEvaluatePosition,
@@ -132,6 +133,8 @@ describe("Test PGNViewer", () => {
         if (i < moves.length) game.move(moves[i]);
         expect(currentFen).toBe(game.fen());
       }
+      // Test move audio was played
+      expect(audioState.play).toHaveBeenCalledTimes(moves.length);
 
       // Now undo to test prev moves
       for (let i = 0; i < 5; i++) {

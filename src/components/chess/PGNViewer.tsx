@@ -9,6 +9,7 @@ import { useEngineAnalysis } from "@/lib/hooks/useEngineAnalysis";
 import { useToggle } from "@/lib/hooks/useToggle";
 import { useVariation } from "@/lib/hooks/useVariation";
 import { startFen } from "@/lib/types/pgnTypes";
+import { moveSoundPath } from "@/lib/types/types";
 import { makeVariationsNested, sideToMove } from "@/lib/utils/chessUtils";
 import { loadPgn } from "@/lib/utils/loadPgn";
 
@@ -67,7 +68,7 @@ export function PGNViewer({
     enterVariation,
     exitVariation,
     setGameState,
-  } = useVariation(makeVariationsNested(mainVariation));
+  } = useVariation(makeVariationsNested(mainVariation), moveSoundPath);
 
   // Engine State
   const [stockfishData, stockfishEnabled, setStockfishEnabled] =
