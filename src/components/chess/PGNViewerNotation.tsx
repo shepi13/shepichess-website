@@ -19,11 +19,14 @@ export interface PGNViewerNotationProps {
   level?: number;
 }
 
+// Styles
 const variationStylesByLevel = new Map([
   [0, "text-xs lg:text-lg xl:text-xl"],
   [1, "text-xs lg:text-base xl:text-lg"],
   [-1, "text-xs lg:text-sm xl:text-base"],
 ]);
+const currentMoveStyle =
+  "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg border-1 shadow-md";
 
 /**
  * Component that displays a variation tree, with styling
@@ -68,25 +71,23 @@ export function PGNViewerNotation({
     }
 
     notationJSXElems.push(
-      <div
-        key={`${variation.start}_${i}`}
-        className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}
-      >
+      <Fragment key={`${variation.start}_${i}`}>
         {/* Move */}
         <button
-          className={`px-1 py-0 sm:py-[1px] xl:py-[3px] cursor-pointer text-nowrap inline outline-none
-                      ${level > 0 && "italic"}
-                      ${(isCurrentMove && "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg border-1 shadow-md") || "border-none"}
-                    `}
+          className={
+            "px-1 py-0 sm:py-[1px] xl:py-[3px] cursor-pointer text-nowrap inline outline-none " +
+            `${level > 0 && "italic"} ` +
+            `${(isCurrentMove && currentMoveStyle) || "border-none"} `
+          }
           onClick={clickHandler}
           aria-label={"Move: " + move_number + move_text}
         >
           {move_number}
           <span
-            className={`
-                        ${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"}
-                        ${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"}
-                      `}
+            className={
+              `${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"} ` +
+              `${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"} `
+            }
             dangerouslySetInnerHTML={{ __html: move_text }}
           ></span>
         </button>
@@ -102,19 +103,25 @@ export function PGNViewerNotation({
         )}
 
         {/* Variations for move */}
-        {move.variations.length > 0 ? <span> (</span> : ""}
+        {move.variations.length > 0 ? <> (</> : ""}
         {move.variations.map((variation, i) => (
           <Fragment key={variation.id}>
             <PGNViewerNotation
               {...{ variation, gameState, setGameState, level: level + 1 }}
             />
-            {i < move.variations.length - 1 ? <span>, </span> : ""}
+            {i < move.variations.length - 1 ? <>, </> : ""}
           </Fragment>
         ))}
-        {move.variations.length > 0 ? <span>) </span> : ""}
-      </div>,
+        {move.variations.length > 0 ? <>) </> : ""}
+      </Fragment>,
     );
   }
 
-  return <>{notationJSXElems}</>;
+  return (
+    <div
+      className={`inline ${variationStylesByLevel.get(level) || variationStylesByLevel.get(-1)}`}
+    >
+      {notationJSXElems}
+    </div>
+  );
 }
