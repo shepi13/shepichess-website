@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { Toaster } from "sonner";
+
 import { EngineProvider } from "@/components/EngineProvider";
 import { SVGGrainyFilter } from "@/components/Layout/BackgroundFilter";
 import { Footer } from "@/components/Layout/Footer";
@@ -25,10 +27,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <SVGGrainyFilter />
+        <Toaster position="bottom-center" />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <EngineProvider>
             <div className="content flex flex-col min-h-screen justify-between items-center">
-              <div className="py-5 w-screen md:w-4/5 xl:w-2/3 flex flex-col gap-25 items-center">
+              <div className="py-5 w-screen md:w-4/5 xl:w-2/3 flex flex-col gap-20 items-center">
                 <Header />
                 <main>{children}</main>
               </div>

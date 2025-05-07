@@ -15,7 +15,7 @@ export type PGNButtonSettings = {
 /**
  * Optional Type
  */
-export type Optional<T> = T | null;
+export type Optional<T> = T | null | undefined;
 
 export const moveSoundPath = "/sounds/move.ogg";
 export const stockfishPath = "/stockfish/src/stockfish-nnue-16-single.js";

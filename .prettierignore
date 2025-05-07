@@ -1,0 +1,5 @@
+# Ignore shadCN components
+src/components/ui
+
+# Ignore shadCN utils
+src/lib/utils.ts

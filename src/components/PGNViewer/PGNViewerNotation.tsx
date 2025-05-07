@@ -50,6 +50,7 @@ export function PGNViewerNotation({
     const isCurrentMove =
       variation.id === gameState?.variation.id &&
       i + 1 === gameState.halfMoveNum;
+    const separator = move.annotation.includes("&") ? "&nbsp;" : "";
     const move_text = move.move + move.annotation;
 
     // Click to jump to move
@@ -88,7 +89,7 @@ export function PGNViewerNotation({
               `${moveIsGreat(move) && "text-lime-600 dark:text-lime-400"} ` +
               `${moveIsMistake(move) && "text-sky-900 dark:text-sky-200"} `
             }
-            dangerouslySetInnerHTML={{ __html: move_text }}
+            dangerouslySetInnerHTML={{ __html: move_text + separator }}
           ></span>
         </button>
 

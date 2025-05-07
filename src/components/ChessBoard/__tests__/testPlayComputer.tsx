@@ -2,14 +2,12 @@ import { audioState } from "../../PGNViewer/__tests__/mocks/mockAudio";
 import { currentFen, evaluatedPosition } from "./mocks/mockPlayComputer";
 
 import { act, getByRole, render } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
 import { startFen } from "@/lib/types/pgnTypes";
 
-import {
-  PlayAgainstComputer,
-  PlayAgainstComputerParams,
-} from "../PlayComputer";
+import { PlayComputer, PlayComputerPage } from "../PlayComputer";
 
 /*
 const drawFen = "8/8/3k4/8/8/8/3K4/8 w - - 0 1";
@@ -19,11 +17,11 @@ const blackWinFen = "8/8/8/8/8/4k3/8/5K1q w - - 0 1";
 
 describe("Test PlayComputer", () => {
   test("Test Playable Chessboard", () => {
-    act(() => root.render(<PlayAgainstComputer />));
+    act(() => root.render(<PlayComputer />));
     expect(currentFen).toBe(startFen);
   });
   test("Test Engine Move", () => {
-    act(() => render(<PlayAgainstComputer start={startFen} playerColor="b" />));
+    act(() => render(<PlayComputer start={startFen} side="b" />));
     // Engine should have been called with startfen
     expect(evaluatedPosition).toBe(startFen);
     // Any move should've been made
@@ -33,9 +31,7 @@ describe("Test PlayComputer", () => {
   });
 
   test("Test Undo Move", () => {
-    act(() =>
-      root.render(<PlayAgainstComputer start={startFen} playerColor="b" />),
-    );
+    act(() => root.render(<PlayComputer start={startFen} side="b" />));
     const flipButton = getByRole(container, "button", { name: "Flip" });
     const undoButton = getByRole(container, "button", { name: "Undo" });
 
@@ -54,11 +50,32 @@ describe("Test PlayComputer", () => {
 
   test("Test Params", () => {
     // First mock of useParams has params
-    act(() => render(<PlayAgainstComputerParams />));
+    act(() => render(<PlayComputerPage />));
     expect(currentFen).toBe(startFen);
 
     // Second has no params provided
-    act(() => render(<PlayAgainstComputerParams />));
+    act(() => render(<PlayComputerPage />));
     expect(currentFen).toBe(startFen);
+  });
+
+  test("Test Setting Fen Params", async () => {
+    const user = userEvent.setup();
+    act(() => root.render(<PlayComputerPage />));
+    const newFen =
+      "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6";
+
+    const fenInput = getByRole(container, "textbox", { name: "Input Fen" });
+    const fenSubmit = getByRole(container, "button", { name: "Submit Fen" });
+    expect(fenInput).toBeInTheDocument();
+    expect(fenSubmit).toBeInTheDocument();
+
+    await user.clear(fenInput);
+    await user.type(fenInput, newFen);
+    await user.click(fenSubmit);
+
+    expect(currentFen).toBe(newFen);
+    expect(decodeURIComponent(global.window.location.search)).toContain(
+      "fen=" + newFen.replaceAll(" ", "+"),
+    );
   });
 });

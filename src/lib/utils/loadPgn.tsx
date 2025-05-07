@@ -148,7 +148,7 @@ export function loadPgn(
 //Replaces PGN Numeric codes with display html, removing extra whitespace
 function getAnnotation(annotationPgn?: string) {
   if (!annotationPgn) return "";
-  annotationPgn = annotationPgn.replaceAll(/\s*\$/g, " $");
+  annotationPgn = annotationPgn.replaceAll(/\s*\$/g, "$");
   for (const [key, val] of annotationLookup) {
     annotationPgn = annotationPgn.replaceAll(key, val);
   }
