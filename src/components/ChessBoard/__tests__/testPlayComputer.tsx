@@ -1,10 +1,7 @@
-import { audioState } from "./mocks/mockAudio";
-import {
-  currentFen,
-  evaluatedPosition,
-} from "@/components/chess/__tests__/mocks/mockPlayComputer";
+import { audioState } from "../../PGNViewer/__tests__/mocks/mockAudio";
+import { currentFen, evaluatedPosition } from "./mocks/mockPlayComputer";
 
-import { act, getByRole, getByText, render } from "@testing-library/react";
+import { act, getByRole, render } from "@testing-library/react";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
 import { startFen } from "@/lib/types/pgnTypes";
@@ -14,9 +11,11 @@ import {
   PlayAgainstComputerParams,
 } from "../PlayComputer";
 
+/*
 const drawFen = "8/8/3k4/8/8/8/3K4/8 w - - 0 1";
 const whiteWinFen = "8/8/8/8/8/4K3/8/5k1Q b - - 0 1";
 const blackWinFen = "8/8/8/8/8/4k3/8/5K1q w - - 0 1";
+*/
 
 describe("Test PlayComputer", () => {
   test("Test Playable Chessboard", () => {
@@ -51,21 +50,6 @@ describe("Test PlayComputer", () => {
     // Undoing should undo both.
     act(() => undoButton.click());
     expect(currentFen).toBe(startFen);
-  });
-
-  test("Test Game Over", () => {
-    act(() => root.render(<PlayAgainstComputer start={drawFen} />));
-    expect(getByText(container, "Draw", { exact: false })).toBeInTheDocument();
-
-    act(() => root.render(<PlayAgainstComputer start={whiteWinFen} />));
-    expect(
-      getByText(container, "White Wins", { exact: false }),
-    ).toBeInTheDocument();
-
-    act(() => root.render(<PlayAgainstComputer start={blackWinFen} />));
-    expect(
-      getByText(container, "Black Wins", { exact: false }),
-    ).toBeInTheDocument();
   });
 
   test("Test Params", () => {

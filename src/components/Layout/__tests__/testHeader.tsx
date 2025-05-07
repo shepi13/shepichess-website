@@ -1,6 +1,6 @@
 import { act, fireEvent, getByRole, screen } from "@testing-library/react";
 
-import { Header } from "@/components/mainLayout/Header";
+import { Header } from "@/components/Layout/Header";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
 

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
 import { EngineProvider } from "@/components/EngineProvider";
-import { SVGGrainyFilter } from "@/components/mainLayout/BackgroundFilter";
-import { Footer } from "@/components/mainLayout/Footer";
-import { Header } from "@/components/mainLayout/Header";
-import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { SVGGrainyFilter } from "@/components/Layout/BackgroundFilter";
+import { Footer } from "@/components/Layout/Footer";
+import { Header } from "@/components/Layout/Header";
+import { ThemeProvider } from "@/components/Theme/ThemeProvider";
 
 import "@/css/globals.css";
 
@@ -28,7 +28,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <EngineProvider>
             <div className="content flex flex-col min-h-screen justify-between items-center">
-              <div className="p-5 w-screen md:w-4/5 xl:w-2/3 flex flex-col gap-25">
+              <div className="py-5 w-screen md:w-4/5 xl:w-2/3 flex flex-col gap-25 items-center">
                 <Header />
                 <main>{children}</main>
               </div>

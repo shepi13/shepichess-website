@@ -2,7 +2,7 @@
 
 import { Chessboard } from "react-chessboard";
 
-import { PGNViewerButtons } from "@/components/chess/PGNViewerButtons";
+import { PGNViewerButtons } from "@/components/PGNViewer/PGNViewerButtons";
 
 import { usePosition } from "@/lib/hooks/usePosition";
 import { Position } from "@/lib/types/pgnTypes";

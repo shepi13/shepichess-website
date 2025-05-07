@@ -1,6 +1,6 @@
 import { act } from "@testing-library/react";
 
-import { SVGGrainyFilter } from "@/components/mainLayout/BackgroundFilter";
+import { SVGGrainyFilter } from "@/components/Layout/BackgroundFilter";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
 

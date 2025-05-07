@@ -1,6 +1,6 @@
 import { act, getByRole } from "@testing-library/react";
 
-import { Footer } from "@/components/mainLayout/Footer";
+import { Footer } from "@/components/Layout/Footer";
 
 import { container, root } from "@/lib/test/componentTestHelpers";
 

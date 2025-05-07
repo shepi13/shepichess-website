@@ -7,7 +7,7 @@ import { Fragment, useEffect, useState } from "react";
 
 import { useWindowSize } from "@/lib/hooks/useWindowSize";
 
-import { NavDropdownStyle } from "../mainLayout/Header";
+import { NavDropdownStyle } from "../Layout/Header";
 
 const SunSVG = () => (
   <SunIcon className="size-6 fill-yellow-300 stroke-[1px] stroke-primaryblack-light dark:fill-yellow-200 dark:stroke-none" />

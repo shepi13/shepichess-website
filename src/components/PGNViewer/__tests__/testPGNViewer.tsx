@@ -1,5 +1,8 @@
+import {
+  currentFen,
+  orientation,
+} from "../../ChessBoard/__tests__/mocks/mockPlayableChessBoard";
 import { audioState } from "./mocks/mockAudio";
-import { currentFen, orientation } from "./mocks/mockPlayableChessBoard";
 import {
   mockEvaluatePosition,
   mockUseEngineWorker,
