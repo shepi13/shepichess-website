@@ -35,6 +35,7 @@ export type Position = {
   position: string;
   flipped: boolean;
   player: string;
+  start: string;
   resetPosition: () => void;
   undoMove: () => void;
   makeMove: (arg0: Square, arg1: Square, arg2: string) => boolean;

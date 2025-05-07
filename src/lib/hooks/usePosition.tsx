@@ -1,5 +1,5 @@
 import { Chess, Square } from "chess.js";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Position, startFen } from "@/lib/types/pgnTypes";
 
@@ -21,6 +21,9 @@ export function usePosition(
 
   const [position, setPosition] = useState(initialPosition);
   const [flipped, setFlipped] = useState(initialOrientation);
+
+  // Reset when initial position is changed:
+  useEffect(() => setPosition(initialPosition), [initialPosition]);
 
   // Sound
   const moveSound = useAudio(audioSrc);
@@ -62,6 +65,7 @@ export function usePosition(
   };
 
   return {
+    start: initialPosition,
     game,
     position,
     flipped,

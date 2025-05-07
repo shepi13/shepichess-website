@@ -17,9 +17,8 @@ const buttonStyles =
  * Playable chess board component with no state management.
  * For use by components that manage state using usePosition.
  *
- * @param props
- * @param props.position - Position object returned by usePosition, allows the parent to manage this state
- * @param props.flipText - Text for flip board button, default to "Flip Board!"
+ * @param position - Position object returned by usePosition, allows the parent to manage this state
+ * @param flipText - Text for flip board button, default to "Flip Board!"
  */
 export function PlayableChessBoardStateless({
   position,

@@ -7,7 +7,10 @@ export default function About() {
       <div className="w-150 flex flex-col gap-3">
         <h3>About Page!</h3>
         <PGNViewer
-          pgn="1.e4 e5 (1...c5 {Sicilian} 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 {Najdorf} (5...g6 {Dragon}) (5...Nc6 {Classical})) (1...e6 {French})"
+          pgn={`
+                { So black is threatening unstoppable mate in one move. However white has a strong fight back ! }
+                1. Ng6+!! Kg8 2. Ne7+! Kh8 3. Rxh7+!! Kxh7 4. Rh1# $18 *`}
+          start={"r4r1k/5ppp/8/8/5N2/1Bb5/2P5/1KR4R w - - 0 1"}
           puzzle
         />
       </div>

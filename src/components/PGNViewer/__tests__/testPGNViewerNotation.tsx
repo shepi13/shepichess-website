@@ -8,7 +8,7 @@ import { PGNViewerNotation } from "../PGNViewerNotation";
 
 describe("Test PGNViewerNotation", () => {
   const variation = loadPgn(
-    "1. e4 e5 2. Nf3! [c2c3red] {Hello!} (2. d4? (2. c3) exd4 (2...d6))",
+    "1. e4 e5 2. Nf3! [c2c3red] {Hello!} (2. d4?$13 (2. c3) exd4 (2...d6))",
     startFen,
   );
   let gameState = { variation, halfMoveNum: 1 };
@@ -44,7 +44,7 @@ describe("Test PGNViewerNotation", () => {
     expect(currentMove).toBeInTheDocument();
     expect(currentMove.className.includes("bg-")).toBe(true);
   });
-  test.each(["e5", "2. d4?", "2. c3"])("Click Move", (moveId) => {
+  test.each(["e5", "2. d4?&infin;", "2. c3"])("Click Move", (moveId) => {
     let currentMove = getByLabelText(container, "Move: " + moveId);
     expect(currentMove.className.includes("bg-")).toBe(false);
 

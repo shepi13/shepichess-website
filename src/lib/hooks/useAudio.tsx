@@ -10,7 +10,7 @@ function getAudioElement(src: string): HTMLAudioElement {
 
 /**
  * Custom react hook for audio elements. Loads audio using an effect after
- * mounting the component, and caches it globally so reuisng the same audio
+ * mounting the component, and caches it globally so reusing the same audio
  * file will not trigger multiple http requests.
  *
  * @param src - location of audio file

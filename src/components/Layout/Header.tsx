@@ -56,12 +56,7 @@ export function Header() {
   );
 }
 
-/**
- * Styles for individual links in Navbar
- *
- * Export so that we can re-use these throughout the app.
- */
-export const NavLinkStyles =
+const NavLinkStyles =
   "block hover:text-secondary-dark m-3 font-semibold text-gray-950 dark:text-gray-50 cursor-pointer";
 
 /**

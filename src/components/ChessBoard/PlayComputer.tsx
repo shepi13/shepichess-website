@@ -14,29 +14,33 @@ import { moveSoundPath } from "@/lib/types/types";
 
 import { FenInput } from "./FenInput";
 
+export type PlayComputerProps = {
+  start?: string;
+  side?: string;
+  depth?: number;
+  onFenInput?: (arg0: string) => void;
+};
+
 /**
  * Component that renders a chessboard and buttons to play chess against stockfish
  *
- * @param props
- * @param props.start - Fen for initial position,
- * @param props.playerColor - Initial color
- * @param props.depth - Depth for stockfish to use
+ * @param start - Fen for initial position,
+ * @param playerColor - Initial color
+ * @param depth - Depth for stockfish to use
+ * @param onFenInput - custom handler to override FenInputHandler
  *
  * @returns Chessboard where the user can play against a computer
  */
-export function PlayAgainstComputer({
+export function PlayComputer({
   start = startFen,
-  playerColor = "",
+  side = "",
   depth = 15,
-}) {
-  playerColor = playerColor || new Chess(start).turn();
+  onFenInput,
+}: PlayComputerProps) {
+  side = side || new Chess(start).turn();
 
   // React hooks for position/engine state
-  const position = usePosition(
-    start,
-    playerColor.startsWith("b"),
-    moveSoundPath,
-  );
+  const position = usePosition(start, side.startsWith("b"), moveSoundPath);
   const engineCallback = useCallback(
     ({ bestMove }: { bestMove: string }) => {
       if (bestMove) {
@@ -66,64 +70,58 @@ export function PlayAgainstComputer({
     }
   }, [turn, player, isGameOver, makeEngineMove]);
 
-  // Undo button handler
-  const undoHumanAndComputerMove = () => {
+  // Input Handlers
+  const handleUndo = () => {
     position.undoMove();
     if (turn == player) position.undoMove();
   };
+  const handleSubmit = (fen: string) => {
+    position.setPosition(fen);
+    onFenInput?.(fen);
+  };
 
-  // --- Render logic ---
-
-  // Show result
-  /*
-  let result;
-  if (isGameOver) {
-    if (position.game.isDraw()) {
-      result = <h3>Draw!</h3>;
-    } else {
-      result = <h3>{turn == "w" ? "Black Wins!" : "White Wins!"}</h3>;
-    }
-  } else {
-    result = <h3>{turn == "w" ? "White to Move" : "Black to Move"}</h3>;
-  }
-    */
-
-  //JSX Content
   return (
-    <>
-      {/*result*/}
+    <div>
       <PlayableChessBoardStateless
-        position={{ ...position, undoMove: undoHumanAndComputerMove }}
+        position={{ ...position, undoMove: handleUndo }}
         flipText="Switch Sides"
       />
-      <div>
-        <h4>Enter Fen:</h4>
-        <Suspense>
-          <FenInput fen={position.position} />
-        </Suspense>
-      </div>
-    </>
+      <FenInput fen={position.position} onSubmit={handleSubmit} />
+    </div>
   );
 }
 
-export function PlayAgainstComputerParams({ depth = 15 }) {
-  const InnerComponent = () => {
+/**
+ * Wrapper for PlayComputer that defaults the initial position based on search parameters
+ *
+ * Also extends the fenInputHandler to set search params for better browser navigation.
+ */
+export function PlayComputerPage({ depth = 15 }) {
+  const Page = () => {
     const searchParams = useSearchParams();
 
     const initialPosition = searchParams.get("fen") ?? startFen;
     const initialSide = searchParams.get("color") ?? "";
+
+    const handleFenInput = (fen: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("fen", fen);
+      window.history.pushState(null, "", `?${params.toString()}`);
+    };
+
     return (
-      <PlayAgainstComputer
+      <PlayComputer
         start={initialPosition}
-        playerColor={initialSide}
+        side={initialSide}
         depth={depth}
+        onFenInput={handleFenInput}
       />
     );
   };
 
   return (
-    <Suspense fallback={<PlayAgainstComputer />}>
-      <InnerComponent />
+    <Suspense fallback={<PlayComputer />}>
+      <Page />
     </Suspense>
   );
 }

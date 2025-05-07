@@ -1,11 +1,11 @@
-import { PlayAgainstComputerParams } from "@/components/ChessBoard/PlayComputer";
+import { PlayComputerPage } from "@/components/ChessBoard/PlayComputer";
 
 export default function Page() {
   return (
-    <div className="w-130 flex flex-col gap-10 items-center justify-start -mt-15">
+    <div className="w-135 flex flex-col gap-5 items-center justify-start -mt-15">
       <h1>Play vs Computer</h1>
       <div className="w-full">
-        <PlayAgainstComputerParams />
+        <PlayComputerPage />
       </div>
     </div>
   );

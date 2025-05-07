@@ -7,12 +7,12 @@ import { loadPgn } from "@/lib/utils/loadPgn";
 describe("PGN Parser Test", () => {
   describe("Test PGN Annotations", () => {
     const annotationTable = [
-      ["!$13", "! &infin;"],
-      ["!  $13", "! &infin;"],
-      ["$1$15", "! &eplus;"],
-      ["     $1  $10", "! ="],
-      ["     !   $10", "! ="],
-      ["$2     $133", "? &lrarr;"],
+      ["!$13", "!&infin;"],
+      ["!  $13", "!&infin;"],
+      ["$1$15", "!&eplus;"],
+      ["     $1  $10", "!="],
+      ["     !   $10", "!="],
+      ["$2     $133", "?&lrarr;"],
     ];
     test.each(annotationTable)(
       "Annotations Single Variation",
@@ -158,7 +158,7 @@ describe("PGN Parser Test", () => {
     );
     expect(mainVar.moves[0].variations[0]?.moves[7]).toMatchObject({
       move: "0-0",
-      annotation: "! &eplus;",
+      annotation: "!&eplus;",
       comment: "Comment!",
       arrows: [
         ["h2", "h4", "red"],

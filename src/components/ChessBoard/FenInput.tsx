@@ -1,60 +1,52 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-
 import { validateFen } from "chess.js";
-import React, { useEffect, useState } from "react";
+import { useRef } from "react";
+import { toast } from "sonner";
 
-import { Optional } from "@/lib/types/types";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export type FenInputProps = {
-  fen: string;
-  buttonStyles?: string;
-  buttonText?: string;
-  onClick?: Optional<(arg0: string) => void>;
+  fen?: string;
+  onSubmit?: (arg0: string) => void;
 };
 
-const defaultButtonStyle = "cursor-pointer";
-const defaultButtonText = "Submit";
-
-export function FenInput({
-  fen,
-  buttonStyles = "",
-  buttonText = defaultButtonText,
-  onClick = null,
-}: FenInputProps) {
-  const searchParams = useSearchParams();
-  const [value, setValue] = useState(searchParams.get("fen") ?? "");
-
-  useEffect(() => {
-    setValue(fen);
-  }, [fen]);
-
-  const updateFenParam = (fen: string) => {
-    if (validateFen(fen).ok) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("fen", fen);
-      window.history.pushState(null, "", `?${params.toString()}`);
+export function FenInput({ fen, onSubmit }: FenInputProps) {
+  const input = useRef<HTMLInputElement>(null);
+  const handleInput = () => {
+    const fen = input.current?.value;
+    if (fen && validateFen(fen).ok) {
+      onSubmit?.(fen);
     } else {
-      alert("Invalid fen: " + fen);
+      toast.error("Invalid Fen!");
     }
   };
-  onClick = onClick ?? updateFenParam;
 
   return (
-    <div className="flex gap-2">
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        className="w-100 bg-stone-300 border-1 text-xs"
-      />
-      <button
-        onClick={() => onClick(value)}
-        className={defaultButtonStyle + buttonStyles}
-      >
-        {buttonText}
-      </button>
+    <div>
+      <Label htmlFor="text">
+        <h4>Enter Fen:</h4>
+      </Label>
+      <div className="flex gap-2">
+        <Input
+          ref={input}
+          type="text"
+          placeholder={"Fen"}
+          defaultValue={fen}
+          className="bg-stone-300 border-black dark:border-stone-400"
+          aria-label="Input Fen"
+        />
+        <Button
+          type="submit"
+          className="cursor-pointer"
+          onClick={handleInput}
+          aria-label="Submit Fen"
+        >
+          Submit
+        </Button>
+      </div>
     </div>
   );
 }

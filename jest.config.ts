@@ -33,9 +33,14 @@ const config: Config = {
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
+    // Test directories
     "/__tests__/",
+    // Pages
     "app/.*layout.tsx",
-    "app/.*page.tsx"
+    "app/.*page.tsx",
+    // ShadCN
+    "lib/utils.ts",
+    "components/ui",
   ],
 
   // Indicates which provider should be used to instrument code for coverage
