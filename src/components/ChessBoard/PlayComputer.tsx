@@ -5,12 +5,14 @@ import { useSearchParams } from "next/navigation";
 import { Chess, Square } from "chess.js";
 import { Suspense, useCallback, useEffect } from "react";
 
-import { PlayableChessBoardStateless } from "@/components/chess/PlayableChessBoard";
+import { PlayableChessBoardStateless } from "@/components/ChessBoard/PlayableChessBoard";
 
 import { useEngine } from "@/lib/hooks/useEngineWorker";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
 import { moveSoundPath } from "@/lib/types/types";
+
+import { FenInput } from "./FenInput";
 
 /**
  * Component that renders a chessboard and buttons to play chess against stockfish
@@ -73,6 +75,7 @@ export function PlayAgainstComputer({
   // --- Render logic ---
 
   // Show result
+  /*
   let result;
   if (isGameOver) {
     if (position.game.isDraw()) {
@@ -83,15 +86,22 @@ export function PlayAgainstComputer({
   } else {
     result = <h3>{turn == "w" ? "White to Move" : "Black to Move"}</h3>;
   }
+    */
 
   //JSX Content
   return (
     <>
-      {result}
+      {/*result*/}
       <PlayableChessBoardStateless
         position={{ ...position, undoMove: undoHumanAndComputerMove }}
         flipText="Switch Sides"
       />
+      <div>
+        <h4>Enter Fen:</h4>
+        <Suspense>
+          <FenInput fen={position.position} />
+        </Suspense>
+      </div>
     </>
   );
 }
@@ -100,7 +110,7 @@ export function PlayAgainstComputerParams({ depth = 15 }) {
   const InnerComponent = () => {
     const searchParams = useSearchParams();
 
-    const initialPosition = searchParams.get("start") ?? startFen;
+    const initialPosition = searchParams.get("fen") ?? startFen;
     const initialSide = searchParams.get("color") ?? "";
     return (
       <PlayAgainstComputer
@@ -112,7 +122,7 @@ export function PlayAgainstComputerParams({ depth = 15 }) {
   };
 
   return (
-    <Suspense>
+    <Suspense fallback={<PlayAgainstComputer />}>
       <InnerComponent />
     </Suspense>
   );

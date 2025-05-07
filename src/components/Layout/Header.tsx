@@ -7,7 +7,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/16/solid";
 import { Fragment, MouseEventHandler } from "react";
 
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { ThemeToggle } from "@/components/Theme/ThemeToggle";
 
 import { useToggle } from "@/lib/hooks/useToggle";
 import { useWindowSize } from "@/lib/hooks/useWindowSize";
@@ -21,7 +21,7 @@ export function Header() {
   const [isOpen, toggleOpen] = useToggle(false);
 
   return (
-    <header className="sm:flex sm:justify-between">
+    <header className="sm:flex sm:justify-between w-full">
       <div className="flex justify-between grow basis-0">
         <div className="h-14 md:h-20">
           <Link href="/">

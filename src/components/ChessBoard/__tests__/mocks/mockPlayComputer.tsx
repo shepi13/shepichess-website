@@ -63,8 +63,8 @@ jest.mock("next/navigation", () => ({
   ...jest.requireActual("next/navigation"),
   useSearchParams: useSearchParamsMock,
 }));
-jest.mock("@/components/chess/PlayableChessBoard", () => ({
-  ...jest.requireActual("@/components/chess/PlayableChessBoard"),
+jest.mock("@/components/ChessBoard/PlayableChessBoard", () => ({
+  ...jest.requireActual("@/components/ChessBoard/PlayableChessBoard"),
   __esModule: true,
   PlayableChessBoardStateless: mockPlayableChessBoard,
 }));

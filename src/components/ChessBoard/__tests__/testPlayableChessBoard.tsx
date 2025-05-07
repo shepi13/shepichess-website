@@ -9,7 +9,7 @@ import { startFen } from "@/lib/types/pgnTypes";
 import {
   PlayableChessBoard,
   PlayableChessBoardStateless,
-} from "../PlayableChessBoard";
+} from "../../ChessBoard/PlayableChessBoard";
 
 describe("Test PlayableChessBoard", () => {
   test("Test Playable Chessboard", () => {

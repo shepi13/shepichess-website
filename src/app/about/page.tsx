@@ -1,4 +1,4 @@
-import { PGNViewer } from "@/components/chess/PGNViewer";
+import { PGNViewer } from "@/components/PGNViewer/PGNViewer";
 
 export default function About() {
   return (
