@@ -49,7 +49,7 @@ export function PGNViewerNotation({
   // Loop through every move and build a JSX for the entire notation tree.
   const notationJSXElems = [];
   for (const [i, move] of variation.moves.entries()) {
-    if(puzzle && gameState?.halfMoveNum === 0 && level === 0) {
+    if (puzzle && gameState?.halfMoveNum === 0 && level === 0) {
       notationJSXElems.push(
         <span
           key={`Puzzle Comment ${i}`}
@@ -57,7 +57,7 @@ export function PGNViewerNotation({
           aria-label={"Puzzle: " + puzzle}
         >
           {puzzle}
-        </span>
+        </span>,
       );
       break;
     }
@@ -131,7 +131,7 @@ export function PGNViewerNotation({
       </Fragment>,
     );
 
-    if(puzzle && level === 0 && isCurrentMove) {
+    if (puzzle && level === 0 && isCurrentMove) {
       break;
     }
   }
