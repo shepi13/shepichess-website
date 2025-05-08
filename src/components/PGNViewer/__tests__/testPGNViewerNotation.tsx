@@ -24,6 +24,25 @@ describe("Test PGNViewerNotation", () => {
     );
   });
 
+  test("PGN Viewer Puzzle", () => {
+    act(() => root.render(<PGNViewerNotation {...{gameState, setGameState}} puzzle="Puzzle!" variation={variation} />))
+    // Already played moves should show.
+    const firstMove = getByLabelText(container, "Move: " + "1. e4");
+    expect(firstMove).toBeInTheDocument();
+
+    // Later moves should be hidden.
+    expect(() => getByLabelText(container, "2. Nf3!")).toThrow();
+  });
+
+  test("PGN Viewer Puzzle Comment", () => {
+    act(() => root.render(<PGNViewerNotation {...{gameState: {...gameState, halfMoveNum: 0}, setGameState}} puzzle="Puzzle!" variation={variation} />))
+    // No moves should show
+    expect(() => getByLabelText(container, "Move: " + "1. e4")).toThrow();
+    
+    // Puzzle Comment should show
+    expect(getByText(container, "Puzzle!")).toBeInTheDocument();
+  });
+
   test.each([
     ["1. e4", 1],
     ["e5", 2],

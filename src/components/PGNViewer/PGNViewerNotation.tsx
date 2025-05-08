@@ -14,9 +14,10 @@ import { moveIsGreat, moveIsMistake } from "@/lib/utils/chessUtils";
  */
 export interface PGNViewerNotationProps {
   variation: Variation;
-  gameState?: GameState;
+  gameState: GameState;
   setGameState?: (arg0: PGNStateCallback) => void;
   level?: number;
+  puzzle?: string;
 }
 
 // Styles
@@ -43,10 +44,23 @@ export function PGNViewerNotation({
   gameState,
   setGameState,
   level = 0,
+  puzzle = "",
 }: PGNViewerNotationProps) {
   // Loop through every move and build a JSX for the entire notation tree.
   const notationJSXElems = [];
   for (const [i, move] of variation.moves.entries()) {
+    if(puzzle && gameState?.halfMoveNum === 0 && level === 0) {
+      notationJSXElems.push(
+        <span
+          key={`Puzzle Comment ${i}`}
+          className="text-primary px-1 ml-[-3px] whitespace-pre-wrap"
+          aria-label={"Puzzle: " + puzzle}
+        >
+          {puzzle}
+        </span>
+      );
+      break;
+    }
     const isCurrentMove =
       variation.id === gameState?.variation.id &&
       i + 1 === gameState.halfMoveNum;
@@ -116,6 +130,10 @@ export function PGNViewerNotation({
         {move.variations.length > 0 ? <>) </> : ""}
       </Fragment>,
     );
+
+    if(puzzle && level === 0 && isCurrentMove) {
+      break;
+    }
   }
 
   return (
