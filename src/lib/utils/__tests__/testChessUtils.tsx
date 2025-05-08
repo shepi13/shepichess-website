@@ -40,7 +40,7 @@ describe("Test Chess Utilities", () => {
     expect(fen).toBe(fenAfter);
   });
   test("Fen integration test", () => {
-    const variation = loadPgn("1. e4 e5 2. Nf3", startFen);
+    const variation = loadPgn("1. e4 e5 2. Nf3", startFen).gameTree;
     expect(getFen(variation, 3)).toBe(
       "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
     );
@@ -73,8 +73,8 @@ describe("Test Chess Utilities", () => {
       "1. e4 e5 (1...c5 (1... e6) 2. Nf3 (2. Nc3 (2. g3)))",
     ],
   ])("makeVariationsNested", (flatPgn, nestedPgn) => {
-    const result = makeVariationsNested(loadPgn(flatPgn, startFen));
-    const expected = loadPgn(nestedPgn, startFen);
+    const result = makeVariationsNested(loadPgn(flatPgn, startFen).gameTree);
+    const expected = loadPgn(nestedPgn, startFen).gameTree;
 
     expect(inspect(result)).toStrictEqual(inspect(expected));
   });

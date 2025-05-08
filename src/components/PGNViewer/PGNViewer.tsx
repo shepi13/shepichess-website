@@ -8,7 +8,6 @@ import { PGNViewerNotation } from "@/components/PGNViewer/PGNViewerNotation";
 import { useEngineAnalysis } from "@/lib/hooks/useEngineAnalysis";
 import { useToggle } from "@/lib/hooks/useToggle";
 import { useVariation } from "@/lib/hooks/useVariation";
-import { startFen } from "@/lib/types/pgnTypes";
 import { moveSoundPath } from "@/lib/types/types";
 import { makeVariationsNested, sideToMove } from "@/lib/utils/chessUtils";
 import { loadPgn } from "@/lib/utils/loadPgn";
@@ -50,10 +49,10 @@ export interface PGNViewerProps {
  */
 export function PGNViewer({
   pgn = "",
-  start = startFen,
+  start,
   flipped = false,
 }: PGNViewerProps) {
-  const mainVariation = loadPgn(pgn, start);
+  const { gameTree: mainVariation } = loadPgn(pgn, start);
 
   // Current state of display board
   const [flipState, flipBoard] = useToggle(flipped);

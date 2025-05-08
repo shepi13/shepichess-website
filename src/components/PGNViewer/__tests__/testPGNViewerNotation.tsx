@@ -7,7 +7,7 @@ import { loadPgn } from "@/lib/utils/loadPgn";
 import { PGNViewerNotation } from "../PGNViewerNotation";
 
 describe("Test PGNViewerNotation", () => {
-  const variation = loadPgn(
+  const { gameTree: variation } = loadPgn(
     "1. e4 e5 2. Nf3! [c2c3red] {Hello!} (2. d4?$13 (2. c3) exd4 (2...d6))",
     startFen,
   );
@@ -64,7 +64,10 @@ describe("Test PGNViewerNotation", () => {
   });
 
   test("Flat subvariations", () => {
-    const variation = loadPgn("1. e4 e5 (1...e6) (1...c5)", startFen);
+    const { gameTree: variation } = loadPgn(
+      "1. e4 e5 (1...e6) (1...c5)",
+      startFen,
+    );
     act(() =>
       root.render(
         <PGNViewerNotation {...{ variation, gameState, setGameState }} />,
