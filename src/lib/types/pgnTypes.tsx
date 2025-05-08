@@ -8,6 +8,12 @@ import { Chess, Square } from "chess.js";
 /** Array of arrows for react-chessboard */
 export type Arrows = Array<[Square, Square, string]>;
 
+/** PGN Variations and Metadata */
+export type PGNData = {
+  gameTree: Variation;
+  headers: Map<string, string>;
+};
+
 /** Tree of nested variations */
 export type Variation = {
   id: number;

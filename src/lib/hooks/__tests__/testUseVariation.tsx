@@ -11,7 +11,7 @@ import { VariationState, useVariation } from "../useVariation";
 describe("Hooks/useVariation", () => {
   let result: { current: VariationState };
   beforeEach(() => {
-    const variationTree = loadPgn(
+    const { gameTree: variationTree } = loadPgn(
       "1. e4 e5 2. Nf3 (2. d4 (2. c3 Nf6 3. d4))",
       startFen,
     );
@@ -142,7 +142,10 @@ describe("Hooks/useVariation", () => {
   });
 
   test("Test multiple variations", () => {
-    const variationTree = loadPgn("1. e4 e5 (1... c5) (1... e6)", startFen);
+    const variationTree = loadPgn(
+      "1. e4 e5 (1... c5) (1... e6)",
+      startFen,
+    ).gameTree;
     ({ result } = renderHook(() => useVariation(variationTree)));
     const variations = result.current.variation.moves[1].variations;
     expect(variations.length).toBe(2);

@@ -1,6 +1,12 @@
 import { Chess, Square } from "chess.js";
 
-import { Arrows, Move, Variation } from "@/lib/types/pgnTypes";
+import {
+  Arrows,
+  Move,
+  PGNData,
+  Variation,
+  startFen,
+} from "@/lib/types/pgnTypes";
 
 // Lookup table for PGN numerical annotations (see https://en.wikipedia.org/wiki/Portable_Game_Notation#Standard_NAGs)
 const annotationLookup = [
@@ -70,6 +76,7 @@ const pgnParseRegex = new RegExp(
   ].join(/\s*/.source),
   "g",
 );
+const headerRegex = /\s*\[(?<header>.*?)\s*\"(?<value>.*?)\"\]/;
 
 /**
  *  Parses a PGN into variation objects (see pgnTypes.tsx)
@@ -79,7 +86,26 @@ const pgnParseRegex = new RegExp(
  *  @param start - fen for starting position
  *  @returns - Parsed Variation object
  */
-export function loadPgn(
+export function loadPgn(pgn: string, start?: string): PGNData {
+  const headers = new Map<string, string>();
+  const lines = pgn.split("\n");
+  let i;
+  for (i = 0; i < lines.length; i++) {
+    const match = lines[i].match(headerRegex);
+    if (!match?.groups) {
+      break;
+    }
+    headers.set(match.groups.header.toLowerCase(), match.groups.value);
+  }
+  pgn = lines.slice(i).join("\n");
+  start = start ?? headers.get("fen") ?? startFen;
+  return {
+    headers,
+    gameTree: loadPgnRecursive(pgn, start),
+  };
+}
+
+function loadPgnRecursive(
   pgn: string,
   start: string,
   id: number = 0,
@@ -123,7 +149,13 @@ export function loadPgn(
         // Recursively add variation to the tree
         if (varPgn) {
           variations.push(
-            loadPgn(varPgn, beforeFen, ++newId, currentVariation, index + 1),
+            loadPgnRecursive(
+              varPgn,
+              beforeFen,
+              ++newId,
+              currentVariation,
+              index + 1,
+            ),
           );
         }
       }
