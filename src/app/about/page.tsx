@@ -14,7 +14,7 @@ export default function About() {
           [Opening "?"]
           [StudyName "Briliant moves quiz"]
           [ChapterName "Judit's Polgar brilliancy"]
-          [FEN "k6r/3p4/P1nq1p2/2b5/4Q1p1/2R5/1PP3PB/R6K w - - 0 1"]
+          [FEN "k6r/3p4/P1nq1p2/2b5/4Q1p1/2R3P1/1PP4B/R6K b - - 0 1"]
           [SetUp "1"]
           [UTCDate "2025.04.27"]
           [UTCTime "14:50:26"]
@@ -22,9 +22,10 @@ export default function About() {
           [ChapterURL "https://lichess.org/study/dYxOPpbF/K9WVzSw8"]
           [ChapterMode "gamebook"]
 
-          1. g3?? { This move leads from +5 for white to mate in four. Can you find it ? } 1... Rxh2+!! { Yes, absolutely gorgeous move. Can you find the continue for black? } 2. Kxh2 $7 Qd2+! { Yes. Absolutely correct. } 3. Kh1 Qh6+! 4. Kg2 $7 Qh3# $19 { Good job! } *
+          1... Rxh2+!! { Yes, absolutely gorgeous move. Can you find the continue for black? } 2. Kxh2 $7 Qd2+! { Yes. Absolutely correct. } 3. Kh1 Qh6+! 4. Kg2 $7 Qh3# $19 { Good job! } *
           `}
           flipped
+          puzzle="Black to mate in 4!"
         />
       </div>
     </>

@@ -19,7 +19,7 @@ const annotationLookup = [
   ["$16", "&plusmn;"],
   ["$17", "&mnplus;"],
   ["$18", "&plus;&#45;"],
-  ["$19", "&#45;&plus"],
+  ["$19", "&#45;&plus;"],
   ["$22", "&xodot"],
   ["$23", "&xodot"],
   ["$36", "&uarr;"],
@@ -52,7 +52,7 @@ const moveNumberRegex = /(?:[0-9]*\.+)?/;
 const moveRegex = /((?:[A-Za-z]+[0-9])|0-0-0|0-0|O-O-O|O-O)/;
 
 //Optional Annotations (!?=+- for direct annotation, e.g. $13 for pgn style notation)
-const annotationRegex = /((?:[/!?=+-]+ *|\$[0-9]+ *)*)?/;
+const annotationRegex = /((?:[#/!?=+-]+ *|\$[0-9]+ *)*)?/;
 
 // Arrows (in []), Comments (in {}), and Variations (in $(...$))
 // Order must always be arrows -> comments -> variations

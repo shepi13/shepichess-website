@@ -31,7 +31,7 @@ const VariationDisplayLength = 5;
 export interface PGNViewerProps {
   pgn?: string;
   start?: string;
-  puzzle?: boolean;
+  puzzle?: string;
   flipped?: boolean;
 }
 
@@ -51,6 +51,7 @@ export function PGNViewer({
   pgn = "",
   start,
   flipped = false,
+  puzzle = "",
 }: PGNViewerProps) {
   const { gameTree: mainVariation } = loadPgn(pgn, start);
 
@@ -148,6 +149,7 @@ export function PGNViewer({
               variation={mainVariation}
               gameState={{ variation, halfMoveNum }}
               setGameState={setGameState}
+              puzzle={puzzle}
             />
           }
         </div>
