@@ -60,13 +60,12 @@ export function useVariation(
   // Use setGameState, but guarantee that result is a valid location of the move tree
   function setGameStateSafe(callback: PGNStateCallback): boolean {
     const newState = callback(gameState);
-    const success = (
+    const success =
       newState.variation &&
       newState.halfMoveNum >= 0 &&
       newState.halfMoveNum <= newState.variation.moves.length &&
-      newState != gameState
-    );
-    if(success) {
+      newState != gameState;
+    if (success) {
       setGameState((prevState) => callback(prevState));
     }
     return success;

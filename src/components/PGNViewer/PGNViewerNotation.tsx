@@ -46,7 +46,7 @@ export function PGNViewerNotation({
   setGameState,
   level = 0,
   puzzle = "",
-  id = ""
+  id = "",
 }: PGNViewerNotationProps) {
   // Loop through every move and build a JSX for the entire notation tree.
   const notationJSXElems = [];
@@ -140,11 +140,13 @@ export function PGNViewerNotation({
 
   useEffect(() => {
     const elems = document.getElementsByClassName(`currentMove${id}`);
-    for(let i = 0; i < elems.length; i++) {
-      const elem = elems[i] as HTMLButtonElement
-      const parentElem = document.getElementById(`notationScrollContainer${id}`);
-      if(elem && parentElem) {
-       parentElem.scrollTop = elem.offsetTop - parentElem.offsetTop - 50;
+    for (let i = 0; i < elems.length; i++) {
+      const elem = elems[i] as HTMLButtonElement;
+      const parentElem = document.getElementById(
+        `notationScrollContainer${id}`,
+      );
+      if (elem && parentElem) {
+        parentElem.scrollTop = elem.offsetTop - parentElem.offsetTop - 50;
       }
     }
   }, [variation, gameState, id]);

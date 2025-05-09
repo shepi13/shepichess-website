@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { Chessboard } from "react-chessboard";
 
 import { PGNViewerButtons } from "@/components/PGNViewer/PGNViewerButtons";
@@ -13,7 +14,6 @@ import { makeVariationsNested, sideToMove } from "@/lib/utils/chessUtils";
 import { loadPgn } from "@/lib/utils/loadPgn";
 
 import { ChessBoardIcon } from "../ChessBoardIcon";
-import { useId } from "react";
 
 const MaxDepth = 21;
 const VariationDisplayLength = 5;
@@ -134,7 +134,11 @@ export function PGNViewer({
           />
         </div>
         <div className="w-5/12 flex flex-col p-1 pt-2 pl-2 lg:p-2 lg:pl-4 lg:pt-4 ">
-          <div aria-label="Notation Viewer" id={`notationScrollContainer${id}`} className="basis-0 grow overflow-y-auto">
+          <div
+            aria-label="Notation Viewer"
+            id={`notationScrollContainer${id}`}
+            className="basis-0 grow overflow-y-auto"
+          >
             <PGNViewerNotation
               id={id}
               variation={mainVariation}
@@ -158,7 +162,7 @@ export function PGNViewer({
             leftContainerStyle="justify-left items-center gap-2 xl:gap-4 pt-1 xl:pt-0"
           />
         </div>
-        
+
         <div className="w-5/12 flex flex-col justify-end gap-1 pl-4 pr-2 xl:pl-7 xl:pr-6">
           <div
             aria-label="stockfish-pv"
