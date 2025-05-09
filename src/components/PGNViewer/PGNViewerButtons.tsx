@@ -22,9 +22,9 @@ export interface PGNViewerButtonProps {
 }
 
 const defaultButtonStyle =
-  "text-lg md:text-xl hover:text-secondary-dark ring-1 px-2 md:rounded-2xl";
+  "text-lg md:text-xl hover:text-secondary-dark ring-1 px-1 sm:px-2 md:rounded-2xl";
 const defaultFlipButtonStyle =
-  "text-base md:text-lg hover:text-secondary-dark ";
+  "text-sm sm:text-base md:text-lg hover:text-secondary-dark ";
 const defaultFlexStyle = "justify-between items-center ";
 
 /**
@@ -59,7 +59,7 @@ export function PGNViewerButtons({
   };
 
   return (
-    <div className="flex justify-between p-1 lg:p-5 pr-0">
+    <div className="flex justify-between p-1 lg:p-5 pr-0 w-full">
       <div className={"flex " + leftContainerStyle}>
         {leftButtons.map(getButtons(true))}
       </div>

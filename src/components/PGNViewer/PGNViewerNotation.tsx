@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 
 import { GameState, PGNStateCallback, Variation } from "@/lib/types/pgnTypes";
 import { moveIsGreat, moveIsMistake } from "@/lib/utils/chessUtils";
@@ -18,6 +18,7 @@ export interface PGNViewerNotationProps {
   setGameState?: (arg0: PGNStateCallback) => void;
   level?: number;
   puzzle?: string;
+  id?: string;
 }
 
 // Styles
@@ -27,7 +28,7 @@ const variationStylesByLevel = new Map([
   [-1, "text-xs lg:text-sm xl:text-base"],
 ]);
 const currentMoveStyle =
-  "font-bold text-primaryblack dark:text-primarywhite bg-secondary dark:bg-secondary-light rounded-lg border-1 shadow-md";
+  "text-black dark:text-white bg-secondary dark:bg-secondary-light rounded-lg shadow-md";
 
 /**
  * Component that displays a variation tree, with styling
@@ -45,6 +46,7 @@ export function PGNViewerNotation({
   setGameState,
   level = 0,
   puzzle = "",
+  id = "",
 }: PGNViewerNotationProps) {
   // Loop through every move and build a JSX for the entire notation tree.
   const notationJSXElems = [];
@@ -92,7 +94,7 @@ export function PGNViewerNotation({
           className={
             "px-1 py-0 sm:py-[1px] xl:py-[3px] cursor-pointer text-nowrap inline outline-none " +
             `${level > 0 && "italic"} ` +
-            `${(isCurrentMove && currentMoveStyle) || "border-none"} `
+            `${(isCurrentMove && currentMoveStyle + ` currentMove${id}`) || "border-transparent text-primaryblack-light dark:text-primarywhite"} `
           }
           onClick={clickHandler}
           aria-label={"Move: " + move_number + move_text}
@@ -135,6 +137,19 @@ export function PGNViewerNotation({
       break;
     }
   }
+
+  useEffect(() => {
+    const elems = document.getElementsByClassName(`currentMove${id}`);
+    for (let i = 0; i < elems.length; i++) {
+      const elem = elems[i] as HTMLButtonElement;
+      const parentElem = document.getElementById(
+        `notationScrollContainer${id}`,
+      );
+      if (elem && parentElem) {
+        parentElem.scrollTop = elem.offsetTop - parentElem.offsetTop - 50;
+      }
+    }
+  }, [variation, gameState, id]);
 
   return (
     <div

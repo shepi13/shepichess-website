@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { Chessboard } from "react-chessboard";
 
 import { PGNViewerButtons } from "@/components/PGNViewer/PGNViewerButtons";
@@ -54,6 +55,7 @@ export function PGNViewer({
   puzzle = "",
 }: PGNViewerProps) {
   const { gameTree: mainVariation } = loadPgn(pgn, start);
+  const id = useId();
 
   // Current state of display board
   const [flipState, flipBoard] = useToggle(flipped);
@@ -114,13 +116,13 @@ export function PGNViewer({
 
   return (
     <div
-      className="flex border-primaryblack-light dark:border-primarywhite-dark border-solid border-3"
+      className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3"
       onKeyDown={handleKeyDown}
       tabIndex={-1}
       aria-label="PGN Viewer"
     >
-      <div className="w-3/5 h-full">
-        <div aria-hidden="true">
+      <div className="flex">
+        <div className="flex flex-col w-7/12" aria-hidden="true">
           <Chessboard
             position={fen()}
             arePiecesDraggable={false}
@@ -131,39 +133,47 @@ export function PGNViewer({
             }}
           />
         </div>
-        <PGNViewerButtons
-          leftButtons={[
-            { onClick: firstMove, children: "<<" },
-            { onClick: prevMove, children: "<" },
-            { onClick: nextMove, children: ">" },
-            { onClick: lastMove, children: ">>" },
-          ]}
-          rightButtons={[{ onClick: flipBoard, children: "Flip Board" }]}
-          leftContainerStyle="justify-left items-center gap-2 xl:gap-4 pt-1 xl:pt-0"
-        />
-      </div>
-      <div className="w-1/2 p-1 pt-2 pl-2 lg:p-2 lg:pl-4 lg:pt-4 flex flex-col justify-between items-end-safe">
-        <div aria-label="Notation Viewer" className="w-full mb-2 h-3/5">
-          {
+        <div className="w-5/12 flex flex-col p-1 pt-2 pl-2 lg:p-2 lg:pl-4 lg:pt-4 ">
+          <div
+            aria-label="Notation Viewer"
+            id={`notationScrollContainer${id}`}
+            className="basis-0 grow overflow-y-auto"
+          >
             <PGNViewerNotation
+              id={id}
               variation={mainVariation}
               gameState={{ variation, halfMoveNum }}
               setGameState={setGameState}
               puzzle={puzzle}
             />
-          }
+          </div>
         </div>
-        <div className="flex flex-col justify-end font-semibold gap-1 min-w-1/2 px-3 xl:px-6">
+      </div>
+      <div className="flex pt-2">
+        <div className="flex-col w-7/12">
+          <PGNViewerButtons
+            leftButtons={[
+              { onClick: firstMove, children: "<<" },
+              { onClick: prevMove, children: "<" },
+              { onClick: nextMove, children: ">" },
+              { onClick: lastMove, children: ">>" },
+            ]}
+            rightButtons={[{ onClick: flipBoard, children: "Flip Board" }]}
+            leftContainerStyle="justify-left items-center gap-2 xl:gap-4 pt-1 xl:pt-0"
+          />
+        </div>
+
+        <div className="w-5/12 flex flex-col justify-end gap-1 pl-4 pr-2 xl:pl-7 xl:pr-6">
           <div
             aria-label="stockfish-pv"
             hidden={!stockfishEnabled}
-            className="text-xs md:text-sm xl:text-base"
+            className="font-semibold text-xs lg:text-base xl:text-lg"
           >
             {stockfishData.pv}
           </div>
           <div
             className={
-              "flex items-center gap-1 lg:gap-2 xl:gap-3 text-xs lg:text-sm " +
+              "flex items-center font-semibold gap-1 lg:gap-2 xl:gap-3 text-xs lg:text-sm " +
               (stockfishEnabled ? "justify-between" : "justify-end")
             }
           >

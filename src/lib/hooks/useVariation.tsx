@@ -59,41 +59,28 @@ export function useVariation(
 
   // Use setGameState, but guarantee that result is a valid location of the move tree
   function setGameStateSafe(callback: PGNStateCallback): boolean {
-    let success = false;
-    setGameState((prevState) => {
-      const newState = callback(prevState);
-      if (
-        !newState.variation ||
-        newState.halfMoveNum < 0 ||
-        newState.halfMoveNum > newState.variation.moves.length ||
-        prevState === newState
-      ) {
-        return prevState;
-      }
-      success = true;
-      return newState;
-    });
+    const newState = callback(gameState);
+    const success =
+      newState.variation &&
+      newState.halfMoveNum >= 0 &&
+      newState.halfMoveNum <= newState.variation.moves.length &&
+      newState != gameState;
+    if (success) {
+      setGameState((prevState) => callback(prevState));
+    }
     return success;
   }
 
   // Finds and enters the next variation in the move tree, playing the move with sound
   function enterVariation() {
     return setGameStateSafe((prevState) => {
-      const variationMoves = prevState.variation.moves;
-      const initialMoveNum = prevState.halfMoveNum;
+      const moves = prevState.variation.moves;
+      const startIndex = Math.max(prevState.halfMoveNum - 1, 0);
       /* Find next variation if exists */
-      for (
-        let moveNum = Math.max(initialMoveNum - 1, 0);
-        moveNum < variationMoves.length;
-        moveNum++
-      ) {
-        if (variationMoves[moveNum].variations.length > 0) {
-          const variation = variationMoves[moveNum].variations[0];
-          return {
-            ...prevState,
-            variation,
-            halfMoveNum: 1,
-          };
+      for (let moveNum = startIndex; moveNum < moves.length; moveNum++) {
+        if (moves[moveNum].variations.length > 0) {
+          const variation = moves[moveNum].variations[0];
+          return { variation, halfMoveNum: 1 };
         }
       }
       return prevState;
