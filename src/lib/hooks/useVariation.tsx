@@ -30,12 +30,12 @@ import { useAudio } from "./useAudio";
  */
 export type VariationState = {
   fen: () => string;
-  firstMove: () => boolean;
-  lastMove: () => boolean;
-  nextMove: () => boolean;
-  prevMove: () => boolean;
-  enterVariation: () => boolean;
-  exitVariation: () => boolean;
+  firstMove: () => void;
+  lastMove: () => void;
+  nextMove: () => void;
+  prevMove: () => void;
+  enterVariation: () => void;
+  exitVariation: () => void;
   setGameState: (arg0: PGNStateCallback) => boolean;
   variation: Variation;
   halfMoveNum: number;
@@ -71,35 +71,9 @@ export function useVariation(
     return success;
   }
 
-  // Finds and enters the next variation in the move tree, playing the move with sound
-  function enterVariation() {
-    return setGameStateSafe((prevState) => {
-      const moves = prevState.variation.moves;
-      const startIndex = Math.max(prevState.halfMoveNum - 1, 0);
-      /* Find next variation if exists */
-      for (let moveNum = startIndex; moveNum < moves.length; moveNum++) {
-        if (moves[moveNum].variations.length > 0) {
-          const variation = moves[moveNum].variations[0];
-          return { variation, halfMoveNum: 1 };
-        }
-      }
-      return prevState;
-    });
-  }
-
-  // Exits the current variation and enters its parent.
-  function exitVariation() {
-    return setGameStateSafe((prev) => {
-      return {
-        variation: prev.variation.parentVariation || variation,
-        halfMoveNum: prev.variation.parentMove,
-      };
-    });
-  }
-
   // Adds a move sound to a method
   function addSound(handler: () => boolean) {
-    return () => {
+    return function () {
       if (!moveSound) return handler();
       if (moveSound.paused && handler()) {
         moveSound.currentTime = 0;
@@ -110,34 +84,56 @@ export function useVariation(
     };
   }
 
+  // Finds and enters the next variation in the move tree, playing the move with sound
+  const enterVariation = addSound(() =>
+    setGameStateSafe((prevState) => {
+      const moves = prevState.variation.moves;
+      const startIndex = Math.max(prevState.halfMoveNum - 1, 0);
+      /* Find next variation if exists */
+      for (let moveNum = startIndex; moveNum < moves.length; moveNum++) {
+        if (moves[moveNum].variations.length > 0) {
+          const variation = moves[moveNum].variations[0];
+          return { variation, halfMoveNum: 1 };
+        }
+      }
+      return prevState;
+    }),
+  );
+
+  // Exits the current variation and enters its parent.
+  const exitVariation = () =>
+    setGameStateSafe((prev) => {
+      return {
+        variation: prev.variation.parentVariation || variation,
+        halfMoveNum: prev.variation.parentMove,
+      };
+    });
+
+  // firstMove and lastMove also jump to main variation
+  const firstMove = () => setGameState({ variation, halfMoveNum: 0 });
+  const lastMove = () =>
+    setGameState({ variation, halfMoveNum: variation.moves.length });
+
+  // nextMove and prevMove only set move number
+  const nextMove = addSound(() =>
+    setGameStateSafe((prev) => ({
+      ...prev,
+      halfMoveNum: prev.halfMoveNum + 1,
+    })),
+  );
+  const prevMove = () =>
+    setGameStateSafe((prev) => ({
+      ...prev,
+      halfMoveNum: prev.halfMoveNum - 1,
+    }));
+
   return {
     fen: () => getFen(gameState.variation, gameState.halfMoveNum),
-    // firstMove and lastMove also jump to main variation
-    firstMove: () =>
-      setGameStateSafe((prev) => ({
-        ...prev,
-        variation,
-        halfMoveNum: 0,
-      })),
-    lastMove: () =>
-      setGameStateSafe((prev) => ({
-        ...prev,
-        variation,
-        halfMoveNum: variation.moves.length,
-      })),
-    // prevMove/nextMove only set move number
-    nextMove: addSound(() =>
-      setGameStateSafe((prev) => ({
-        ...prev,
-        halfMoveNum: prev.halfMoveNum + 1,
-      })),
-    ),
-    prevMove: () =>
-      setGameStateSafe((prev) => ({
-        ...prev,
-        halfMoveNum: prev.halfMoveNum - 1,
-      })),
-    enterVariation: addSound(enterVariation),
+    firstMove,
+    prevMove,
+    nextMove,
+    lastMove,
+    enterVariation,
     exitVariation,
     setGameState: setGameStateSafe,
     ...gameState,

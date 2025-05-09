@@ -54,7 +54,7 @@ export function PGNViewer({
   flipped = false,
   puzzle = "",
 }: PGNViewerProps) {
-  const { gameTree: mainVariation } = loadPgn(pgn, start);
+  const mainVariation = makeVariationsNested(loadPgn(pgn, start).gameTree);
   const id = useId();
 
   // Current state of display board
@@ -70,7 +70,7 @@ export function PGNViewer({
     enterVariation,
     exitVariation,
     setGameState,
-  } = useVariation(makeVariationsNested(mainVariation), moveSoundPath);
+  } = useVariation(mainVariation, moveSoundPath);
 
   // Engine State
   const [stockfishData, stockfishEnabled, setStockfishEnabled] =
@@ -116,22 +116,24 @@ export function PGNViewer({
 
   return (
     <div
-      className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3"
+      className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3 "
       onKeyDown={handleKeyDown}
       tabIndex={-1}
       aria-label="PGN Viewer"
     >
       <div className="flex">
         <div className="flex flex-col w-7/12" aria-hidden="true">
-          <Chessboard
-            position={fen()}
-            arePiecesDraggable={false}
-            boardOrientation={flipState ? "black" : "white"}
-            customArrows={arrows}
-            customBoardStyle={{
-              boxShadow: "3px 3px 5px rgba(0,0,0,.8)",
-            }}
-          />
+          <div className="flex before:pt-[100%]">
+            <Chessboard
+              position={fen()}
+              arePiecesDraggable={false}
+              boardOrientation={flipState ? "black" : "white"}
+              customArrows={arrows}
+              customBoardStyle={{
+                boxShadow: "3px 3px 5px rgba(0,0,0,.8)",
+              }}
+            />
+          </div>
         </div>
         <div className="w-5/12 flex flex-col p-1 pt-2 pl-2 lg:p-2 lg:pl-4 lg:pt-4 ">
           <div
