@@ -31,7 +31,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <EngineProvider>
             <div className="content flex flex-col min-h-screen justify-between items-center">
-              <div className="py-5 w-screen md:w-4/5 xl:w-2/3 flex flex-col gap-20 items-center">
+              <div className="py-5 w-5/6 md:w-4/5 xl:w-2/3 flex flex-col gap-20 items-center">
                 <Header />
                 <main>{children}</main>
               </div>

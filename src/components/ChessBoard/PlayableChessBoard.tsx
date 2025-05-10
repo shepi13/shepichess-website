@@ -28,18 +28,20 @@ export function PlayableChessBoardStateless({
   flipText?: string;
 }) {
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <div className="border-primaryblack-light dark:border-primarywhite-dark border-solid border-3">
-        <Chessboard
-          position={position.position}
-          boardOrientation={position.flipped ? "black" : "white"}
-          onPieceDrop={position.makeMove}
-          animationDuration={0}
-          customArrowColor={"rgb(138, 12, 58)"}
-          customDropSquareStyle={{
-            boxShadow: "inset 0 0 3px 3px rgb(138, 12, 58)",
-          }}
-        />
+        <div className="flex before:pt-[100%]">
+          <Chessboard
+            position={position.position}
+            boardOrientation={position.flipped ? "black" : "white"}
+            onPieceDrop={position.makeMove}
+            animationDuration={0}
+            customArrowColor={"rgb(138, 12, 58)"}
+            customDropSquareStyle={{
+              boxShadow: "inset 0 0 3px 3px rgb(138, 12, 58)",
+            }}
+          />
+        </div>
       </div>
       <PGNViewerButtons
         leftButtonStyle={buttonStyles}
@@ -59,7 +61,7 @@ export function PlayableChessBoardStateless({
         ]}
         rightButtons={[{ onClick: position.toggleFlipped, children: flipText }]}
       />
-    </>
+    </div>
   );
 }
 

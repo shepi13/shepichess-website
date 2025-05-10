@@ -8,7 +8,7 @@ export default function OpeningLayout({
       <div className="hidden md:flex flex-col min-w-1/4 items-end">
         <h5>Table Of Contents!</h5>
       </div>
-      <div className="flex flex-col max-w-3/4">{children}</div>
+      <div className="flex flex-col">{children}</div>
     </div>
   );
 }

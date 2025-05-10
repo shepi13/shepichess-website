@@ -81,7 +81,7 @@ export function PlayComputer({
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <PlayableChessBoardStateless
         position={{ ...position, undoMove: handleUndo }}
         flipText="Switch Sides"
