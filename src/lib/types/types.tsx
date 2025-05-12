@@ -18,4 +18,5 @@ export type PGNButtonSettings = {
 export type Optional<T> = T | null | undefined;
 
 export const moveSoundPath = "/sounds/move.ogg";
+export const gameOverSoundPath = "/sounds/gameover.mp3";
 export const stockfishPath = "/stockfish/src/stockfish-nnue-16-single.js";
