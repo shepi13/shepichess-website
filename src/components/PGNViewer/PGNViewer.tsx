@@ -123,7 +123,7 @@ export function PGNViewer({
     >
       <div className="flex">
         <div className="flex flex-col w-7/12" aria-hidden="true">
-          <div className="flex before:pt-[100%]">
+          <div className="flex before:pt-[100%] bg-cover bg-[url(/ChessBoardStart.png)]">
             <Chessboard
               position={fen()}
               arePiecesDraggable={false}

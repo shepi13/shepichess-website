@@ -1,5 +1,6 @@
 import { audioState } from "../../PGNViewer/__tests__/mocks/mockAudio";
 import { currentFen, evaluatedPosition } from "./mocks/mockPlayComputer";
+import { mockToast } from "./mocks/mockToast";
 
 import { act, getByRole, render } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
@@ -9,11 +10,9 @@ import { startFen } from "@/lib/types/pgnTypes";
 
 import { PlayComputer, PlayComputerPage } from "../PlayComputer";
 
-/*
 const drawFen = "8/8/3k4/8/8/8/3K4/8 w - - 0 1";
 const whiteWinFen = "8/8/8/8/8/4K3/8/5k1Q b - - 0 1";
 const blackWinFen = "8/8/8/8/8/4k3/8/5K1q w - - 0 1";
-*/
 
 describe("Test PlayComputer", () => {
   test("Test Playable Chessboard", () => {
@@ -76,6 +75,20 @@ describe("Test PlayComputer", () => {
     expect(currentFen).toBe(newFen);
     expect(decodeURIComponent(global.window.location.search)).toContain(
       "fen=" + newFen.replaceAll(" ", "+"),
+    );
+  });
+
+  test.each([
+    [drawFen, "draw"],
+    [whiteWinFen, "white"],
+    [blackWinFen, "black"],
+  ])("Test Game Over", (fen, toastString) => {
+    act(() => root.render(<PlayComputer start={fen} />));
+
+    expect(mockToast).toHaveBeenCalled();
+    expect(mockToast.mock.calls[0][0].toLowerCase()).toContain("game over");
+    expect(mockToast.mock.calls[0][1]["description"].toLowerCase()).toContain(
+      toastString,
     );
   });
 });

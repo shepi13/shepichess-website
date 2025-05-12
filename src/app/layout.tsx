@@ -27,7 +27,20 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <SVGGrainyFilter />
-        <Toaster position="bottom-center" />
+        <Toaster
+          position="bottom-right"
+          richColors
+          expand
+          toastOptions={{
+            classNames: {
+              error: "!bg-stone-50 !border-stone-300",
+              title: "!text-lg !text-black",
+              description: "!text-base",
+              actionButton:
+                "hover:!shadow-md !text-lg !bg-primary !py-4 hover:!text-stone-400 dark:hover:!text-stone-600 dark:!text-stone-800",
+            },
+          }}
+        />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <EngineProvider>
             <div className="content flex flex-col min-h-screen justify-between items-center">

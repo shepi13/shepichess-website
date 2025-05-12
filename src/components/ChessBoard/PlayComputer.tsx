@@ -4,13 +4,15 @@ import { useSearchParams } from "next/navigation";
 
 import { Chess, Square } from "chess.js";
 import { Suspense, useCallback, useEffect } from "react";
+import { toast } from "sonner";
 
 import { PlayableChessBoardStateless } from "@/components/ChessBoard/PlayableChessBoard";
 
+import { useAudio } from "@/lib/hooks/useAudio";
 import { useEngine } from "@/lib/hooks/useEngineWorker";
 import { usePosition } from "@/lib/hooks/usePosition";
 import { startFen } from "@/lib/types/pgnTypes";
-import { moveSoundPath } from "@/lib/types/types";
+import { gameOverSoundPath, moveSoundPath } from "@/lib/types/types";
 
 import { FenInput } from "./FenInput";
 
@@ -69,6 +71,24 @@ export function PlayComputer({
       makeEngineMove();
     }
   }, [turn, player, isGameOver, makeEngineMove]);
+
+  // Game Over Sound Effect
+  const gameOverSound = useAudio(gameOverSoundPath);
+  useEffect(() => {
+    if (!position.game.isGameOver()) return;
+    if (gameOverSound && gameOverSound.paused) {
+      gameOverSound.play();
+    }
+    const win_string = position.game.isDraw()
+      ? "Draw!"
+      : position.game.turn() == "w"
+        ? "Black Wins!"
+        : "White Wins!";
+    toast("Game Over", {
+      action: { label: "Play Again!", onClick: position.resetPosition },
+      description: win_string,
+    });
+  }, [gameOverSound, position]);
 
   // Input Handlers
   const handleUndo = () => {
